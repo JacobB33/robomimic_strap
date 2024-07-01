@@ -162,11 +162,15 @@ def set_env_settings(generator, args):
                 name="",
                 group=-1,
                 values=[
-                    ["robot0_base_to_eef_pos",
-                     "robot0_base_to_eef_quat",
-                     "robot0_base_pos",
-                     "robot0_base_quat",
-                     "robot0_gripper_qpos"]
+                    [
+                        "robot0_eef_pos",
+                        "robot0_eef_quat",
+                        # "robot0_base_to_eef_pos",
+                        # "robot0_base_to_eef_quat",
+                        # "robot0_base_pos",
+                        # "robot0_base_quat",
+                        "robot0_gripper_qpos"
+                    ]
                 ],
             )
             generator.add_param(
@@ -174,9 +178,11 @@ def set_env_settings(generator, args):
                 name="",
                 group=-1,
                 values=[
-                    ["robot0_agentview_left_image",
-                     "robot0_agentview_right_image",
-                     "robot0_eye_in_hand_image"]
+                    [
+                        "robot0_agentview_left_image",
+                    #  "robot0_agentview_right_image",
+                     "robot0_eye_in_hand_image"
+                    ]
                 ],
             )
         else:
@@ -256,7 +262,8 @@ def set_mod_settings(generator, args):
                 key="experiment.rollout.rate",
                 name="",
                 group=-1,
-                values=[100],
+                values=[200],
+                # values=[100],
             )
 
 
@@ -427,6 +434,12 @@ def get_argparser():
     )
 
     parser.add_argument(
+        "--task",
+        type=str,
+        default='all', # ["single", "pnp", "all"]
+    )
+
+    parser.add_argument(
         '--mod',
         type=str,
         choices=['ld', 'im'],
@@ -577,19 +590,25 @@ def get_ds_cfg(
         gen_tex=True,
         rand_cams=True,
     ):
-    from robocasa.utils.dataset_registry import get_ds_path, SINGLE_STAGE_TASK_DATASETS, MULTI_STAGE_TASK_DATASETS
-    
+    from robocasa.utils.dataset_registry import get_ds_path # , SINGLE_STAGE_TASK_DATASETS, VIOLA_REAL_TASK_DATASETS, MULTI_STAGE_TASK_DATASETS
+    from robomimic.scripts.config_gen.dataset_registry import SINGLE_STAGE_TASK_DATASETS, VIOLA_REAL_TASK_DATASETS, MULTI_STAGE_TASK_DATASETS
+
     assert src in ["human", "mg"]
     all_datasets = {}
     all_datasets.update(SINGLE_STAGE_TASK_DATASETS)
+    all_datasets.update(VIOLA_REAL_TASK_DATASETS)
     all_datasets.update(MULTI_STAGE_TASK_DATASETS)
 
     if ds_names == "all":
         ds_names = list(all_datasets.keys())
     elif ds_names == "single_stage":
         ds_names = list(SINGLE_STAGE_TASK_DATASETS.keys())
+    elif ds_names == "viola_real":
+        ds_names = list(VIOLA_REAL_TASK_DATASETS.keys())
     elif ds_names == "multi_stage":
         ds_names = list(MULTI_STAGE_TASK_DATASETS.keys())
+    elif ds_names == "pnp":
+        ds_names = [name for name in all_datasets.keys() if "PnP" in name]
     elif isinstance(ds_names, str):
         ds_names = [ds_names]
 

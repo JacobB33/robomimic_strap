@@ -45,14 +45,14 @@ def make_generator_helper(args):
             group=2,
             values_and_names=[
                 # (get_ds_cfg("all"), "pnp-doors-human"),
-                (get_ds_cfg("pnp_counter_to_cab"), "pnp-counter-to-cab-human"),
-                (get_ds_cfg("pnp_cab_to_counter"), "pnp-cab-to-counter-human"),
-                (get_ds_cfg("pnp_counter_to_sink"), "pnp-counter-to-sink-human"),
-                (get_ds_cfg("pnp_sink_to_counter"), "pnp-sink-to-counter-human"),
-                (get_ds_cfg("pnp_counter_to_microwave"), "pnp-counter-to-microwave-human"),
-                (get_ds_cfg("pnp_microwave_to_counter"), "pnp-microwave-to-counter-human"),
-                (get_ds_cfg(["open_door_single_hinge", "open_door_double_hinge"]), "open-door-human"),
-                (get_ds_cfg(["close_door_single_hinge", "close_door_double_hinge"]), "close-door-human"),
+                (get_ds_cfg("PnPCounterToCab"), "pnp-counter-to-cab-human"),
+                # (get_ds_cfg("pnp_cab_to_counter"), "pnp-cab-to-counter-human"),
+                # (get_ds_cfg("pnp_counter_to_sink"), "pnp-counter-to-sink-human"),
+                # (get_ds_cfg("pnp_sink_to_counter"), "pnp-sink-to-counter-human"),
+                # (get_ds_cfg("pnp_counter_to_microwave"), "pnp-counter-to-microwave-human"),
+                # (get_ds_cfg("pnp_microwave_to_counter"), "pnp-microwave-to-counter-human"),
+                # (get_ds_cfg(["open_door_single_hinge", "open_door_double_hinge"]), "open-door-human"),
+                # (get_ds_cfg(["close_door_single_hinge", "close_door_double_hinge"]), "close-door-human"),
             ]
         )
 

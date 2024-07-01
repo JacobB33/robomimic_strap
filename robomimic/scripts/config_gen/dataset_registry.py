@@ -179,13 +179,38 @@ SINGLE_STAGE_TASK_DATASETS = OrderedDict(
         mg_filter_key="3000_demos",
         horizon=500,
     ),
-    NavigateKitchen=dict(
-        human_path="~/robocasa/datasets/single_stage/kitchen_navigate/NavigateKitchen/2024-05-09",
-        human_filter_key="50_demos",
+
+    # exclude navigation for now
+    # NavigateKitchen=dict(
+    #     human_path="~/robocasa/datasets/single_stage/kitchen_navigate/NavigateKitchen/2024-05-09",
+    #     human_filter_key="50_demos",
+    #     horizon=500,
+    # ),
+)
+
+VIOLA_REAL_TASK_DATASETS = OrderedDict(
+    RealCapsuleCoffeeDomain=dict(
+        human_path="~../data/viola/RealCapsuleCoffeeDomain_training_set",
+        human_filter_key=None,
+        # mg_path="~/robocasa/datasets/single_stage/kitchen_microwave/TurnOffMicrowave/mg/2024-05-04-22-39-23",
+        # mg_filter_key="3000_demos",
+        horizon=500,
+    ),
+    RealKitchenBowlDomain=dict(
+        human_path="~../data/viola/RealKitchenBowlDomain_training_set",
+        human_filter_key=None,
+        # mg_path="~/robocasa/datasets/single_stage/kitchen_microwave/TurnOffMicrowave/mg/2024-05-04-22-39-23",
+        # mg_filter_key="3000_demos",
+        horizon=500,
+    ),
+    RealKitchenPlateForkDomain=dict(
+        human_path="~../data/viola/RealKitchenPlateForkDomain_training_set",
+        human_filter_key=None,
+        # mg_path="~/robocasa/datasets/single_stage/kitchen_microwave/TurnOffMicrowave/mg/2024-05-04-22-39-23",
+        # mg_filter_key="3000_demos",
         horizon=500,
     ),
 )
-
 
 MULTI_STAGE_TASK_DATASETS = OrderedDict(
     ArrangeVegetables=dict(
@@ -220,12 +245,16 @@ MULTI_STAGE_TASK_DATASETS = OrderedDict(
     ),
 )
 
+# TODO: add datasets here
 
 def get_ds_cfg(ds_names, exclude_ds_names=None, overwrite_ds_lang=False, src="human", filter_key=None, eval=None, gen_tex=True, rand_cams=True):
     assert src in ["human", "mg"]
     all_datasets = {}
     all_datasets.update(SINGLE_STAGE_TASK_DATASETS)
+    all_datasets.update(VIOLA_REAL_TASK_DATASETS)
     all_datasets.update(MULTI_STAGE_TASK_DATASETS)
+
+    # TODO: add datasets here
 
     if ds_names == "all":
         ds_names = list(all_datasets.keys())
@@ -233,6 +262,11 @@ def get_ds_cfg(ds_names, exclude_ds_names=None, overwrite_ds_lang=False, src="hu
         ds_names = list(SINGLE_STAGE_TASK_DATASETS.keys())
     elif ds_names == "multi_stage":
         ds_names = list(MULTI_STAGE_TASK_DATASETS.keys())
+    elif ds_names == "viola_real":
+        ds_names = list(VIOLA_REAL_TASK_DATASETS.keys())
+    
+    # TODO: add datasets here
+
     elif ds_names == "pnp":
         ds_names = [name for name in all_datasets.keys() if "PnP" in name]
     elif isinstance(ds_names, str):
