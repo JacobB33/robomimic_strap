@@ -19,18 +19,26 @@ def make_generator_helper(args):
 
     ### Multi-task training on atomic tasks ###
     EVAL_TASKS = [
-        "PnPCounterToSink",
+        "TurnOnMicrowave",
     ]  # or evaluate all tasks by setting EVAL_TASKS = None
+    
+    values_and_names = None
 
+    # Get evaluation tasks and add them to dataset
+    eval_tasks = []
+    for st in EVAL_TASKS:
+        eval_tasks.append(get_ds_cfg(
+                        st,
+                        src="human",
+                        eval=EVAL_TASKS,
+                        filter_key="50_demos",
+                    )[0])
+        
+    # Single task aka eval tasks
     if args.task == "single":
         values_and_names = [
             (
-                get_ds_cfg(
-                    "PnPCounterToSink",
-                    src="human",
-                    eval=EVAL_TASKS,
-                    filter_key="50_demos",
-                ),
+                eval_tasks,
                 "human-50",
             )
         ]
@@ -38,6 +46,20 @@ def make_generator_helper(args):
         values_and_names = [
             (
                 get_ds_cfg("pnp", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
+                "human-50",
+            )
+        ]
+    elif args.task == "turn":
+        values_and_names = [
+            (
+                get_ds_cfg("turn", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
+                "human-50",
+            )
+        ]
+    elif args.task == "openclose":
+        values_and_names = [
+            (
+                get_ds_cfg("openclose", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
                 "human-50",
             )
         ]
@@ -54,10 +76,23 @@ def make_generator_helper(args):
         ValueError("Invalid task")
     # TODO add dataset combination support in get_ds_cfg
 
+    # Add evaluation tasks to dataset
+    all_paths = [ds["path"] for ds in values_and_names[0][0]]
+    for eval_task in eval_tasks:
+        if eval_task["path"] not in all_paths:
+            values_and_names[0][0].append(eval_task)
+
     # get_ds_cfg(
     #     "viola_real", src="human", eval=EVAL_TASKS, filter_key=None
     # ),
     # "viola-50"
+    
+    generator.add_param(
+        key="experiment.name",
+        name="",
+        group=-1,
+        values=[args.name]
+            )
 
     generator.add_param(
         key="train.data",

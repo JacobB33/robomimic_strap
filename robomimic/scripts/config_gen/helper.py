@@ -436,7 +436,7 @@ def get_argparser():
     parser.add_argument(
         "--task",
         type=str,
-        default='all', # ["single", "pnp", "all"]
+        default='single', # ["single", "pnp", "turn", "openclose", "all"]
     )
 
     parser.add_argument(
@@ -609,6 +609,10 @@ def get_ds_cfg(
         ds_names = list(MULTI_STAGE_TASK_DATASETS.keys())
     elif ds_names == "pnp":
         ds_names = [name for name in all_datasets.keys() if "PnP" in name]
+    elif ds_names == "turn":
+            ds_names = [name for name in all_datasets.keys() if "Turn" in name]
+    elif ds_names == "openclose":
+        ds_names = [name for name in all_datasets.keys() if "Close" in name or "Open" in name]
     elif isinstance(ds_names, str):
         ds_names = [ds_names]
 
