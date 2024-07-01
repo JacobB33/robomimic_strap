@@ -18,9 +18,10 @@ def make_generator_helper(args):
         args.ckpt_mode = "off"
 
     ### Multi-task training on atomic tasks ###
-    EVAL_TASKS = [
-        "TurnOnMicrowave",
-    ]  # or evaluate all tasks by setting EVAL_TASKS = None
+    EVAL_TASKS = args.eval_task
+    # [
+    #     "TurnOnMicrowave",
+    # ]  # or evaluate all tasks by setting EVAL_TASKS = None
     
     values_and_names = None
 
@@ -35,35 +36,49 @@ def make_generator_helper(args):
                     )[0])
         
     # Single task aka eval tasks
-    if args.task == "single":
+    if args.train_task == "single":
         values_and_names = [
             (
                 eval_tasks,
                 "human-50",
             )
         ]
-    elif args.task == "pnp":
+    elif args.train_task == "pnp":
         values_and_names = [
             (
                 get_ds_cfg("pnp", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
                 "human-50",
             )
         ]
-    elif args.task == "turn":
+    elif args.train_task == "pnp_half":
+        values_and_names = [
+            (
+                get_ds_cfg("pnp_half", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
+                "human-50",
+            )
+        ]
+    elif args.train_task == "turn":
         values_and_names = [
             (
                 get_ds_cfg("turn", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
                 "human-50",
             )
         ]
-    elif args.task == "openclose":
+    elif args.train_task == "openclose":
         values_and_names = [
             (
                 get_ds_cfg("openclose", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
                 "human-50",
             )
         ]
-    elif args.task == "all":
+    elif args.train_task == "openclose_half":
+        values_and_names = [
+            (
+                get_ds_cfg("openclose_half", src="human", eval=EVAL_TASKS, filter_key="50_demos"),
+                "human-50",
+            )
+        ]
+    elif args.train_task == "all":
         values_and_names = [
             (
                 get_ds_cfg(
@@ -72,6 +87,16 @@ def make_generator_helper(args):
                 "human-50",
             )
         ]
+    elif args.train_task == "viola_real":
+         values_and_names = [
+            (
+                get_ds_cfg(
+                "viola_real", src="human", eval=EVAL_TASKS, filter_key=None
+            ),
+            "viola-50"
+            )
+        ]
+
     else:
         ValueError("Invalid task")
     # TODO add dataset combination support in get_ds_cfg

@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+import random
 import datetime
 from copy import deepcopy
 
@@ -9,7 +10,10 @@ import robomimic.utils.hyperparam_utils as HyperparamUtils
 
 # from robomimic.scripts.config_gen.dataset_registry import get_ds_cfg
 
-base_path = os.path.abspath(os.path.join(os.path.dirname(robomimic.__file__), os.pardir))
+base_path = os.path.abspath(
+    os.path.join(os.path.dirname(robomimic.__file__), os.pardir)
+)
+
 
 def scan_datasets(folder, postfix=".hdf5"):
     dataset_paths = []
@@ -28,14 +32,23 @@ def get_generator(algo_name, config_file, args, algo_name_short=None, pt=False):
             args.env,
             args.mod,
         ]
-        args.wandb_proj_name = '_'.join([str(s) for s in strings if s is not None])
+        args.wandb_proj_name = "_".join([str(s) for s in strings if s is not None])
 
     if args.script is not None:
         generated_config_dir = os.path.join(os.path.dirname(args.script), "json")
     else:
-        curr_time = datetime.datetime.fromtimestamp(time.time()).strftime('%m-%d-%y-%H-%M-%S')
-        generated_config_dir=os.path.join(
-            '~/', 'tmp/autogen_configs/ril', algo_name, args.env, args.mod, args.name, curr_time, "json",
+        curr_time = datetime.datetime.fromtimestamp(time.time()).strftime(
+            "%m-%d-%y-%H-%M-%S"
+        )
+        generated_config_dir = os.path.join(
+            "~/",
+            "tmp/autogen_configs/ril",
+            algo_name,
+            args.env,
+            args.mod,
+            args.name,
+            curr_time,
+            "json",
         )
 
     generator = HyperparamUtils.ConfigGenerator(
@@ -59,37 +72,35 @@ def set_env_settings(generator, args):
             group=-1,
             values=[
                 {
-                    "actions":{
+                    "actions": {
                         "normalization": None,
                     },
-                    "action_dict/abs_pos": {
-                        "normalization": "min_max"
-                    },
+                    "action_dict/abs_pos": {"normalization": "min_max"},
                     "action_dict/abs_rot_axis_angle": {
                         "normalization": "min_max",
-                        "format": "rot_axis_angle"
+                        "format": "rot_axis_angle",
                     },
                     "action_dict/abs_rot_6d": {
                         "normalization": None,
-                        "format": "rot_6d"
+                        "format": "rot_6d",
                     },
                     "action_dict/rel_pos": {
                         "normalization": None,
                     },
                     "action_dict/rel_rot_axis_angle": {
                         "normalization": None,
-                        "format": "rot_axis_angle"
+                        "format": "rot_axis_angle",
                     },
                     "action_dict/rel_rot_6d": {
                         "normalization": None,
-                        "format": "rot_6d"
+                        "format": "rot_6d",
                     },
                     "action_dict/gripper": {
                         "normalization": None,
                     },
                     "action_dict/base_mode": {
                         "normalization": None,
-                    }
+                    },
                 }
             ],
         )
@@ -99,17 +110,13 @@ def set_env_settings(generator, args):
             key="observation.encoder.rgb.core_class",
             name="",
             group=-1,
-            values=[
-                "VisualCoreLanguageConditioned"
-            ],
+            values=["VisualCoreLanguageConditioned"],
         )
         generator.add_param(
             key="observation.encoder.rgb.core_kwargs.backbone_class",
             name="",
             group=-1,
-            values=[
-                "ResNet18ConvFiLM"
-            ],
+            values=["ResNet18ConvFiLM"],
         )
 
         env_kwargs = {
@@ -137,7 +144,12 @@ def set_env_settings(generator, args):
             name="obsrandargs",
             group=-1,
             values=[
-                {"crop_height": 116, "crop_width": 116, "num_crops": 1, "pos_enc": False},
+                {
+                    "crop_height": 116,
+                    "crop_width": 116,
+                    "num_crops": 1,
+                    "pos_enc": False,
+                },
             ],
             hidename=True,
         )
@@ -156,20 +168,18 @@ def set_env_settings(generator, args):
             values=[500],
             value_names=[""],
         )
-        if args.mod == 'im':
+        if args.mod == "im":
             generator.add_param(
                 key="observation.modalities.obs.low_dim",
                 name="",
                 group=-1,
                 values=[
                     [
-                        "robot0_eef_pos",
-                        "robot0_eef_quat",
-                        # "robot0_base_to_eef_pos",
-                        # "robot0_base_to_eef_quat",
+                        "robot0_base_to_eef_pos",
+                        "robot0_base_to_eef_quat",
                         # "robot0_base_pos",
                         # "robot0_base_quat",
-                        "robot0_gripper_qpos"
+                        "robot0_gripper_qpos",
                     ]
                 ],
             )
@@ -180,8 +190,8 @@ def set_env_settings(generator, args):
                 values=[
                     [
                         "robot0_agentview_left_image",
-                    #  "robot0_agentview_right_image",
-                     "robot0_eye_in_hand_image"
+                        #  "robot0_agentview_right_image",
+                        "robot0_eye_in_hand_image",
                     ]
                 ],
             )
@@ -191,11 +201,12 @@ def set_env_settings(generator, args):
                 name="",
                 group=-1,
                 values=[
-                    ["robot0_eef_pos",
-                     "robot0_eef_quat",
-                     "robot0_gripper_qpos",
-                     "robot0_base_pos",
-                     "object",
+                    [
+                        "robot0_eef_pos",
+                        "robot0_eef_quat",
+                        "robot0_gripper_qpos",
+                         "robot0_base_pos",
+                         "object",
                     ]
                 ],
             )
@@ -204,17 +215,15 @@ def set_env_settings(generator, args):
 
 
 def set_mod_settings(generator, args):
-    if args.mod == 'ld':
+    if args.mod == "ld":
         if "experiment.save.epochs" not in generator.parameters:
             generator.add_param(
                 key="experiment.save.epochs",
                 name="",
                 group=-1,
-                values=[
-                    [2000]
-                ],
+                values=[[2000]],
             )
-    elif args.mod == 'im':
+    elif args.mod == "im":
         if "experiment.save.every_n_epochs" not in generator.parameters:
             generator.add_param(
                 key="experiment.save.every_n_epochs",
@@ -292,7 +301,7 @@ def set_debug_mode(generator, args):
         values=[2],
         value_names=[""],
     )
-    
+
     # set horizon to 30
     ds_cfg_list = generator.parameters["train.data"].values
     for ds_cfg in ds_cfg_list:
@@ -305,7 +314,7 @@ def set_debug_mode(generator, args):
     #     values=[30],
     #     value_names=[""],
     # )
-    
+
     generator.add_param(
         key="experiment.rollout.rate",
         name="",
@@ -317,7 +326,7 @@ def set_debug_mode(generator, args):
         key="experiment.epoch_every_n_steps",
         name="",
         group=-1,
-        values=[2], #50
+        values=[2],  # 50
         value_names=[""],
     )
     generator.add_param(
@@ -389,6 +398,7 @@ def set_wandb_mode(generator, args):
         values=[not args.no_wandb],
     )
 
+
 def set_rollout_mode(generator, args):
     if args.no_rollout:
         generator.add_param(
@@ -430,20 +440,28 @@ def get_argparser():
     parser.add_argument(
         "--env",
         type=str,
-        default='robocasa',
+        default="robocasa",
     )
 
     parser.add_argument(
-        "--task",
+        "--train_task",
         type=str,
-        default='single', # ["single", "pnp", "turn", "openclose", "all"]
+        default="single",  # ["single", "pnp", "turn", "viola_real", "openclose", "all"]
     )
 
     parser.add_argument(
-        '--mod',
+        "--eval_task",
         type=str,
-        choices=['ld', 'im'],
-        default='im',
+        nargs="+",  # This allows one or more arguments
+        default="TurnOnMicrowave",
+        help="tasks that the policy is evaluated on + tasks are added to the training dataset",
+    )
+
+    parser.add_argument(
+        "--mod",
+        type=str,
+        choices=["ld", "im"],
+        default="im",
     )
 
     parser.add_argument(
@@ -453,43 +471,25 @@ def get_argparser():
         default=None,
     )
 
-    parser.add_argument(
-        "--script",
-        type=str,
-        default=None
-    )
+    parser.add_argument("--script", type=str, default=None)
 
-    parser.add_argument(
-        "--wandb_proj_name",
-        type=str,
-        default=None
-    )
+    parser.add_argument("--wandb_proj_name", type=str, default=None)
 
     parser.add_argument(
         "--debug",
         action="store_true",
     )
 
-    parser.add_argument(
-        '--no_video',
-        action='store_true'
-    )
+    parser.add_argument("--no_video", action="store_true")
 
-    parser.add_argument(
-        '--no_rollout',
-        action='store_true'
-    )
+    parser.add_argument("--no_rollout", action="store_true")
 
     parser.add_argument(
         "--tmplog",
         action="store_true",
     )
 
-    parser.add_argument(
-        "--nr",
-        type=int,
-        default=-1
-    )
+    parser.add_argument("--nr", type=int, default=-1)
 
     parser.add_argument(
         "--no_wandb",
@@ -501,17 +501,9 @@ def get_argparser():
         action="store_true",
     )
 
-    parser.add_argument(
-        "--n_seeds",
-        type=int,
-        default=None
-    )
+    parser.add_argument("--n_seeds", type=int, default=None)
 
-    parser.add_argument(
-        "--num_cmd_groups",
-        type=int,
-        default=None
-    )
+    parser.add_argument("--num_cmd_groups", type=int, default=None)
 
     return parser
 
@@ -520,7 +512,7 @@ def make_generator(args, make_generator_helper):
     if args.tmplog or args.debug and args.name is None:
         args.name = "debug"
     else:
-        time_str = datetime.datetime.fromtimestamp(time.time()).strftime('%m-%d-')
+        time_str = datetime.datetime.fromtimestamp(time.time()).strftime("%m-%d-")
         args.name = time_str + str(args.name)
 
     if args.debug or args.tmplog:
@@ -533,7 +525,7 @@ def make_generator(args, make_generator_helper):
         pass
 
     if (args.debug or args.tmplog) and (args.wandb_proj_name is None):
-        args.wandb_proj_name = 'debug'
+        args.wandb_proj_name = "debug"
 
     if not args.debug:
         assert args.name is not None
@@ -582,16 +574,22 @@ def make_generator(args, make_generator_helper):
 
 
 def get_ds_cfg(
-        ds_names,
-        exclude_ds_names=None,
-        src="human",
-        filter_key=None,
-        eval=None,
-        gen_tex=True,
-        rand_cams=True,
-    ):
-    from robocasa.utils.dataset_registry import get_ds_path # , SINGLE_STAGE_TASK_DATASETS, VIOLA_REAL_TASK_DATASETS, MULTI_STAGE_TASK_DATASETS
-    from robomimic.scripts.config_gen.dataset_registry import SINGLE_STAGE_TASK_DATASETS, VIOLA_REAL_TASK_DATASETS, MULTI_STAGE_TASK_DATASETS
+    ds_names,
+    exclude_ds_names=None,
+    src="human",
+    filter_key=None,
+    eval=None,
+    gen_tex=True,
+    rand_cams=True,
+):
+    from robocasa.utils.dataset_registry import (
+        get_ds_path,
+    )  # , SINGLE_STAGE_TASK_DATASETS, VIOLA_REAL_TASK_DATASETS, MULTI_STAGE_TASK_DATASETS
+    from robomimic.scripts.config_gen.dataset_registry import (
+        SINGLE_STAGE_TASK_DATASETS,
+        VIOLA_REAL_TASK_DATASETS,
+        MULTI_STAGE_TASK_DATASETS,
+    )
 
     assert src in ["human", "mg"]
     all_datasets = {}
@@ -609,10 +607,22 @@ def get_ds_cfg(
         ds_names = list(MULTI_STAGE_TASK_DATASETS.keys())
     elif ds_names == "pnp":
         ds_names = [name for name in all_datasets.keys() if "PnP" in name]
+    elif ds_names == "pnp_half":
+        ds_names = [name for name in all_datasets.keys() if "PnP" in name]
+        random.seed(42)
+        ds_names = random.sample(ds_names, len(ds_names) // 2)
     elif ds_names == "turn":
-            ds_names = [name for name in all_datasets.keys() if "Turn" in name]
+        ds_names = [name for name in all_datasets.keys() if "Turn" in name]
     elif ds_names == "openclose":
-        ds_names = [name for name in all_datasets.keys() if "Close" in name or "Open" in name]
+        ds_names = [
+            name for name in all_datasets.keys() if "Close" in name or "Open" in name
+        ]
+    elif ds_names == "openclose_half":
+        ds_names = [
+            name for name in all_datasets.keys() if "Close" in name or "Open" in name
+        ]
+        random.seed(42)
+        ds_names = random.sample(ds_names, len(ds_names) // 2)
     elif isinstance(ds_names, str):
         ds_names = [ds_names]
 
@@ -623,22 +633,20 @@ def get_ds_cfg(
     for name in ds_names:
         ds_meta = all_datasets[name]
 
-        cfg = dict(
-            horizon=ds_meta["horizon"]
-        )
-        
+        cfg = dict(horizon=ds_meta["horizon"])
+
         # determine whether we are performing eval on dataset
         if eval is None or name in eval:
             cfg["do_eval"] = True
         else:
             cfg["do_eval"] = False
-        
+
         # determine dataset path
         path_list = get_ds_path(name, ds_type=f"{src}_im")
         # skip if entry does not exist for this dataset src
         if path_list is None:
             continue
-        
+
         if isinstance(path_list, str):
             path_list = [path_list]
 
@@ -653,7 +661,7 @@ def get_ds_cfg(
 
             if "env_meta_update_dict" in ds_meta:
                 cfg_for_path["env_meta_update_dict"] = ds_meta["env_meta_update_dict"]
-            
+
             cfg_for_path["path"] = path
 
             if path_i > 0:
