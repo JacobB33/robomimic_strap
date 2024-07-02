@@ -241,7 +241,7 @@ def make_generator_helper(args):
 
     # automatic precision
     generator.add_param(
-        key="algo.amp",
+        key="algo.transformer.amp",
         name="",
         group=1234,
         values=[

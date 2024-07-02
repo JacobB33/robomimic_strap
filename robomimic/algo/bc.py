@@ -706,8 +706,8 @@ class BC_Transformer(BC):
         self._set_params_from_config()
         self.nets = self.nets.float().to(self.device)
         
-        torch.compile(self.nets, mode="max-autotune")
-        self.scaler = GradScaler() if self.algo_config.amp else None
+        # torch.compile(self.nets, mode="max-autotune")
+        self.scaler = GradScaler() if self.algo_config.transformer.amp else None
 
     def _set_params_from_config(self):
         """
@@ -831,8 +831,8 @@ class BC_Transformer_GMM(BC_Transformer):
         self._set_params_from_config()
         self.nets = self.nets.float().to(self.device)
 
-        torch.compile(self.nets, mode="max-autotune")
-        self.scaler = GradScaler() if self.algo_config.amp else None
+        # torch.compile(self.nets, mode="max-autotune")
+        self.scaler = GradScaler() if self.algo_config.transformer.amp else None
 
     def _forward_training(self, batch, epoch=None):
         """
