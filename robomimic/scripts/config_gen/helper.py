@@ -177,10 +177,11 @@ def set_env_settings(generator, args):
                     [
                         "robot0_base_to_eef_pos",
                         "robot0_base_to_eef_quat",
-                        # "robot0_base_pos",
-                        # "robot0_base_quat",
-                        "robot0_gripper_qpos",
-                    ]
+                        # base_pose varies between episodes
+                        "robot0_base_pos",
+                        "robot0_base_quat",
+                        "robot0_gripper_qpos"
+                     ]
                 ],
             )
             generator.add_param(
