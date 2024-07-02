@@ -239,6 +239,18 @@ def make_generator_helper(args):
     #     hidename=True,
     # )
 
+    # automatic precision
+    generator.add_param(
+        key="algo.amp",
+        name="",
+        group=1234,
+        values=[
+            # True,
+            False,
+        ],
+        hidename=True,
+    )
+
     return generator
 
 

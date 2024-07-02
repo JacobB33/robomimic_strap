@@ -193,7 +193,7 @@ def lr_scheduler_from_optim_params(net_optim_params, net, optimizer, num_trainin
         raise ValueError("Invalid LR scheduler type: {}".format(lr_scheduler_type))
 
 
-def backprop_for_loss(net, optim, loss, max_grad_norm=None, retain_graph=False):
+def backprop_for_loss(net, optim, loss, max_grad_norm=None, scaler=None, retain_graph=False):
     """
     Backpropagate loss and update parameters for network with
     name @name.
@@ -215,7 +215,10 @@ def backprop_for_loss(net, optim, loss, max_grad_norm=None, retain_graph=False):
 
     # backprop
     optim.zero_grad()
-    loss.backward(retain_graph=retain_graph)
+    if scaler is not None:
+        scaler.scale(loss).backward(retain_graph=retain_graph)
+    else:
+        loss.backward(retain_graph=retain_graph)
 
     # gradient clipping
     if max_grad_norm is not None:
@@ -229,7 +232,11 @@ def backprop_for_loss(net, optim, loss, max_grad_norm=None, retain_graph=False):
             grad_norms += p.grad.data.norm(2).pow(2).item()
 
     # step
-    optim.step()
+    if scaler is not None:
+        scaler.step(optim)
+        scaler.update()
+    else:
+        optim.step()
 
     return grad_norms
 
@@ -297,6 +304,13 @@ def maybe_no_grad(no_grad):
     """
     return torch.no_grad() if no_grad else dummy_context_mgr()
 
+def maybe_amp(amp):
+    """
+    Args:
+        amp (bool): if True, the returned context will be torch.cuda.amp.autocast(), otherwise
+            it will be a dummy context
+    """
+    return torch.cuda.amp.autocast() if amp else dummy_context_mgr()
 
 """
 The following utility functions were taken from PyTorch3D:

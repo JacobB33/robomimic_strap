@@ -4,6 +4,8 @@ Implementation of Behavioral Cloning (BC).
 from collections import OrderedDict
 
 import torch
+# torch.backends.cudnn.benchmark = True
+
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.distributions as D
@@ -20,6 +22,7 @@ from robomimic.macros import LANG_EMB_KEY
 
 from robomimic.algo import register_algo_factory_func, PolicyAlgo
 
+from torch.cuda.amp import GradScaler
 
 @register_algo_factory_func("bc")
 def algo_config_to_class(algo_config):
@@ -133,9 +136,11 @@ class BC(PolicyAlgo):
                 that might be relevant for logging
         """
         with TorchUtils.maybe_no_grad(no_grad=validate):
-            info = super(BC, self).train_on_batch(batch, epoch, validate=validate)
-            predictions = self._forward_training(batch)
-            losses = self._compute_losses(predictions, batch)
+
+            with TorchUtils.maybe_amp(amp=not validate):
+                info = super(BC, self).train_on_batch(batch, epoch, validate=validate)
+                predictions = self._forward_training(batch)
+                losses = self._compute_losses(predictions, batch)
 
             info["predictions"] = TensorUtils.detach(predictions)
             info["losses"] = TensorUtils.detach(losses)
@@ -209,6 +214,7 @@ class BC(PolicyAlgo):
             optim=self.optimizers["policy"],
             loss=losses["action_loss"],
             max_grad_norm=self.global_config.train.max_grad_norm,
+            scaler=self.scaler,
         )
         info["policy_grad_norms"] = policy_grad_norms
 
@@ -700,6 +706,9 @@ class BC_Transformer(BC):
         self._set_params_from_config()
         self.nets = self.nets.float().to(self.device)
         
+        torch.compile(self.nets, mode="max-autotune")
+        self.scaler = GradScaler() if self.algo_config.amp else None
+
     def _set_params_from_config(self):
         """
         Read specific config variables we need for training / eval.
@@ -821,6 +830,9 @@ class BC_Transformer_GMM(BC_Transformer):
         )
         self._set_params_from_config()
         self.nets = self.nets.float().to(self.device)
+
+        torch.compile(self.nets, mode="max-autotune")
+        self.scaler = GradScaler() if self.algo_config.amp else None
 
     def _forward_training(self, batch, epoch=None):
         """

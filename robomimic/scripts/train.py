@@ -211,7 +211,9 @@ def train(config, device):
         batch_size=config.train.batch_size,
         shuffle=(train_sampler is None),
         num_workers=config.train.num_data_workers,
-        drop_last=True
+        drop_last=True,
+        # modified,
+        pin_memory=True,
     )
 
     if config.experiment.validate:
