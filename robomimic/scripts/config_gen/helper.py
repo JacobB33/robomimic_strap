@@ -621,7 +621,7 @@ def get_ds_cfg(
         ds_names = [
             name for name in all_datasets.keys() if "Close" in name or "Open" in name
         ]
-        random.seed(42)
+        random.seed(4)
         ds_names = random.sample(ds_names, len(ds_names) // 2)
     elif isinstance(ds_names, str):
         ds_names = [ds_names]
