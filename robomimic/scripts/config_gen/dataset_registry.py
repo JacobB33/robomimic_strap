@@ -130,13 +130,15 @@ SINGLE_STAGE_TASK_DATASETS = OrderedDict(
         mg_filter_key="3000_demos",
         horizon=500,
     ),
-    TurnOnStove=dict(
-        human_path="~/robocasa/datasets/single_stage/kitchen_stove/TurnOnStove/2024-05-02",
-        human_filter_key="50_demos",
-        mg_path="~/robocasa/datasets/single_stage/kitchen_stove/TurnOnStove/mg/2024-05-08-09-20-31",
-        mg_filter_key="3000_demos",
-        horizon=500,
-    ),
+
+    # exclude for now -> has navigation
+    # TurnOnStove=dict(
+    #     human_path="~/robocasa/datasets/single_stage/kitchen_stove/TurnOnStove/2024-05-02",
+    #     human_filter_key="50_demos",
+    #     mg_path="~/robocasa/datasets/single_stage/kitchen_stove/TurnOnStove/mg/2024-05-08-09-20-31",
+    #     mg_filter_key="3000_demos",
+    #     horizon=500,
+    # ),
     TurnOffStove=dict(
         human_path="~/robocasa/datasets/single_stage/kitchen_stove/TurnOffStove/2024-05-02",
         human_filter_key="50_demos",
@@ -180,7 +182,7 @@ SINGLE_STAGE_TASK_DATASETS = OrderedDict(
         horizon=500,
     ),
 
-    # exclude navigation for now
+    # exclude for now -> has navigation
     # NavigateKitchen=dict(
     #     human_path="~/robocasa/datasets/single_stage/kitchen_navigate/NavigateKitchen/2024-05-09",
     #     human_filter_key="50_demos",
