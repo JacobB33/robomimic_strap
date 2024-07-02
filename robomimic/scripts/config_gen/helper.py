@@ -453,7 +453,7 @@ def get_argparser():
         "--eval_task",
         type=str,
         nargs="+",  # This allows one or more arguments
-        default="TurnOnMicrowave",
+        default=["TurnOnMicrowave"],
         help="tasks that the policy is evaluated on + tasks are added to the training dataset",
     )
 
