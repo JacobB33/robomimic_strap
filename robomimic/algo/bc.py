@@ -137,7 +137,8 @@ class BC(PolicyAlgo):
         """
         with TorchUtils.maybe_no_grad(no_grad=validate):
 
-            with TorchUtils.maybe_amp(amp=not validate):
+            with TorchUtils.maybe_amp(amp=self.algo_config.transformer.amp and not validate):
+                
                 info = super(BC, self).train_on_batch(batch, epoch, validate=validate)
                 predictions = self._forward_training(batch)
                 losses = self._compute_losses(predictions, batch)
