@@ -7,11 +7,24 @@ class LangEncoder:
         os.environ["TOKENIZERS_PARALLELISM"] = "true" # needed to suppress warning about potential deadlock
         model_variant = "openai/clip-vit-large-patch14" #"openai/clip-vit-base-patch32"
         self.device = device
-        self.lang_emb_model = CLIPTextModelWithProjection.from_pretrained(
-            model_variant,
-            cache_dir=os.path.expanduser("~/tmp/clip")
-        ).to(device).eval()
-        self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True)
+        try:
+            self.lang_emb_model = CLIPTextModelWithProjection.from_pretrained(
+                model_variant,
+                cache_dir=os.path.expanduser("~/tmp/clip")
+            ).to(device).eval()
+        except EnvironmentError:
+            # use proxy on strip district cluster
+            self.lang_emb_model = CLIPTextModelWithProjection.from_pretrained(
+                model_variant,
+                cache_dir=os.path.expanduser("~/tmp/clip"),
+                proxies={'http': 'StripDistrict:9137'}
+            ).to(device).eval()
+
+        try:
+            self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True)
+        except EnvironmentError:
+            # use proxy on strip district cluster
+            self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True, proxies={'http': 'StripDistrict:9137'})
 
     def get_lang_emb(self, lang):
         if lang is None:
