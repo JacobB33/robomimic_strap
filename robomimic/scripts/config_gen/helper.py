@@ -459,6 +459,13 @@ def get_argparser():
     )
 
     parser.add_argument(
+        "--base_path",
+        type=str,
+        default="~/projects/robocasa_ret/datasets",
+        help="base path to datasets",
+    )
+
+    parser.add_argument(
         "--mod",
         type=str,
         choices=["ld", "im"],
