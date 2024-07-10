@@ -236,8 +236,6 @@ def get_ds_cfg(
     overwrite_ds_lang=False,
     filter_key=None,
     eval=None,
-    gen_tex=True,
-    rand_cams=True,
 ):
 
     all_datasets = {}
@@ -247,7 +245,7 @@ def get_ds_cfg(
     # filter datsets by name or rule
     if ds_names == "all":
         ds_names = list(all_datasets.keys())
-    if ds_names in ALL_DATASETS:
+    elif ds_names in ALL_DATASETS:
         ds_names = list(ALL_DATASETS[ds_names].keys())
 
     # TODO: add names or rules here
@@ -302,15 +300,7 @@ def get_ds_cfg(
                 cfg_for_path["env_meta_update_dict"] = ds_meta["env_meta_update_dict"]
 
             if not path.endswith(".hdf5"):
-                # determine path
-                if gen_tex is True and rand_cams is True:
-                    path = os.path.join(path, "demo_gentex_im128_randcams.hdf5")
-                elif gen_tex is True and rand_cams is False:
-                    path = os.path.join(path, "demo_gentex_im128.hdf5")
-                elif gen_tex is False and rand_cams is False:
-                    path = os.path.join(path, "demo_im128.hdf5")
-                else:
-                    raise ValueError
+                path = os.path.join(path, ds_meta["file_name"])
             cfg_for_path["path"] = path
 
             if path_i > 0:
