@@ -6,7 +6,7 @@ This is the official policy learning repo accompanying the [RoboCasa](https://ro
 ## Installation
 After installing the [RoboCasa codebase](https://github.com/robocasa/robocasa), follow the instructions below:
 ```
-git clone https://github.com/ARISE-Initiative/robomimic -b robocasa
+git clone https://github.com/memmelma/robomimic_ret.git
 cd robomimic
 pip install -e .
 ```
@@ -19,7 +19,7 @@ Before training, download datasets, see instructions [here](https://github.com/r
 
 Each algorithm has its own config generator script. For example for BC-Transformer policy run:
 ```
-python robomimic/scripts/config_gen/bc_xfmr.py --name <experiment-name>
+python robomimic/scripts/config_gen/bc_xfmr_gen.py --name <experiment-name>
 ```
 Modify this file accordingly, depending on which datasets you are training on and whether you are running evaluations.
 
