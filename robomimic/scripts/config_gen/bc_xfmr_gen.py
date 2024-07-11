@@ -31,21 +31,22 @@ def make_generator_helper(args):
     # Add training tasks to dataset
     values_and_names = [
         (
-            get_ds_cfg(args.train_task, base_path=args.base_path, eval=args.eval_task),
+            get_ds_cfg(args.train_task, base_path=args.base_path, eval=args.eval_task, filter_key=args.filter_key),
             "human-50",
         )
     ]
 
     # Add evaluation tasks to dataset
     all_paths = [ds["path"] for ds in values_and_names[0][0]]
-    for eval_task in args.eval_task:
-        value = get_ds_cfg(
-            eval_task,
-            base_path=args.base_path,
-            eval=args.eval_task,
-        )[0]
-        if value["path"] not in all_paths:
-            values_and_names[0][0].append(value)
+    if args.eval_task is not None:
+        for eval_task in args.eval_task:
+            value = get_ds_cfg(
+                eval_task,
+                base_path=args.base_path,
+                eval=args.eval_task,
+            )[0]
+            if value["path"] not in all_paths:
+                values_and_names[0][0].append(value)
 
     generator.add_param(key="experiment.name", name="", group=-1, values=[args.name])
 

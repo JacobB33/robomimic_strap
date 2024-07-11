@@ -219,12 +219,103 @@ VIOLA_REAL_TASK_DATASETS = OrderedDict(
     ),
 )
 
+RETRIEVAL_DATASETS = OrderedDict(
+    TurnOnMicrowave_CLIP_best=dict(
+        file_name="CLIP_robot0_eye_in_hand_image_best.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_CLIP_worst=dict(
+        file_name="CLIP_robot0_eye_in_hand_image_worst.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_CLIP_random=dict(
+        file_name="CLIP_robot0_eye_in_hand_image_random.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+
+    TurnOnMicrowave_DINOv2_best=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_best.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_DINOv2_worst=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_worst.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_DINOv2_random=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_random.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+
+    TurnOnMicrowave_VIP_best=dict(
+        file_name="VIP_robot0_eye_in_hand_image_best.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_VIP__worst=dict(
+        file_name="VIP_robot0_eye_in_hand_image_worst.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_VIP_random=dict(
+        file_name="VIP_robot0_eye_in_hand_image_random.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+
+    TurnOnMicrowave_R3M_best=dict(
+        file_name="R3M_robot0_eye_in_hand_image_best.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_R3M_worst=dict(
+        file_name="R3M_robot0_eye_in_hand_image_worst.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnMicrowave_R3M_random=dict(
+        file_name="R3M_robot0_eye_in_hand_image_random.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
+)
+
 # TODO: add datasets here
 
 ALL_DATASETS = OrderedDict()
 ALL_DATASETS["single_stage"] = SINGLE_STAGE_TASK_DATASETS
 ALL_DATASETS["multi_stage"] = MULTI_STAGE_TASK_DATASETS
 ALL_DATASETS["viola_real"] = VIOLA_REAL_TASK_DATASETS
+ALL_DATASETS["retrieval"] = RETRIEVAL_DATASETS
 
 # TODO: add datasets here
 
@@ -249,6 +340,27 @@ def get_ds_cfg(
         ds_names = list(ALL_DATASETS[ds_names].keys())
 
     # TODO: add names or rules here
+
+    elif "clip" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "CLIP" in name]
+        ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "best" in name]
+
+    elif "dinov2" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "best" in name]
+
+    elif "r3m" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "R3M" in name]
+        ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "best" in name]
+
+    elif "vip" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "VIP" in name]
+        ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "best" in name]
+
 
     elif ds_names == "pnp":
         ds_names = [name for name in all_datasets.keys() if "PnP" in name]

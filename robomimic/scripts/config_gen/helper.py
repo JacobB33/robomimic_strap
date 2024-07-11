@@ -454,8 +454,15 @@ def get_argparser():
         "--eval_task",
         type=str,
         nargs="+",  # This allows one or more arguments
-        default=["TurnOnMicrowave"],
+        default=None, # ["TurnOnMicrowave"],
         help="tasks that the policy is evaluated on + tasks are added to the training dataset",
+    )
+
+    parser.add_argument(
+        "--filter_key",
+        type=str,
+        default=None,
+        help="filter_key for dataset split",
     )
 
     parser.add_argument(
