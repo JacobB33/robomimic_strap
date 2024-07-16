@@ -70,6 +70,13 @@ def make_generator_helper(args):
         ],
     )
 
+    generator.add_param(
+        key="train.hdf5_cache_mode",
+        name="",
+        group=-1,
+        values=["all"],
+    )
+
     ##### ALGORITHM #####
 
     # # pass language to transformer

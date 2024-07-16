@@ -80,8 +80,10 @@ class DataLogger(object):
                         entity=Macros.WANDB_ENTITY,
                         project=config.experiment.logging.wandb_proj_name,
                         name=config.experiment.name,
-                        dir=log_dir,
-                        mode=("offline" if attempt == num_attempts - 1 else "online"),
+                        # dir=log_dir,
+                        # mode=("offline" if attempt == num_attempts - 1 else "online"),
+                        dir="/scratch/home/mem1pi/projects/",
+                        mode="offline",
                     )
 
                     # set up info for identifying experiment

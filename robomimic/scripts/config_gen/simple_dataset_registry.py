@@ -341,26 +341,30 @@ def get_ds_cfg(
 
     # TODO: add names or rules here
 
-    elif "clip" in ds_names:
+    elif "clip_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "CLIP" in name]
         ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
         ds_names = [name for name in ds_names if "best" in name]
 
-    elif "dinov2" in ds_names:
+    elif "dinov2_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
         ds_names = [name for name in ds_names if "best" in name]
 
-    elif "r3m" in ds_names:
+    elif "r3m_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "R3M" in name]
         ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
         ds_names = [name for name in ds_names if "best" in name]
 
-    elif "vip" in ds_names:
+    elif "vip_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "VIP" in name]
         ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
         ds_names = [name for name in ds_names if "best" in name]
 
+    elif "random" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "CLIP" in name]
+        ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "random" in name]
 
     elif ds_names == "pnp":
         ds_names = [name for name in all_datasets.keys() if "PnP" in name]

@@ -58,7 +58,8 @@ def train(config, device):
     print("\n============= New Training Run with Config =============")
     print(config)
     print("")
-    log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config)
+    log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config, auto_remove_exp_dir=True)
+    # log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config)
 
     if config.experiment.logging.terminal_output_to_txt:
         # log stdout and stderr to a text file

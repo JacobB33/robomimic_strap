@@ -246,13 +246,13 @@ def set_mod_settings(generator, args):
                 group=-1,
                 values=[5],
             )
-        generator.add_param(
-            key="train.hdf5_cache_mode",
-            name="",
-            group=-1,
-            # values=["low_dim"],
-            values=[None],
-        )
+        # generator.add_param(
+        #     key="train.hdf5_cache_mode",
+        #     name="",
+        #     group=-1,
+        #     # values=["low_dim"],
+        #     values=[None],
+        # )
         if "train.batch_size" not in generator.parameters:
             generator.add_param(
                 key="train.batch_size",
