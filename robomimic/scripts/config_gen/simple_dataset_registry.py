@@ -340,6 +340,11 @@ def get_ds_cfg(
         ds_names = list(ALL_DATASETS[ds_names].keys())
 
     # TODO: add names or rules here
+    elif ds_names == "single_stage":
+        ds_names = list(ALL_DATASETS["single_stage"].keys())
+
+    # elif ds_names == "multi_stage":
+    #     ds_names = list(ALL_DATASETS["multi_stage"].keys())
 
     elif "clip_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "CLIP" in name]
