@@ -219,6 +219,30 @@ VIOLA_REAL_TASK_DATASETS = OrderedDict(
     ),
 )
 
+VIOLA_SIM_TASK_DATASETS = OrderedDict(
+    SimSort=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="viola/sort",
+        horizon=500,
+        activity="sort",
+    ),
+    SimStack=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="viola/stack",
+        horizon=500,
+        activity="stack",
+    ),
+    SimBuds=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="viola/buds",
+        horizon=500,
+        activity="buds",
+    ),
+)
+
 RETRIEVAL_DATASETS = OrderedDict(
     TurnOnMicrowave_CLIP_best=dict(
         file_name="CLIP_robot0_eye_in_hand_image_best.hdf5",
@@ -324,6 +348,7 @@ ALL_DATASETS = OrderedDict()
 ALL_DATASETS["single_stage"] = SINGLE_STAGE_TASK_DATASETS
 ALL_DATASETS["multi_stage"] = MULTI_STAGE_TASK_DATASETS
 ALL_DATASETS["viola_real"] = VIOLA_REAL_TASK_DATASETS
+ALL_DATASETS["viola_sim"] = VIOLA_SIM_TASK_DATASETS
 ALL_DATASETS["droid"] = DROID_DATASETS
 ALL_DATASETS["retrieval"] = RETRIEVAL_DATASETS
 
@@ -352,6 +377,11 @@ def get_ds_cfg(
     # TODO: add names or rules here
     # elif ds_names == "single_stage":
     #     ds_names = list(ALL_DATASETS["single_stage"].keys())
+    elif ds_names == "viola":
+        viola_datasets = {}
+        viola_datasets.update(ALL_DATASETS["viola_real"])
+        viola_datasets.update(ALL_DATASETS["viola_sim"])
+        ds_names = list(viola_datasets.keys())
 
     # elif ds_names == "multi_stage":
     #     ds_names = list(ALL_DATASETS["multi_stage"].keys())
