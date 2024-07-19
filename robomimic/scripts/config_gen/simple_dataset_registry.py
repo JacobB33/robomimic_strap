@@ -309,12 +309,22 @@ RETRIEVAL_DATASETS = OrderedDict(
     ),
 )
 
+DROID_DATASETS = OrderedDict(
+    DroidLanguage100=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="droid_100",
+        horizon=500,
+        activity="everything",
+    ),
+)
 # TODO: add datasets here
 
 ALL_DATASETS = OrderedDict()
 ALL_DATASETS["single_stage"] = SINGLE_STAGE_TASK_DATASETS
 ALL_DATASETS["multi_stage"] = MULTI_STAGE_TASK_DATASETS
 ALL_DATASETS["viola_real"] = VIOLA_REAL_TASK_DATASETS
+ALL_DATASETS["droid"] = DROID_DATASETS
 ALL_DATASETS["retrieval"] = RETRIEVAL_DATASETS
 
 # TODO: add datasets here
@@ -340,8 +350,8 @@ def get_ds_cfg(
         ds_names = list(ALL_DATASETS[ds_names].keys())
 
     # TODO: add names or rules here
-    elif ds_names == "single_stage":
-        ds_names = list(ALL_DATASETS["single_stage"].keys())
+    # elif ds_names == "single_stage":
+    #     ds_names = list(ALL_DATASETS["single_stage"].keys())
 
     # elif ds_names == "multi_stage":
     #     ds_names = list(ALL_DATASETS["multi_stage"].keys())
