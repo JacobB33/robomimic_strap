@@ -6,153 +6,153 @@ SINGLE_STAGE_TASK_DATASETS = OrderedDict(
     PnPCounterToCab=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPCounterToCab/2024-04-24",
     ),
     PnPCabToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPCabToCounter/2024-04-24",
     ),
     PnPCounterToSink=dict(
         horizon=700,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPCounterToSink/2024-04-25",
     ),
     PnPSinkToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPSinkToCounter/2024-04-26_2",
     ),
     PnPCounterToMicrowave=dict(
         horizon=600,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPCounterToMicrowave/2024-04-27",
     ),
     PnPMicrowaveToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPMicrowaveToCounter/2024-04-26",
     ),
     PnPCounterToStove=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPCounterToStove/2024-04-26",
     ),
     PnPStoveToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_pnp/PnPStoveToCounter/2024-05-01",
     ),
     OpenSingleDoor=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_doors/OpenSingleDoor/2024-04-24",
     ),
     CloseSingleDoor=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_doors/CloseSingleDoor/2024-04-24",
     ),
     OpenDoubleDoor=dict(
         horizon=1000,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_doors/OpenDoubleDoor/2024-04-26",
     ),
     CloseDoubleDoor=dict(
         horizon=700,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_doors/CloseDoubleDoor/2024-04-29",
     ),
     OpenDrawer=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_drawer/OpenDrawer/2024-05-03",
     ),
     CloseDrawer=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_drawer/CloseDrawer/2024-04-30",
     ),
     TurnOnSinkFaucet=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_sink/TurnOnSinkFaucet/2024-04-25",
     ),
     TurnOffSinkFaucet=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_sink/TurnOffSinkFaucet/2024-04-25",
     ),
     TurnSinkSpout=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_sink/TurnSinkSpout/2024-04-29",
     ),
     # exclude for now -> has navigation
     # TurnOnStove=dict(
     #     horizon=500,
     #     file_name="demo_gentex_im128_randcams.hdf5",
-    # filter_key="human_50",
+    # filter_key="50_demos",
     # path="v0.1/single_stage/kitchen_stove/TurnOnStove/2024-05-02",
     # ),
     TurnOffStove=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_stove/TurnOffStove/2024-05-02",
     ),
     CoffeeSetupMug=dict(
         horizon=600,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_coffee/CoffeeSetupMug/2024-04-25",
     ),
     CoffeeServeMug=dict(
         horizon=600,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_coffee/CoffeeServeMug/2024-05-01",
     ),
     CoffeePressButton=dict(
         horizon=300,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_coffee/CoffeePressButton/2024-04-25",
     ),
     TurnOnMicrowave=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_microwave/TurnOnMicrowave/2024-04-25",
     ),
     TurnOffMicrowave=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/single_stage/kitchen_microwave/TurnOffMicrowave/2024-04-25",
     ),
     # exclude for now -> has navigation
     # NavigateKitchen=dict(
     #     horizon=500,
     #     file_name="demo_gentex_im128_randcams.hdf5",
-    # filter_key="human_50",
+    # filter_key="50_demos",
     # path="v0.1/single_stage/kitchen_navigate/NavigateKitchen/2024-05-09",
     # ),
 )
@@ -160,35 +160,35 @@ SINGLE_STAGE_TASK_DATASETS = OrderedDict(
 MULTI_STAGE_TASK_DATASETS = OrderedDict(
     ArrangeVegetables=dict(
         file_name="demo_gentex_im128.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/multi_stage/chopping_food/ArrangeVegetables/2024-05-11",
         horizon=1200,
         activity="chopping_food",
     ),
     MicrowaveThawing=dict(
         file_name="demo_gentex_im128.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/multi_stage/defrosting_food/MicrowaveThawing/2024-05-11",
         horizon=1000,
         activity="defrosting_food",
     ),
     RestockPantry=dict(
         file_name="demo_gentex_im128.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/multi_stage/restocking_supplies/RestockPantry/2024-05-10",
         horizon=1000,
         activity="restocking_supplies",
     ),
     PreSoakPan=dict(
         file_name="demo_gentex_im128.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/multi_stage/washing_dishes/PreSoakPan/2024-05-10",
         horizon=1500,
         activity="washing_dishes",
     ),
     PrepareCoffee=dict(
         file_name="demo_gentex_im128.hdf5",
-        filter_key="human_50",
+        filter_key="50_demos",
         path="v0.1/multi_stage/brewing/PrepareCoffee/2024-05-07",
         horizon=1000,
         activity="brewing",
@@ -237,7 +237,7 @@ VIOLA_SIM_TASK_DATASETS = OrderedDict(
     SimBuds=dict(
         file_name="robocasa_demo.hdf5",
         filter_key=None,
-        path="viola/buds",
+        path="viola/buds_kitchen",
         horizon=500,
         activity="buds",
     ),
@@ -373,6 +373,18 @@ def get_ds_cfg(
         ds_names = list(all_datasets.keys())
     elif ds_names in ALL_DATASETS:
         ds_names = list(ALL_DATASETS[ds_names].keys())
+
+    elif ds_names == "TurnOnMicrowave_beta_2_dist":
+        ds_names = list(ALL_DATASETS["single_stage"].keys())
+        for k in ALL_DATASETS["single_stage"].keys():
+            # exclude eval task
+            if k == "TurnOnMicrowave":
+                continue
+            # temporarily overwrite path for beta_2_dist
+            ALL_DATASETS["single_stage"][k]["path"] = os.path.join(
+                ALL_DATASETS["single_stage"][k]["path"],
+                "beta_2_dist",
+            )
 
     # TODO: add names or rules here
     # elif ds_names == "single_stage":
