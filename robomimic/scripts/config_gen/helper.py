@@ -468,7 +468,8 @@ def get_argparser():
     parser.add_argument(
         "--base_path",
         type=str,
-        default="~/projects/robocasa_ret/datasets",
+        default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
+        # default="~/projects/robocasa_ret/datasets",
         help="base path to datasets",
     )
 
