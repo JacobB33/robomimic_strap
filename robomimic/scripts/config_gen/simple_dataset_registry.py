@@ -219,6 +219,30 @@ VIOLA_REAL_TASK_DATASETS = OrderedDict(
     ),
 )
 
+VIOLA_SIM_TASK_DATASETS = OrderedDict(
+    SimSort=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="viola/sort",
+        horizon=500,
+        activity="sort",
+    ),
+    SimStack=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="viola/stack",
+        horizon=500,
+        activity="stack",
+    ),
+    SimBuds=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="viola/buds_kitchen",
+        horizon=500,
+        activity="buds",
+    ),
+)
+
 RETRIEVAL_DATASETS = OrderedDict(
     TurnOnMicrowave_CLIP_best=dict(
         file_name="CLIP_robot0_eye_in_hand_image_best.hdf5",
@@ -309,12 +333,23 @@ RETRIEVAL_DATASETS = OrderedDict(
     ),
 )
 
+DROID_DATASETS = OrderedDict(
+    DroidLanguage100=dict(
+        file_name="robocasa_demo.hdf5",
+        filter_key=None,
+        path="droid_100",
+        horizon=500,
+        activity="everything",
+    ),
+)
 # TODO: add datasets here
 
 ALL_DATASETS = OrderedDict()
 ALL_DATASETS["single_stage"] = SINGLE_STAGE_TASK_DATASETS
 ALL_DATASETS["multi_stage"] = MULTI_STAGE_TASK_DATASETS
 ALL_DATASETS["viola_real"] = VIOLA_REAL_TASK_DATASETS
+ALL_DATASETS["viola_sim"] = VIOLA_SIM_TASK_DATASETS
+ALL_DATASETS["droid"] = DROID_DATASETS
 ALL_DATASETS["retrieval"] = RETRIEVAL_DATASETS
 
 # TODO: add datasets here
@@ -339,9 +374,26 @@ def get_ds_cfg(
     elif ds_names in ALL_DATASETS:
         ds_names = list(ALL_DATASETS[ds_names].keys())
 
-    # TODO: add names or rules here
-    elif ds_names == "single_stage":
+    elif ds_names == "TurnOnMicrowave_beta_2_dist":
         ds_names = list(ALL_DATASETS["single_stage"].keys())
+        for k in ALL_DATASETS["single_stage"].keys():
+            # exclude eval task
+            if k == "TurnOnMicrowave":
+                continue
+            # temporarily overwrite path for beta_2_dist
+            ALL_DATASETS["single_stage"][k]["path"] = os.path.join(
+                ALL_DATASETS["single_stage"][k]["path"],
+                "beta_2_dist",
+            )
+
+    # TODO: add names or rules here
+    # elif ds_names == "single_stage":
+    #     ds_names = list(ALL_DATASETS["single_stage"].keys())
+    elif ds_names == "viola":
+        viola_datasets = {}
+        viola_datasets.update(ALL_DATASETS["viola_real"])
+        viola_datasets.update(ALL_DATASETS["viola_sim"])
+        ds_names = list(viola_datasets.keys())
 
     # elif ds_names == "multi_stage":
     #     ds_names = list(ALL_DATASETS["multi_stage"].keys())
