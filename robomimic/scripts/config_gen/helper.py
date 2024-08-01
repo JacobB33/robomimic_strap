@@ -455,7 +455,7 @@ def get_argparser():
         type=str,
         nargs="+",  # This allows one or more arguments
         default=None, # ["TurnOnMicrowave"],
-        help="tasks that the policy is evaluated on + tasks are added to the training dataset",
+        help="tasks that the policy is evaluated on.", #  + tasks are added to the training dataset",
     )
 
     parser.add_argument(

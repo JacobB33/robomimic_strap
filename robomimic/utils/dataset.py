@@ -239,7 +239,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                     lang = ep_meta.get("lang", "dummy")
                     if lang is not None:
                         self._demo_id_to_demo_lang_str[ep] = lang
-            # print(self._demo_id_to_demo_lang_str[ep])
+            print(self._demo_id_to_demo_lang_str[ep])
 
             num_sequences = demo_length
             # determine actual number of sequences taking into account whether to pad for frame_stack and seq_length
@@ -625,6 +625,8 @@ class SequenceDataset(torch.utils.data.Dataset):
             data = self.get_dataset_for_ep(demo_id, k)
             seq[k] = data[seq_begin_index: seq_end_index]
 
+        # print(seq_begin_pad, seq_end_pad)
+        # print(seq.shape)
         seq = TensorUtils.pad_sequence(seq, padding=(seq_begin_pad, seq_end_pad), pad_same=True)
         pad_mask = np.array([0] * seq_begin_pad + [1] * (seq_end_index - seq_begin_index) + [0] * seq_end_pad)
         pad_mask = pad_mask[:, None].astype(bool)

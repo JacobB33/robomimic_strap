@@ -17,14 +17,14 @@ class LangEncoder:
             self.lang_emb_model = CLIPTextModelWithProjection.from_pretrained(
                 model_variant,
                 cache_dir=os.path.expanduser("~/tmp/clip"),
-                proxies={'http': 'StripDistrict:9137'}
+                proxies={'http': 'http://rb-proxy-sl.bosch.com:8080'}
             ).to(device).eval()
 
         try:
             self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True)
         except EnvironmentError:
             # use proxy on strip district cluster
-            self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True, proxies={'http': 'StripDistrict:9137'})
+            self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True, proxies={'http': 'rb-proxy-sl.bosch.com:8080'})
 
     def get_lang_emb(self, lang):
         if lang is None:
