@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+import json
 import random
 import datetime
 from copy import deepcopy
@@ -119,25 +120,28 @@ def set_env_settings(generator, args):
             values=["ResNet18ConvFiLM"],
         )
 
-        env_kwargs = {
-            "generative_textures": None,
-            "scene_split": None,
-            "style_ids": None,
-            "layout_ids": None,
-            "layout_and_style_ids": [[1, 1], [2, 2], [4, 4], [6, 9], [7, 10]],
-            "randomize_cameras": False,
-            "obj_instance_split": "B",
-        }
-        if args.abs_actions:
-            env_kwargs["controller_configs"] = {"control_delta": False}
+        # env_kwargs = {
+        #     # "generative_textures": None,
+        #     # "scene_split": None,
+        #     # "style_ids": None,
+        #     # "layout_ids": None,
+        #     # "layout_and_style_ids": [[1, 1]], # , [2, 2], [4, 4], [6, 9], [7, 10]],
+        #     "randomize_cameras": False,
+        #     # "obj_instance_split": "B",
+        # }
 
-        # don't use generative textures for evaluation
-        generator.add_param(
-            key="experiment.env_meta_update_dict",
-            name="",
-            group=-1,
-            values=[{"env_kwargs": env_kwargs}],
-        )
+        if args.env_kwargs_path:
+            env_kwargs = json.load(open(args.env_kwargs_path, "r"))
+            if args.abs_actions:
+                env_kwargs["controller_configs"] = {"control_delta": False}
+
+            # don't use generative textures for evaluation
+            generator.add_param(
+                key="experiment.env_meta_update_dict",
+                name="",
+                group=-1,
+                values=[{"env_kwargs": env_kwargs}],
+            )
 
         generator.add_param(
             key="observation.encoder.rgb.obs_randomizer_kwargs",
@@ -496,6 +500,23 @@ def get_argparser():
         action="store_true",
     )
 
+    parser.add_argument(
+        "--eval_only",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--ckpt_path",
+        type=str,
+        default=None,
+    )
+
+    parser.add_argument(
+        "--env_kwargs_path",
+        type=str,
+        default=None,
+    )
+
     parser.add_argument("--no_video", action="store_true")
 
     parser.add_argument("--no_rollout", action="store_true")
@@ -582,6 +603,52 @@ def make_generator(args, make_generator_helper):
             group=-1,
             values=[
                 False,
+            ],
+        )
+
+    if args.eval_only and args.ckpt_path is not None:
+        # disable save
+        generator.add_param(
+            key="experiment.save.enabled",
+            name="",
+            group=-1,
+            values=[
+                False,
+            ],
+        )
+        # disable train and eval
+        generator.add_param(
+            key="experiment.epoch_every_n_steps",
+            name="",
+            group=-1,
+            values=[
+                0,
+            ],
+        )
+        generator.add_param(
+            key="experiment.validation_epoch_every_n_steps",
+            name="",
+            group=-1,
+            values=[
+                0,
+            ],
+        )
+        # immediate eval rollout
+        generator.add_param(
+            key="experiment.rollout.rate",
+            name="",
+            group=-1,
+            values=[
+                1,
+            ],
+        )
+        # set model ckpt_path
+        generator.add_param(
+            key="experiment.ckpt_path",
+            name="",
+            group=-1,
+            values=[
+                args.ckpt_path,
             ],
         )
 
