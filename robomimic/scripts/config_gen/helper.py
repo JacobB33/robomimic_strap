@@ -57,6 +57,7 @@ def get_generator(algo_name, config_file, args, algo_name_short=None, pt=False):
         generated_config_dir=generated_config_dir,
         wandb_proj_name=args.wandb_proj_name,
         script_file=args.script,
+        eval_mode=args.eval,
     )
 
     args.algo_name = algo_name
@@ -132,16 +133,21 @@ def set_env_settings(generator, args):
 
         if args.env_kwargs_path:
             env_kwargs = json.load(open(args.env_kwargs_path, "r"))
-            if args.abs_actions:
-                env_kwargs["controller_configs"] = {"control_delta": False}
+        else:
+            env_kwargs = {
+                "generative_textures": None
+            }
 
-            # don't use generative textures for evaluation
-            generator.add_param(
-                key="experiment.env_meta_update_dict",
-                name="",
-                group=-1,
-                values=[{"env_kwargs": env_kwargs}],
-            )
+        if args.abs_actions:
+            env_kwargs["controller_configs"] = {"control_delta": False}
+
+        # don't use generative textures for evaluation
+        generator.add_param(
+            key="experiment.env_meta_update_dict",
+            name="",
+            group=-1,
+            values=[{"env_kwargs": env_kwargs}],
+        )
 
         generator.add_param(
             key="observation.encoder.rgb.obs_randomizer_kwargs",
@@ -500,8 +506,12 @@ def get_argparser():
         action="store_true",
     )
 
+    # parser.add_argument(
+    #     "--eval_only",
+    #     action="store_true",
+    # )
     parser.add_argument(
-        "--eval_only",
+        "--eval",
         action="store_true",
     )
 
@@ -515,6 +525,11 @@ def get_argparser():
         "--env_kwargs_path",
         type=str,
         default=None,
+    )
+
+    parser.add_argument(
+        "--baku",
+        action="store_true",
     )
 
     parser.add_argument("--no_video", action="store_true")
@@ -606,42 +621,7 @@ def make_generator(args, make_generator_helper):
             ],
         )
 
-    if args.eval_only and args.ckpt_path is not None:
-        # disable save
-        generator.add_param(
-            key="experiment.save.enabled",
-            name="",
-            group=-1,
-            values=[
-                False,
-            ],
-        )
-        # disable train and eval
-        generator.add_param(
-            key="experiment.epoch_every_n_steps",
-            name="",
-            group=-1,
-            values=[
-                0,
-            ],
-        )
-        generator.add_param(
-            key="experiment.validation_epoch_every_n_steps",
-            name="",
-            group=-1,
-            values=[
-                0,
-            ],
-        )
-        # immediate eval rollout
-        generator.add_param(
-            key="experiment.rollout.rate",
-            name="",
-            group=-1,
-            values=[
-                1,
-            ],
-        )
+    if args.ckpt_path is not None:
         # set model ckpt_path
         generator.add_param(
             key="experiment.ckpt_path",
@@ -652,6 +632,106 @@ def make_generator(args, make_generator_helper):
             ],
         )
 
+        # if args.eval_only:
+        #     # disable save
+        #     generator.add_param(
+        #         key="experiment.save.enabled",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             False,
+        #         ],
+        #     )
+        #     # disable train and eval
+        #     generator.add_param(
+        #         key="experiment.epoch_every_n_steps",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             0,
+        #         ],
+        #     )
+        #     generator.add_param(
+        #         key="experiment.validation_epoch_every_n_steps",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             0,
+        #         ],
+        #     )
+        #     # immediate eval rollout
+        #     generator.add_param(
+        #         key="experiment.rollout.rate",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             1,
+        #         ],
+        #     )
+        #     # set model ckpt_path
+        #     generator.add_param(
+        #         key="experiment.ckpt_path",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             args.ckpt_path,
+        #         ],
+        #     )
+
+    if args.baku:
+        generator.add_param(
+            key="algo.language_conditioned",
+            name="",
+            group=-1,
+            values=[True],
+        )
+        # baku-like changes that are not supported yet
+        # baku has sequence length of 1 (history) and 10 (future)
+        # baku has two-layer mlp to encode obs before transformer
+        seq_length = 5
+        generator.add_param(
+            key="train.seq_length",
+            name="",
+            group=-1,
+            values=[seq_length],
+        )
+        generator.add_param(
+            key="train.frame_stack",
+            name="",
+            group=-1,
+            values=[seq_length],
+        )
+        generator.add_param(
+            key="algo.transformer.context_length",
+            name="",
+            group=-1,
+            values=[seq_length],
+        )
+        generator.add_param(
+            key="algo.gmm.enabled",
+            name="",
+            group=-1,
+            values=[False],
+        )
+        generator.add_param(
+            key="algo.transformer.num_layers",
+            name="",
+            group=-1,
+            values=[8],
+        )
+        generator.add_param(
+            key="algo.transformer.embed_dim",
+            name="",
+            group=-1,
+            values=[256],
+        )
+        generator.add_param(
+            key="algo.transformer.num_heads",
+            name="",
+            group=-1,
+            values=[4],
+        )
+        
     # generate jsons and script
     generator.generate(override_base_name=True)
 

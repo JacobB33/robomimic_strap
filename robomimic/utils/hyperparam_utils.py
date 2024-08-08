@@ -16,7 +16,7 @@ class ConfigGenerator(object):
     Useful class to keep track of hyperparameters to sweep, and to generate
     the json configs for each experiment run.
     """
-    def __init__(self, base_config_file, wandb_proj_name="debug", script_file=None, generated_config_dir=None):
+    def __init__(self, base_config_file, wandb_proj_name="debug", script_file=None, generated_config_dir=None, eval_mode=False):
         """
         Args:
             base_config_file (str): path to a base json config to use as a starting point
@@ -40,6 +40,8 @@ class ConfigGenerator(object):
 
         assert isinstance(wandb_proj_name, str)
         self.wandb_proj_name = wandb_proj_name
+
+        self.eval_mode = eval_mode
 
     def add_param(
             self,
@@ -99,7 +101,7 @@ class ConfigGenerator(object):
         """
         assert len(self.parameters) > 0, "must add parameters using add_param first!"
         generated_json_paths = self._generate_jsons(override_base_name=override_base_name)
-        self._script_from_jsons(generated_json_paths)
+        self._script_from_jsons(generated_json_paths, eval_mode=self.eval_mode)
 
     def _name_for_experiment(self, base_name, parameter_values, parameter_value_names):
         """
@@ -301,7 +303,7 @@ class ConfigGenerator(object):
 
         return json_paths
 
-    def _script_from_jsons(self, json_paths):
+    def _script_from_jsons(self, json_paths, eval_mode=False):
         """
         Generates a bash script to run the experiments that correspond to
         the input jsons.
@@ -311,7 +313,10 @@ class ConfigGenerator(object):
             for path in json_paths:
                 # write python command to file
                 import robomimic
-                cmd = "python {}/scripts/train.py --config {}\n".format(robomimic.__path__[0], path)
+                if eval_mode:
+                    cmd = "python {}/scripts/eval.py --config {}\n".format(robomimic.__path__[0], path)
+                else:
+                    cmd = "python {}/scripts/train.py --config {}\n".format(robomimic.__path__[0], path)
                 
                 print()
                 print(cmd)

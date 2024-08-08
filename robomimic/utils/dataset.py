@@ -125,6 +125,7 @@ class SequenceDataset(torch.utils.data.Dataset):
 
         # set up lang and language embedding
         self.dataset_lang = dataset_lang # language for entire dataset
+        self.lang_encoder = lang_encoder
 
         self.n_frame_stack = frame_stack
         assert self.n_frame_stack >= 1
@@ -239,7 +240,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                     lang = ep_meta.get("lang", "dummy")
                     if lang is not None:
                         self._demo_id_to_demo_lang_str[ep] = lang
-            print(self._demo_id_to_demo_lang_str[ep])
+            # print(self._demo_id_to_demo_lang_str[ep])
 
             num_sequences = demo_length
             # determine actual number of sequences taking into account whether to pad for frame_stack and seq_length
@@ -258,22 +259,22 @@ class SequenceDataset(torch.utils.data.Dataset):
                 self._index_to_demo_id[self.total_num_sequences] = ep
                 self.total_num_sequences += 1
 
-        device = TorchUtils.get_torch_device(try_to_use_cuda=True)
-        lang_encoder = LangUtils.LangEncoder(
-            device=device,
-        )
+        # device = TorchUtils.get_torch_device(try_to_use_cuda=True)
+        # lang_encoder = self.lang_encoder(
+        #     device=device,
+        # )
         
         if len(self._demo_id_to_demo_lang_str) > 0:
             print("getting language embeddings...")
             for ep_batch in tqdm(np.array_split(self.demos, int(math.ceil(len(self.demos) / 64)))):
                 # get language embedding
                 lang_batch = [self._demo_id_to_demo_lang_str[ep] for ep in ep_batch]
-                emb_batch = lang_encoder.get_lang_emb(lang_batch)
+                emb_batch = self.lang_encoder.get_lang_emb(lang_batch)
                 emb_batch = TensorUtils.to_numpy(emb_batch)
                 for batch_idx, ep in enumerate(ep_batch):
                     self._demo_id_to_demo_lang_emb[ep] = emb_batch[batch_idx]
 
-        del lang_encoder
+        # del lang_encoder
 
     @property
     def hdf5_file(self):

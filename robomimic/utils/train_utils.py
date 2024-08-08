@@ -29,7 +29,7 @@ from robomimic.algo import RolloutPolicy
 from tianshou.env import SubprocVectorEnv
 
 
-def get_exp_dir(config, auto_remove_exp_dir=False):
+def get_exp_dir(config, auto_remove_exp_dir=False, keep_exp_dir=False):
     """
     Create experiment directory from config. If an identical experiment directory
     exists and @auto_remove_exp_dir is False (default), the function will prompt 
@@ -58,7 +58,9 @@ def get_exp_dir(config, auto_remove_exp_dir=False):
         base_output_dir = os.path.join(robomimic.__path__[0], base_output_dir)
     base_output_dir = os.path.join(base_output_dir, config.experiment.name)
     if os.path.exists(base_output_dir):
-        if not auto_remove_exp_dir:
+        if keep_exp_dir:
+            ans = "n"
+        elif not auto_remove_exp_dir:
             ans = input("WARNING: model directory ({}) already exists! \noverwrite? (y/n)\n".format(base_output_dir))
         else:
             ans = "y"
@@ -70,19 +72,19 @@ def get_exp_dir(config, auto_remove_exp_dir=False):
     output_dir = None
     if config.experiment.save.enabled:
         output_dir = os.path.join(base_output_dir, time_str, "models")
-        os.makedirs(output_dir)
+        os.makedirs(output_dir, exist_ok=keep_exp_dir)
 
     # tensorboard directory
     log_dir = os.path.join(base_output_dir, time_str, "logs")
-    os.makedirs(log_dir)
+    os.makedirs(log_dir, exist_ok=keep_exp_dir)
 
     # video directory
     video_dir = os.path.join(base_output_dir, time_str, "videos")
-    os.makedirs(video_dir)
+    os.makedirs(video_dir, exist_ok=keep_exp_dir)
 
     # vis directory
     vis_dir = os.path.join(base_output_dir, time_str, "vis")
-    os.makedirs(vis_dir)
+    os.makedirs(vis_dir, exist_ok=keep_exp_dir)
     
     return log_dir, output_dir, video_dir, vis_dir
 
