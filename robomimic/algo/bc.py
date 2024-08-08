@@ -215,7 +215,7 @@ class BC(PolicyAlgo):
             optim=self.optimizers["policy"],
             loss=losses["action_loss"],
             max_grad_norm=self.global_config.train.max_grad_norm,
-            scaler=self.scaler,
+            scaler=self.scaler if hasattr(self, "scaler") else None,
         )
         info["policy_grad_norms"] = policy_grad_norms
 

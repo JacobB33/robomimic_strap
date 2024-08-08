@@ -109,4 +109,5 @@ class BCConfig(BaseConfig):
         self.algo.transformer.amp = False                           # whether to use automatic mixed precision training
 
         self.algo.language_conditioned = False                      # whether policy is language conditioned
+        self.algo.language_encoder = "clip"                         # language encoder to use ("clip" or "minilm")
         

@@ -58,3 +58,6 @@ class DiffusionPolicyConfig(BaseConfig):
         self.algo.ddim.set_alpha_to_one = True
         self.algo.ddim.steps_offset = 0
         self.algo.ddim.prediction_type = 'epsilon'
+
+        self.algo.language_conditioned = False                      # whether policy is language conditioned
+        self.algo.language_encoder = "clip"                         # language encoder to use ("clip" or "minilm")
