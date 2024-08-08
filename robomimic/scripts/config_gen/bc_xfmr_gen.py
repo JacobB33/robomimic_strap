@@ -36,17 +36,17 @@ def make_generator_helper(args):
         )
     ]
 
-    # Add evaluation tasks to dataset
-    all_paths = [ds["path"] for ds in values_and_names[0][0]]
-    if args.eval_task is not None:
-        for eval_task in args.eval_task:
-            value = get_ds_cfg(
-                eval_task,
-                base_path=args.base_path,
-                eval=args.eval_task,
-            )[0]
-            if value["path"] not in all_paths:
-                values_and_names[0][0].append(value)
+    # # Add evaluation tasks to dataset
+    # all_paths = [ds["path"] for ds in values_and_names[0][0]]
+    # if args.eval_task is not None:
+    #     for eval_task in args.eval_task:
+    #         value = get_ds_cfg(
+    #             eval_task,
+    #             base_path=args.base_path,
+    #             eval=args.eval_task,
+    #         )[0]
+    #         if value["path"] not in all_paths:
+    #             values_and_names[0][0].append(value)
 
     generator.add_param(key="experiment.name", name="", group=-1, values=[args.name])
 
@@ -62,6 +62,7 @@ def make_generator_helper(args):
         name="",
         group=-1,
         values=[
+            # "/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/robomimic_logs/{env}/{mod}/{algo_name_short}".format(
             "~/expdata/{env}/{mod}/{algo_name_short}".format(
                 env=args.env,
                 mod=args.mod,
