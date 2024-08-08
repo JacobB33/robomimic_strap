@@ -79,11 +79,10 @@ class DataLogger(object):
                     self._wandb_logger.init(
                         entity=Macros.WANDB_ENTITY,
                         project="multitask", # config.experiment.logging.wandb_proj_name,
+                        config={"config_file": config},
                         name=config.experiment.name,
                         dir=log_dir,
                         mode=("offline" if attempt == num_attempts - 1 else "online"),
-                        # dir="/scratch/home/mem1pi/projects/",
-                        # mode="offline",
                     )
 
                     # set up info for identifying experiment
