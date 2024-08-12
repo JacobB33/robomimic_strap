@@ -294,7 +294,14 @@ def main(args):
         config.experiment.ckpt_path = args.ckpt_path
 
     if args.dataset is not None:
-        config.train.data = args.dataset
+        # config.train.data = args.dataset
+
+        config.train.data = [{
+            "horizon": 700,
+            "do_eval": True,
+            "filter_key": None,
+            "path": args.dataset
+        }]
 
     if args.name is not None:
         config.experiment.name = args.name
