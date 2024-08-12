@@ -290,6 +290,9 @@ def main(args):
     else:
         config = config_factory(args.algo)
 
+    if args.ckpt_path is not None:
+        config.experiment.ckpt_path = args.ckpt_path
+
     if args.dataset is not None:
         config.train.data = args.dataset
 
@@ -363,6 +366,14 @@ if __name__ == "__main__":
         type=str,
         default=None,
         help="(optional) if provided, override the dataset path defined in the config",
+    )
+
+    # Ckpt path, to override the one in the config
+    parser.add_argument(
+        "--ckpt_path",
+        type=str,
+        default=None,
+        help="(optional) if provided, override the ckpt path defined in the config",
     )
 
     # debug mode
