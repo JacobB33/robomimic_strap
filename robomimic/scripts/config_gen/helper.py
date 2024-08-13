@@ -221,6 +221,143 @@ def set_env_settings(generator, args):
                     ]
                 ],
             )
+    elif args.env == "libero":
+        generator.add_param(
+        key="train.action_config",
+        name="",
+        group=-1,
+        #TODO: could be wrong
+        values=[
+            {
+                "actions": {
+                    "normalization": None,
+                },
+                "action_dict/abs_pos": {"normalization": "min_max"},
+                "action_dict/abs_rot_axis_angle": {
+                    "normalization": "min_max",
+                    "format": "rot_axis_angle",
+                },
+                "action_dict/abs_rot_6d": {
+                    "normalization": None,
+                    "format": "rot_6d",
+                },
+                "action_dict/rel_pos": {
+                    "normalization": None,
+                },
+                "action_dict/rel_rot_axis_angle": {
+                    "normalization": None,
+                    "format": "rot_axis_angle",
+                },
+                "action_dict/rel_rot_6d": {
+                    "normalization": None,
+                    "format": "rot_6d",
+                },
+                "action_dict/gripper": {
+                    "normalization": None,
+                },
+                "action_dict/base_mode": {
+                    "normalization": None,
+                },
+                }
+            ],
+        )
+        
+        # Add in the dataformat:
+        generator.add_param(
+            key="train.data_format",
+            name="",
+            group=-1,
+            values=["libero"],
+        ),
+
+        # language conditioned architecture
+        generator.add_param(
+            key="observation.encoder.rgb.core_class",
+            name="",
+            group=-1,
+            values=["VisualCoreLanguageConditioned"],
+        )
+        generator.add_param(
+            key="observation.encoder.rgb.core_kwargs.backbone_class",
+            name="",
+            group=-1,
+            values=["ResNet18ConvFiLM"],
+        )
+
+        if args.env_kwargs_path:
+            env_kwargs = json.load(open(args.env_kwargs_path, "r"))
+        else:
+            env_kwargs = {
+                "generative_textures": None
+            }
+
+        if args.abs_actions:
+            env_kwargs["controller_configs"] = {"control_delta": False}
+
+        # don't use generative textures for evaluation
+        generator.add_param(
+            key="experiment.env_meta_update_dict",
+            name="",
+            group=-1,
+            values=[{"env_kwargs": env_kwargs}],
+        )
+
+        generator.add_param(
+            key="observation.encoder.rgb.obs_randomizer_kwargs",
+            name="obsrandargs",
+            group=-1,
+            values=[
+                {
+                    "crop_height": 116,
+                    "crop_width": 116,
+                    "num_crops": 1,
+                    "pos_enc": False,
+                },
+            ],
+            hidename=True,
+        )
+        if "experiment.rollout.n" not in generator.parameters:
+            generator.add_param(
+                key="experiment.rollout.n",
+                name="",
+                group=-1,
+                values=[50],
+                value_names=[""],
+            )
+        generator.add_param(
+            key="experiment.rollout.horizon",
+            name="",
+            group=-1,
+            values=[500],
+            value_names=[""],
+        )
+        generator.add_param(
+                key="observation.modalities.obs.low_dim",
+                name="",
+                group=-1,
+                values=[
+                    [
+                        "ee_pos",
+                        "ee_ori",
+                        "ee_states",
+                        "joint_states",
+                        "gripper_states"
+                     ]
+                ],
+            )
+        if args.mod == "im":
+           
+            generator.add_param(
+                key="observation.modalities.obs.rgb",
+                name="",
+                group=-1,
+                values=[
+                    [
+                        "agentview_rgb",
+                        "eye_in_hand_rgb"
+                    ]
+                ],
+            )
     else:
         raise ValueError
 

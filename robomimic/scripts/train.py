@@ -86,11 +86,16 @@ def train(config, device):
 
         # populate language instruction for env in env_meta
         env_meta["env_lang"] = dataset_cfg.get("lang", None)
+        if ds_format == "libero":
+            env_meta["env_lang"] = env_meta["language_instruction"]
+            
+            # print("Language Instruction: {}".format(env_meta["env_lang"]))
 
         # update env meta if applicable
         from robomimic.utils.script_utils import deep_update
         deep_update(env_meta, dataset_cfg.get("env_meta_update_dict", {}))
         deep_update(env_meta, config.experiment.env_meta_update_dict)
+        #TODO: This env_meta_list seems to not be used
         env_meta_list.append(env_meta)
 
         shape_meta = FileUtils.get_shape_metadata_from_dataset(

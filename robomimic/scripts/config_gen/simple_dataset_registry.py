@@ -434,6 +434,15 @@ DROID_DATASETS = OrderedDict(
         activity="everything",
     ),
 )
+
+LIBERO_DATASETS = OrderedDict(
+    LIBEROTest=dict(
+        file_name="KITCHEN_SCENE10_close_the_top_drawer_of_the_cabinet_and_put_the_black_bowl_on_top_of_it_demo.hdf5",
+        filter_key=None,
+        path="../../../dependancies/LIBERO/libero/datasets/libero_90",
+        horizon=500,
+    ),
+)
 # TODO: add datasets here
 
 ALL_DATASETS = OrderedDict()
@@ -444,6 +453,7 @@ ALL_DATASETS["viola_sim"] = VIOLA_SIM_TASK_DATASETS
 ALL_DATASETS["droid"] = DROID_DATASETS
 ALL_DATASETS["retrieval"] = RETRIEVAL_DATASETS
 ALL_DATASETS["sub_traj_retrieval"] = RETRIEVAL_SUB_TRAJ_DATASETS
+ALL_DATASETS["libero"] = LIBERO_DATASETS
 
 # TODO: add datasets here
 

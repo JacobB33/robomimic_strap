@@ -102,6 +102,9 @@ def get_env_metadata_from_dataset(dataset_path, ds_format="robomimic"):
         env_meta = json.loads(f["data"].attrs["env_args"])
     elif ds_format == "r2d2":
         env_meta = dict(f.attrs)
+    elif ds_format == "libero":
+        env_meta = json.loads(f["data"].attrs["env_args"])
+        env_meta["language_instruction"] = json.loads(f["data"].attrs["problem_info"])["language_instruction"]
     else:
         raise ValueError
     f.close()
