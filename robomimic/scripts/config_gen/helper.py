@@ -825,7 +825,7 @@ def make_generator(args, make_generator_helper):
         # baku-like changes that are not supported yet
         # baku has sequence length of 1 (history) and 10 (future)
         # baku has two-layer mlp to encode obs before transformer
-        seq_length = 5
+        seq_length = 10 # 5 works worse
         generator.add_param(
             key="train.seq_length",
             name="",
