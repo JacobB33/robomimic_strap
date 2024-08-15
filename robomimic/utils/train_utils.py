@@ -204,8 +204,13 @@ def dataset_factory(config, obs_keys, filter_by_attribute=None, dataset_path=Non
     ds_kwargs["hdf5_path"] = [ds_cfg["path"] for ds_cfg in config.train.data]
     ds_kwargs["filter_by_attribute"] = [ds_cfg.get("filter_key", filter_by_attribute) for ds_cfg in config.train.data]
     ds_weights = [ds_cfg.get("weight", 1.0) for ds_cfg in config.train.data]
-    ds_langs = [ds_cfg.get("lang", None) for ds_cfg in config.train.data]
-
+    if config.train.data_format == "libero":
+        ds_files = [ds_cfg["path"] for ds_cfg in config.train.data]
+        ds_langs = [FileUtils.get_env_metadata_from_dataset(dataset_path=ds_file, ds_format="libero")["language_instruction"] for ds_file in ds_files]
+    else:
+        ds_langs = [ds_cfg.get("lang", None) for ds_cfg in config.train.data]
+        # env_meta = FileUtils.get_env_metadata_from_dataset(dataset_path=dataset_path, ds_format="libero")
+        # ds_kwargs["dataset_lang"] = env_meta["language_instruction"]
     meta_ds_kwargs = dict()
 
     dataset = get_dataset(
