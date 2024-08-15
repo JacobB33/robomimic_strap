@@ -306,6 +306,9 @@ def main(args):
     if args.name is not None:
         config.experiment.name = args.name
 
+    if args.seed is not None:
+        config.train.seed = args.seed
+
     # get torch device
     device = TorchUtils.get_torch_device(try_to_use_cuda=config.train.cuda)
 
@@ -381,6 +384,14 @@ if __name__ == "__main__":
         type=str,
         default=None,
         help="(optional) if provided, override the ckpt path defined in the config",
+    )
+
+    # Seed
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="(optional) if provided, override the seed defined in the config",
     )
 
     # debug mode
