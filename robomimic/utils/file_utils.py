@@ -195,6 +195,27 @@ def get_shape_metadata_from_dataset(dataset_path, action_keys, all_obs_keys=None
             if len(initial_shape) == 0:
                 initial_shape = (1,)
 
+    elif ds_format == "libero":
+        demo_id = list(f["data"].keys())[0]
+        demo = f["data/{}".format(demo_id)]
+        
+        for key in action_keys:
+            assert len(demo[key].shape) == 2 # shape should be (B, D)
+        action_dim = sum([demo[key].shape[1] for key in action_keys])
+        shape_meta["ac_dim"] = action_dim
+
+        # observation dimensions
+        all_shapes = OrderedDict()
+
+        if all_obs_keys is None:
+            # use all modalities present in the file
+            all_obs_keys = [k for k in demo["obs"]]
+
+        for k in sorted(all_obs_keys):
+            initial_shape = demo["obs/{}".format(k)].shape[1:]
+            if verbose:
+                print("obs key {} with shape {}".format(k, initial_shape))
+            # Store processed shape for each obs key
             all_shapes[k] = ObsUtils.get_processed_shape(
                 obs_modality=ObsUtils.OBS_KEYS_TO_MODALITIES[k],
                 input_shape=initial_shape,
