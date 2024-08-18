@@ -58,7 +58,7 @@ def train(config, device):
     print("\n============= New Training Run with Config =============")
     print(config)
     print("")
-    log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config, auto_remove_exp_dir=True)
+    log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config, no_timestamp=True, auto_remove_exp_dir=True)
     # log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config)
 
     if config.experiment.logging.terminal_output_to_txt:
@@ -471,11 +471,37 @@ def main(args):
     else:
         config = config_factory(args.algo)
 
+    if args.ckpt_path is not None:
+        config.experiment.ckpt_path = args.ckpt_path
+
+    if args.dataset_json is not None:
+        config.train.data = [json.loads(args.dataset_json)]
+        
     if args.dataset is not None:
-        config.train.data = args.dataset
+        assert len(config.train.data) == 1, "dataset arg overwrite only supported for single dataset"
+        
+        # config.train.data = args.dataset
+        filter_key = config.train.data[0]["filter_key"] if args.filter_key is None else args.filter_key
+        do_eval = config.train.data[0]["do_eval"]
+        horizon = config.train.data[0]["horizon"]
+        
+        config.train.data = [{
+            "horizon": horizon,
+            "do_eval": do_eval,
+            "filter_key": filter_key,
+            "path": args.dataset
+        }]
 
     if args.name is not None:
         config.experiment.name = args.name
+
+    if args.seed is not None:
+        config.train.seed = args.seed
+
+    config.experiment.name = config.experiment.name # + "-" + str(config.train.seed)
+    if args.output_dir is not None:
+        config.train.output_dir = args.output_dir
+    config.train.output_dir = os.path.join(config.train.output_dir, str(config.train.seed))
 
     # get torch device
     device = TorchUtils.get_torch_device(try_to_use_cuda=config.train.cuda)
@@ -544,6 +570,42 @@ if __name__ == "__main__":
         type=str,
         default=None,
         help="(optional) if provided, override the dataset path defined in the config",
+    )
+    parser.add_argument(
+        "--filter_key",
+        type=str,
+        default=None,
+        help="(optional) if provided, override the filter_key defined in the config",
+    )
+    parser.add_argument(
+        "--dataset_json",
+        type=str,
+        default=None,
+        help="(optional) if provided, override the dataset list defined in the config",
+    )
+
+    # Ckpt path, to override the one in the config
+    parser.add_argument(
+        "--ckpt_path",
+        type=str,
+        default=None,
+        help="(optional) if provided, override the ckpt path defined in the config",
+    )
+
+    # Output directory
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        default=None,
+        help="(optional) if provided, override the output directory defined in the config",
+    )
+
+    # Seed
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="(optional) if provided, override the seed defined in the config",
     )
 
     # debug mode

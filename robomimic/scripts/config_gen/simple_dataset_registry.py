@@ -253,6 +253,13 @@ RETRIEVAL_SUB_TRAJ_DATASETS = OrderedDict(
         horizon=500,
         activity="coffee",
     ),
+    TurnOnMicrowave_DINOv2_sub_traj_len_25_stride_20_gt=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_avg_gt.hdf5",
+        filter_key=None,
+        path="retrieval/sub_traj_len_25_stride_20/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
     TurnOnMicrowave_DINOv2_sub_traj_len_25_stride_20_random=dict(
         file_name="DINOv2_robot0_eye_in_hand_image_avg_random.hdf5",
         filter_key=None,
@@ -263,6 +270,13 @@ RETRIEVAL_SUB_TRAJ_DATASETS = OrderedDict(
 
     PnPCounterToSink_DINOv2_sub_traj_len_25_stride_20_best=dict(
         file_name="DINOv2_robot0_eye_in_hand_image_avg_best.hdf5",
+        filter_key=None,
+        path="retrieval/sub_traj_len_25_stride_20/PnPCounterToSink/",
+        horizon=500,
+        activity="coffee",
+    ),
+    PnPCounterToSink_DINOv2_sub_traj_len_25_stride_20_gt=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_avg_gt.hdf5",
         filter_key=None,
         path="retrieval/sub_traj_len_25_stride_20/PnPCounterToSink/",
         horizon=500,
@@ -288,6 +302,13 @@ RETRIEVAL_DATASETS = OrderedDict(
         horizon=500,
         activity="coffee",
     ),
+    TurnOnMicrowave_DINOv2_gt=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_avg_gt.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnMicrowave/",
+        horizon=500,
+        activity="coffee",
+    ),
     TurnOnMicrowave_DINOv2_random=dict(
         file_name="DINOv2_robot0_eye_in_hand_image_avg_random.hdf5",
         filter_key=None,
@@ -298,6 +319,13 @@ RETRIEVAL_DATASETS = OrderedDict(
 
     TurnOnSinkFaucet_DINOv2_best=dict(
         file_name="DINOv2_robot0_eye_in_hand_image_avg_best.hdf5",
+        filter_key=None,
+        path="retrieval/TurnOnSinkFaucet/",
+        horizon=500,
+        activity="coffee",
+    ),
+    TurnOnSinkFaucet_DINOv2_gt=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_avg_gt.hdf5",
         filter_key=None,
         path="retrieval/TurnOnSinkFaucet/",
         horizon=500,
@@ -318,6 +346,13 @@ RETRIEVAL_DATASETS = OrderedDict(
         horizon=500,
         activity="coffee",
     ),
+    OpenDrawer_DINOv2_gt=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_avg_gt.hdf5",
+        filter_key=None,
+        path="retrieval/OpenDrawer/",
+        horizon=500,
+        activity="coffee",
+    ),
     OpenDrawer_DINOv2_random=dict(
         file_name="DINOv2_robot0_eye_in_hand_image_avg_random.hdf5",
         filter_key=None,
@@ -333,6 +368,13 @@ RETRIEVAL_DATASETS = OrderedDict(
         horizon=500,
         activity="coffee",
     ),
+    PnPCounterToSink_DINOv2_gt=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_avg_gt.hdf5",
+        filter_key=None,
+        path="retrieval/PnPCounterToSink/",
+        horizon=500,
+        activity="coffee",
+    ),
     PnPCounterToSink_DINOv2_random=dict(
         file_name="DINOv2_robot0_eye_in_hand_image_avg_random.hdf5",
         filter_key=None,
@@ -343,6 +385,13 @@ RETRIEVAL_DATASETS = OrderedDict(
 
     CoffeePressButton_DINOv2_best=dict(
         file_name="DINOv2_robot0_eye_in_hand_image_avg_best.hdf5",
+        filter_key=None,
+        path="retrieval/CoffeePressButton/",
+        horizon=500,
+        activity="coffee",
+    ),
+    CoffeePressButton_DINOv2_gt=dict(
+        file_name="DINOv2_robot0_eye_in_hand_image_avg_gt.hdf5",
         filter_key=None,
         path="retrieval/CoffeePressButton/",
         horizon=500,
@@ -509,6 +558,12 @@ def get_ds_cfg(
         ds_names = [name for name in ds_names if "sub_traj_len_25_stride_20" in name]
         ds_names = [name for name in ds_names if "best" in name]
 
+    elif "TurnOnMicrowave_dinov2_sub_traj_gt" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "sub_traj_len_25_stride_20" in name]
+        ds_names = [name for name in ds_names if "gt" in name]
+
     elif "TurnOnMicrowave_dinov2_sub_traj_random" in ds_names:
         ds_names = list(ALL_DATASETS["sub_traj_retrieval"].keys())
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
@@ -522,6 +577,12 @@ def get_ds_cfg(
         ds_names = [name for name in ds_names if "sub_traj_len_25_stride_20" in name]
         ds_names = [name for name in ds_names if "best" in name]
 
+    elif "PnPCounterToSink_dinov2_sub_traj_gt" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "PnPCounterToSink" in name]
+        ds_names = [name for name in ds_names if "sub_traj_len_25_stride_20" in name]
+        ds_names = [name for name in ds_names if "gt" in name]
+        
     elif "PnPCounterToSink_dinov2_sub_traj_random" in ds_names:
         ds_names = list(ALL_DATASETS["sub_traj_retrieval"].keys())
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
@@ -544,51 +605,91 @@ def get_ds_cfg(
     elif "CoffeePressButton_dinov2_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "CoffeePressButton" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "best" in name]
+    
+    elif "CoffeePressButton_dinov2_gt" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "CoffeePressButton" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
+        ds_names = [name for name in ds_names if "gt" in name]
 
     elif "CoffeePressButton_random" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "CoffeePressButton" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "random" in name]
 
     elif "OpenDrawer_dinov2_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "OpenDrawer" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "best" in name]
+    
+    elif "OpenDrawer_dinov2_gt" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "OpenDrawer" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
+        ds_names = [name for name in ds_names if "gt" in name]
 
     elif "OpenDrawer_random" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "OpenDrawer" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "random" in name]
 
     elif "PnPCounterToSink_dinov2_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "PnPCounterToSink" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "best" in name]
+
+    elif "PnPCounterToSink_dinov2_gt" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "PnPCounterToSink" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
+        ds_names = [name for name in ds_names if "gt" in name]
 
     elif "PnPCounterToSink_random" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "PnPCounterToSink" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "random" in name]
 
     elif "TurnOnMicrowave_dinov2_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "best" in name]
+
+    elif "TurnOnMicrowave_dinov2_gt" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
+        ds_names = [name for name in ds_names if "gt" in name]
 
     elif "TurnOnMicrowave_random" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "TurnOnMicrowave" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "random" in name]
 
     elif "TurnOnSinkFaucet_dinov2_best" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "TurnOnSinkFaucet" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "best" in name]
+
+    elif "TurnOnSinkFaucet_dinov2_gt" in ds_names:
+        ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
+        ds_names = [name for name in ds_names if "TurnOnSinkFaucet" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
+        ds_names = [name for name in ds_names if "gt" in name]
 
     elif "TurnOnSinkFaucet_random" in ds_names:
         ds_names = [name for name in all_datasets.keys() if "DINOv2" in name]
         ds_names = [name for name in ds_names if "TurnOnSinkFaucet" in name]
+        ds_names = [name for name in ds_names if "sub_traj" not in name]
         ds_names = [name for name in ds_names if "random" in name]
 
     
