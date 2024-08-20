@@ -484,16 +484,86 @@ DROID_DATASETS = OrderedDict(
     ),
 )
 
-LIBERO_DATASETS = OrderedDict(
-    LIBEROTest=dict(
-        file_name="KITCHEN_SCENE10_close_the_top_drawer_of_the_cabinet_and_put_the_black_bowl_on_top_of_it_demo.hdf5",
+LIBERO_90 = OrderedDict(
+    {f"DATASET_{i + 1}": dict(file_name=file, filter_key=None, path=f"libero_90", horizon=500) for (i, file) in enumerate(os.listdir(f"/home/jacob/projects/robocasa/datasets/libero_90")) if file.endswith(".hdf5")} 
+    
+)
+
+LIBERO_10 = OrderedDict(
+    KitchenScene3=dict(
+        file_name="KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it_demo.hdf5",
         filter_key=None,
-        path="../../../dependancies/LIBERO/libero/datasets/libero_90",
+        path="libero_10",
         horizon=500,
     ),
-)
-# TODO: add datasets here
+    KitchenScene4=dict(
+        file_name="KITCHEN_SCENE4_put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    KitchenScene6=dict(
+        file_name="KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    KitchenScene8=dict(
+        file_name="KITCHEN_SCENE8_put_both_moka_pots_on_the_stove_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
 
+    LivingRoomScene1=dict(
+        file_name="LIVING_ROOM_SCENE1_put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    LivingRoomScene21=dict(
+        file_name="LIVING_ROOM_SCENE2_put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    LivingRoomScene22=dict(
+        file_name="LIVING_ROOM_SCENE2_put_both_the_cream_cheese_box_and_the_butter_in_the_basket_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    LivingRoomScene5=dict(
+        file_name="LIVING_ROOM_SCENE5_put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    LivingRoomScene6=dict(
+        file_name="LIVING_ROOM_SCENE6_put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    StudyScene1=dict(
+        file_name="STUDY_SCENE1_pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy_demo.hdf5",
+        filter_key=None,
+        path="libero_10",
+        horizon=500,
+    ),
+    
+
+           
+    
+)
+    
+# TODO: add datasets here
+# LIBEROTest=dict(
+#         file_name="KITCHEN_SCENE10_close_the_top_drawer_of_the_cabinet_and_put_the_black_bowl_on_top_of_it_demo.hdf5",
+#         filter_key=None,
+#         path="libero_90",
+#         horizon=500,
+#     ),
 ALL_DATASETS = OrderedDict()
 ALL_DATASETS["single_stage"] = SINGLE_STAGE_TASK_DATASETS
 ALL_DATASETS["multi_stage"] = MULTI_STAGE_TASK_DATASETS
@@ -502,7 +572,8 @@ ALL_DATASETS["viola_sim"] = VIOLA_SIM_TASK_DATASETS
 ALL_DATASETS["droid"] = DROID_DATASETS
 ALL_DATASETS["retrieval"] = RETRIEVAL_DATASETS
 ALL_DATASETS["sub_traj_retrieval"] = RETRIEVAL_SUB_TRAJ_DATASETS
-ALL_DATASETS["libero"] = LIBERO_DATASETS
+ALL_DATASETS["libero_90"] = LIBERO_90
+ALL_DATASETS["libero_10"] = LIBERO_10
 
 # TODO: add datasets here
 
