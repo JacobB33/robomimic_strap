@@ -57,7 +57,7 @@ class EnvLibero(EB.EnvBase):
         """
         self.postprocess_visual_obs = postprocess_visual_obs
 
-        self._env_name = env_name
+        self._env_name = f"{env_name}_{env_lang}"
         task_bddl_file = os.path.join(f"/mmfs1/gscratch/weirdlab/jacob33/retrieval/LIBERO/{env_meta['bddl_file_name']}", )
                 
         env_args = {
