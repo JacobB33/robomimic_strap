@@ -29,7 +29,7 @@ from robomimic.algo import RolloutPolicy
 from tianshou.env import SubprocVectorEnv
 
 
-def get_exp_dir(config, no_timestamp=False, auto_remove_exp_dir=False, keep_exp_dir=False):
+def get_exp_dir(config, timestamp=False, auto_remove_exp_dir=False, keep_exp_dir=False):
     """
     Create experiment directory from config. If an identical experiment directory
     exists and @auto_remove_exp_dir is False (default), the function will prompt 
@@ -71,28 +71,28 @@ def get_exp_dir(config, no_timestamp=False, auto_remove_exp_dir=False, keep_exp_
     # only make model directory if model saving is enabled
     output_dir = None
     if config.experiment.save.enabled:
-        if no_timestamp:
+        if timestamp:
             output_dir = os.path.join(base_output_dir, time_str, "models")
         else:
             output_dir = os.path.join(base_output_dir, "models")
         os.makedirs(output_dir, exist_ok=keep_exp_dir)
 
     # tensorboard directory
-    if no_timestamp:
+    if timestamp:
         log_dir = os.path.join(base_output_dir, time_str, "logs")
     else:
         log_dir = os.path.join(base_output_dir, "logs")
     os.makedirs(log_dir, exist_ok=keep_exp_dir)
 
     # video directory
-    if no_timestamp:
+    if timestamp:
         video_dir = os.path.join(base_output_dir, time_str, "videos")
     else:
         video_dir = os.path.join(base_output_dir, "videos")
     os.makedirs(video_dir, exist_ok=keep_exp_dir)
 
     # vis directory
-    if no_timestamp:
+    if timestamp:
         vis_dir = os.path.join(base_output_dir, time_str, "vis")
     else:
         vis_dir = os.path.join(base_output_dir, "vis")
@@ -218,7 +218,7 @@ def dataset_factory(config, obs_keys, filter_by_attribute=None, dataset_path=Non
         ds_kwargs=ds_kwargs,
         ds_weights=ds_weights,
         ds_langs=ds_langs,
-        normalize_weights_by_ds_size=False,
+        normalize_weights_by_ds_size=config.train.normalize_weights_by_ds_size,
         meta_ds_class=MetaDataset,
         meta_ds_kwargs=meta_ds_kwargs,
     )
@@ -347,6 +347,14 @@ def run_rollout(
         else:
             policy_ob = ob_dict
             ac = policy(ob=policy_ob, goal=goal_dict) #, return_ob=True)
+
+        # extend action by base action if necessary
+        try:
+            from robosuite.robots.wheeled_robot import WheeledRobot
+            if type(env.env.env.robots[0]) == WheeledRobot and env.env.env.action_dim > len(ac):
+                ac = np.concatenate((ac[:7], np.zeros(4,), -1*np.ones(1,)))
+        except AttributeError as e:
+            print("No action_dim attribute in env", e)
 
         # play action
         ob_dict, r, done, info = env.step(ac)

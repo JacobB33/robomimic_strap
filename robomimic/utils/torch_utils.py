@@ -310,7 +310,7 @@ def maybe_amp(amp):
         amp (bool): if True, the returned context will be torch.cuda.amp.autocast(), otherwise
             it will be a dummy context
     """
-    return torch.cuda.amp.autocast() if amp else dummy_context_mgr()
+    return torch.cuda.amp.autocast("cuda") if amp else dummy_context_mgr()
 
 """
 The following utility functions were taken from PyTorch3D:

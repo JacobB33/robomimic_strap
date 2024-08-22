@@ -205,6 +205,7 @@ class SequenceDataset(torch.utils.data.Dataset):
         if demos is not None:
             self.demos = demos
         elif filter_by_attribute is not None:
+            print("Available masks", np.array(self.hdf5_file["mask"]))
             self.demos = [elem.decode("utf-8") for elem in np.array(self.hdf5_file["mask/{}".format(filter_by_attribute)][:])]
         else:
             self.demos = list(self.hdf5_file["data"].keys())

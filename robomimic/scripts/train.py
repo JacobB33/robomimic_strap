@@ -58,7 +58,7 @@ def train(config, device):
     print("\n============= New Training Run with Config =============")
     print(config)
     print("")
-    log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config, no_timestamp=True, auto_remove_exp_dir=True)
+    log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config, timestamp=False, auto_remove_exp_dir=True)
     # log_dir, ckpt_dir, video_dir, vis_dir = TrainUtils.get_exp_dir(config)
 
     if config.experiment.logging.terminal_output_to_txt:
@@ -469,6 +469,8 @@ def main(args):
     else:
         config = config_factory(args.algo)
 
+    # print(config.train.action_keys)
+    # exit()
     if args.ckpt_path is not None:
         config.experiment.ckpt_path = args.ckpt_path
 
