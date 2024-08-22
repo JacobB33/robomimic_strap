@@ -67,6 +67,20 @@ def get_generator(algo_name, config_file, args, algo_name_short=None, pt=False):
 
 
 def set_env_settings(generator, args):
+
+    generator.add_param(
+            key="train.action_keys",
+            name="",
+            group=-1,
+            values=[
+                [
+                    "action_dict/rel_pos",
+                    "action_dict/rel_rot_axis_angle",
+                    "action_dict/gripper"
+                ]
+            ],
+        )
+    
     if args.env == "robocasa":
         generator.add_param(
             key="train.action_config",
