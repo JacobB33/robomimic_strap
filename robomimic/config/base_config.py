@@ -234,6 +234,8 @@ class BaseConfig(Config):
         self.train.max_grad_norm = None  # clip gradient norms (see `backprop_for_loss` function in torch_utils.py) 
 
         self.train.data_format = "robomimic" # either "robomimic" or "r2d2"
+        
+        self.train.normalize_weights_by_ds_size = False # whether to adjust sampling weights by dataset size
 
         # list of observation keys to shuffle randomly in the dataset.
         # must be list of tuples pairs, with each pair representing

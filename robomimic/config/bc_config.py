@@ -28,6 +28,7 @@ class BCConfig(BaseConfig):
         self.algo.optim_params.policy.learning_rate.initial = 1e-4      # policy learning rate
         self.algo.optim_params.policy.learning_rate.decay_factor = 0.1  # factor to decay LR by (if epoch schedule non-empty)
         self.algo.optim_params.policy.learning_rate.epoch_schedule = [] # epochs where LR decay occurs
+        self.algo.optim_params.policy.learning_rate.num_warmup_steps = 10000 # warmup steps
         self.algo.optim_params.policy.learning_rate.scheduler_type = "constant_with_warmup" # learning rate scheduler ("multistep", "linear", etc) 
         self.algo.optim_params.policy.regularization.L2 = 0.00          # L2 regularization strength
 
