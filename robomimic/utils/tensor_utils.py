@@ -6,7 +6,20 @@ import collections
 import numpy as np
 import torch
 
-
+def print_cuda_memory_gb():
+    if torch.cuda.is_available():
+        t = torch.cuda.get_device_properties(0).total_memory
+        r = torch.cuda.memory_reserved(0)
+        a = torch.cuda.memory_allocated(0)
+        f = r - a  # free inside reserved
+        
+        # print(f"CUDA Memory Usage:")
+        # print(f"Total: {t/1e9:.2f} GB")
+        # print(f"Reserved: {r/1e9:.2f} GB")
+        print(f"Allocated: {a/1e9:.2f} GB")
+        # print(f"Free: {f/1e9:.2f} GB")
+    else:
+        print("CUDA is not available on this system.")
 def recursive_dict_list_tuple_apply(x, type_func_dict):
     """
     Recursively apply functions to a nested dictionary or list or tuple, given a dictionary of 
