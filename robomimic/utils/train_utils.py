@@ -247,6 +247,9 @@ def get_dataset(
 
         ds_kwargs_copy["dataset_lang"] = ds_langs[i]
         
+        # Change so that we do not run out of cuda memory
+        ds_kwargs_copy["lang_encoder"] = ds_kwargs["lang_encoder"]
+
         ds_list.append(ds_class(**ds_kwargs_copy))
     
     if len(ds_weights) == 1:
