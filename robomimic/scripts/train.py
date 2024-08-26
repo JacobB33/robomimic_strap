@@ -121,7 +121,10 @@ def train(config, device):
             continue
         eval_env_meta_list.append(env_meta_list[dataset_i])
         eval_shape_meta_list.append(shape_meta_list[dataset_i])
-        eval_env_name_list.append(env_meta_list[dataset_i]["env_name"])
+        if ds_format == "libero":
+            eval_env_name_list.append(f'{env_meta_list[dataset_i]["env_name"]}_{env_meta_list[dataset_i]["env_lang"]}')
+        else:
+            eval_env_name_list.append(env_meta_list[dataset_i]["env_name"])
         horizon = dataset_cfg.get("horizon", config.experiment.rollout.horizon)
         eval_env_horizon_list.append(horizon)
     
@@ -616,6 +619,8 @@ if __name__ == "__main__":
         action='store_true',
         help="set this flag to run a quick training run for debugging purposes"
     )
+    import faulthandler
 
+    faulthandler.enable()
     args = parser.parse_args()
     main(args)

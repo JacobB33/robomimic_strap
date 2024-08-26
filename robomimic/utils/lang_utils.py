@@ -69,22 +69,34 @@ class CLIPLangEncoder:
     def get_lang_emb(self, lang):
         if lang is None:
             return None
-        
-        with torch.no_grad():
-            tokens = self.tz(
-                text=lang,                   # the sentence to be encoded
-                add_special_tokens=True,             # Add [CLS] and [SEP]
-                # max_length=25,  # maximum length of a sentence
-                padding="max_length",
-                return_attention_mask=True,        # Generate the attention mask
-                return_tensors="pt",               # ask the function to return PyTorch tensors
-            ).to(self.device)
-
-            lang_emb = self.lang_emb_model(**tokens)['text_embeds'].detach()
-        
-        # check if input is batched or single string
+            # Convert single string to list for consistent processing
         if isinstance(lang, str):
-            lang_emb = lang_emb[0]
+            lang = [lang]
+        batch_size = 100
+        all_lang_embs = []
+        # self.print_cuda_memory_gb()
+        # print(f"the length of the lang to embed is {len(lang)}") 
+        for i in range(0, len(lang), batch_size):
+            batch = lang[i:i+batch_size]
+        
+            with torch.no_grad():
+                tokens = self.tz(
+                    text=batch,                   # batch of sentences to be encoded
+                    add_special_tokens=True,      # Add [CLS] and [SEP]
+                    padding="max_length",
+                    return_attention_mask=True,   # Generate the attention mask
+                    return_tensors="pt",          # ask the function to return PyTorch tensors
+                    ).to(self.device)
 
-        return lang_emb
+                lang_embs = self.lang_emb_model(**tokens)['text_embeds'].detach()
+                all_lang_embs.append(lang_embs)
+    
+        # Concatenate all batches
+        all_lang_embs = torch.cat(all_lang_embs, dim=0)
+
+        # If input was a single string, return a single embedding
+        if len(lang) == 1:
+            return all_lang_embs[0]
+    
+        return all_lang_embs
 

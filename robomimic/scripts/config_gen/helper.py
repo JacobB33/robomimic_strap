@@ -68,7 +68,9 @@ def get_generator(algo_name, config_file, args, algo_name_short=None, pt=False):
 
 def set_env_settings(generator, args):
 
-    generator.add_param(
+
+    if args.env == "robocasa":
+        generator.add_param(
             key="train.action_keys",
             name="",
             group=-1,
@@ -80,8 +82,6 @@ def set_env_settings(generator, args):
                 ]
             ],
         )
-    
-    if args.env == "robocasa":
         generator.add_param(
             key="train.action_config",
             name="",
@@ -246,32 +246,32 @@ def set_env_settings(generator, args):
                 "actions": {
                     "normalization": None,
                 },
-                "action_dict/abs_pos": {"normalization": "min_max"},
-                "action_dict/abs_rot_axis_angle": {
-                    "normalization": "min_max",
-                    "format": "rot_axis_angle",
-                },
-                "action_dict/abs_rot_6d": {
-                    "normalization": None,
-                    "format": "rot_6d",
-                },
-                "action_dict/rel_pos": {
-                    "normalization": None,
-                },
-                "action_dict/rel_rot_axis_angle": {
-                    "normalization": None,
-                    "format": "rot_axis_angle",
-                },
-                "action_dict/rel_rot_6d": {
-                    "normalization": None,
-                    "format": "rot_6d",
-                },
-                "action_dict/gripper": {
-                    "normalization": None,
-                },
-                "action_dict/base_mode": {
-                    "normalization": None,
-                },
+                # "action_dict/abs_pos": {"normalization": "min_max"},
+                # "action_dict/abs_rot_axis_angle": {
+                #     "normalization": "min_max",
+                #     "format": "rot_axis_angle",
+                # },
+                # "action_dict/abs_rot_6d": {
+                #     "normalization": None,
+                #     "format": "rot_6d",
+                # },
+                # "action_dict/rel_pos": {
+                #     "normalization": None,
+                # },
+                # "action_dict/rel_rot_axis_angle": {
+                #     "normalization": None,
+                #     "format": "rot_axis_angle",
+                # },
+                # "action_dict/rel_rot_6d": {
+                #     "normalization": None,
+                #     "format": "rot_6d",
+                # },
+                # "action_dict/gripper": {
+                #     "normalization": None,
+                # },
+                # "action_dict/base_mode": {
+                #     "normalization": None,
+                # },
                 }
             ],
         )
@@ -629,7 +629,8 @@ def get_argparser():
     parser.add_argument(
         "--base_path",
         type=str,
-        default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
+        default='/gscratch/weirdlab/jacob33/retrieval/robocasa/datasets',
+        # default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
         # default="~/projects/robocasa_ret/datasets",
         help="base path to datasets",
     )
