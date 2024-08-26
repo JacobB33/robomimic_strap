@@ -391,7 +391,7 @@ def set_mod_settings(generator, args):
                 key="experiment.save.every_n_epochs",
                 name="",
                 group=-1,
-                values=[100],
+                values=[200],
             )
 
         generator.add_param(
