@@ -783,6 +783,36 @@ def make_generator(args, make_generator_helper):
             ],
         )
 
+    # lower context length for faster training
+    seq_length = 5
+    generator.add_param(
+        key="train.seq_length",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+    generator.add_param(
+        key="train.frame_stack",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+    generator.add_param(
+        key="algo.transformer.context_length",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+
+    # proper language conditioned architecture
+    generator.add_param(
+            key="algo.language_conditioned",
+            name="",
+            group=-1,
+            values=[True],
+        )
+
+    # 
         # if args.eval_only:
         #     # disable save
         #     generator.add_param(
