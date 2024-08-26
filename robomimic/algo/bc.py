@@ -94,6 +94,8 @@ class BC(PolicyAlgo):
             mlp_layer_dims=self.algo_config.actor_layer_dims,
             encoder_kwargs=ObsUtils.obs_encoder_kwargs_from_config(self.obs_config.encoder),
         )
+        for k in self.nets.keys:
+            self.nets[k]  = torch.compile(self.nets[k])
         self.nets = self.nets.float().to(self.device)
 
     def process_batch_for_training(self, batch):
