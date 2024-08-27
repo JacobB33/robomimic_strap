@@ -135,21 +135,17 @@ def set_env_settings(generator, args):
             values=["ResNet18ConvFiLM"],
         )
 
-        # env_kwargs = {
-        #     # "generative_textures": None,
-        #     # "scene_split": None,
-        #     # "style_ids": None,
-        #     # "layout_ids": None,
-        #     # "layout_and_style_ids": [[1, 1]], # , [2, 2], [4, 4], [6, 9], [7, 10]],
-        #     "randomize_cameras": False,
-        #     # "obj_instance_split": "B",
-        # }
-
         if args.env_kwargs_path:
             env_kwargs = json.load(open(args.env_kwargs_path, "r"))
         else:
             env_kwargs = {
-                "generative_textures": None
+                "generative_textures": None,
+                "scene_split": None,
+                "style_ids": None,
+                "layout_ids": None,
+                "layout_and_style_ids": [[1, 1] , [2, 2], [4, 4], [6, 9], [7, 10]],
+                "randomize_cameras": False,
+                "obj_instance_split": "B",
             }
 
         if args.abs_actions:
