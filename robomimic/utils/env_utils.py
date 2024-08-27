@@ -35,6 +35,9 @@ def get_env_class(env_meta=None, env_type=None, env=None):
     if env_type == EB.EnvType.ROBOSUITE_TYPE:
         from robomimic.envs.env_robosuite import EnvRobosuite
         return EnvRobosuite
+    elif env_type == EB.EnvType.ROBOCASA_TYPE:
+        from robomimic.envs.env_robosuite import EnvRobocasa
+        return EnvRobocasa
     elif env_type == EB.EnvType.GYM_TYPE:
         from robomimic.envs.env_gym import EnvGym
         return EnvGym
@@ -224,7 +227,6 @@ def create_env_from_metadata(
 
     if seed is not None:
         env_kwargs["seed"] = seed
-
     env = create_env(
         env_type=env_type,
         render=render, 

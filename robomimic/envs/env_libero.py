@@ -58,7 +58,8 @@ class EnvLibero(EB.EnvBase):
         self.postprocess_visual_obs = postprocess_visual_obs
 
         self._env_name = f"{env_name}_{env_lang}"
-        task_bddl_file = os.path.join(f"/mmfs1/gscratch/weirdlab/jacob33/retrieval/LIBERO/{env_meta['bddl_file_name']}", )
+        # task_bddl_file = os.path.join(f"/mmfs1/gscratch/weirdlab/jacob33/retrieval/LIBERO/{env_meta['bddl_file_name']}", )
+        task_bddl_file = os.path.join(f"/home/mem1pi/projects/LIBERO/{env_meta['bddl_file_name']}", )
                 
         env_args = {
             "bddl_file_name": task_bddl_file,
@@ -221,15 +222,29 @@ class EnvLibero(EB.EnvBase):
         assert di is not None, "di must be provided to get_observation"
         # The keys are wrong so we need to fix them
         new_di = {}
-        new_di["ee_pos"] = di["robot0_eef_pos"]
-        new_di["ee_ori"] = T.quat2axisangle(di["robot0_eef_quat"])
-        new_di["ee_states"] = np.hstack((di["robot0_eef_pos"],  new_di["ee_ori"]))
-        new_di["joint_states"] = di["robot0_joint_pos"]
-        new_di["gripper_states"] = di["robot0_gripper_qpos"]
+
+        # map libero keys to robosuite keys
         
-        new_di["agentview_rgb"] = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='agentview_rgb')
-        new_di["eye_in_hand_rgb"] = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='eye_in_hand_rgb')
+        # resize images and remap keys
+        robot0_eye_in_hand_image = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='eye_in_hand_rgb').transpose(2,0,1)
+        new_di["robot0_eye_in_hand_image"] = robot0_eye_in_hand_image
         
+        agentview_image = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='agentview_rgb').transpose(2,0,1)
+        new_di["robot0_agentview_left_image"] = agentview_image
+        
+        # dataset only has single-view -> zero-pad right image (cf. Octo)
+        new_di["robot0_agentview_right_image"] = np.zeros_like(agentview_image, dtype=agentview_image.dtype)
+        
+        # remap state keys
+        new_di["robot0_base_to_eef_pos"] = di["robot0_eef_pos"]
+        new_di["robot0_base_to_eef_quat"] = di["robot0_eef_quat"] # T.quat2axisangle(di["robot0_eef_quat"])
+        new_di["robot0_gripper_qpos"] = di["robot0_gripper_qpos"]
+        # new_di["robot0_joint_pos"] = di["robot0_joint_pos"]
+
+        # add zeros for base pos and quat
+        new_di["robot0_base_pos"] = np.zeros_like(di["robot0_eef_pos"])
+        new_di["robot0_base_quat"] = np.zeros_like(di["robot0_eef_quat"])
+
         # add in eef pose to not break other code that has it hardcoded:
         new_di["robot0_eef_pos"] = di["robot0_eef_pos"]     
         di = new_di

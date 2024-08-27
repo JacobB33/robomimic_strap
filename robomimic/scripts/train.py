@@ -140,31 +140,42 @@ def train(config, device):
                     use_image_obs=shape_meta["use_images"],
                     seed=config.train.seed * 1000 + env_i,
                 )
-                if config.train.data_format != "libero":
+                
+                if config.train.data_format == "robosuite":
+                    
+                    # delete keys not supported by robosuite v1.4.1
+                    del env_kwargs["seed"]
+                    del env_kwargs["env_meta"]["env_kwargs"]["generative_textures"]
+                    # only supports single robot: list -> string
+                    env_kwargs["env_meta"]["env_kwargs"]["robots"] = env_kwargs["env_meta"]["env_kwargs"]["robots"][0]
+                    # add robocasa wrapper to re-map obs keys
+                    import robomimic.envs.env_base as EB
+                    env_kwargs["env_meta"]["type"] = EB.EnvType.ROBOCASA_TYPE
+
+                    env = EnvUtils.create_env_from_metadata(**env_kwargs)
+                    
+                
+                elif config.train.data_format == "libero":
+
+                    from libero.libero import benchmark
+                    from libero.libero.envs import OffScreenRenderEnv
+                    from robomimic.envs.env_libero import EnvLibero
+                    task_name = env_meta["env_name"]
+                    task_description = env_meta["env_lang"]
+
+                    env = EnvLibero(env_name=task_name,
+                                    env_meta=env_meta,
+                                    render=False, 
+                                    render_offscreen=False, 
+                                    use_image_obs=False, 
+                                    env_lang=task_description)
+                
+                else: # elif config.train.data_format == "robomimic":
                     env = EnvUtils.create_env_from_metadata(**env_kwargs)
 
-                    
-                    # handle environment wrappers
-                    env = EnvUtils.wrap_env_from_config(env, config=config)  # apply environment warpper, if applicable
+                # handle environment wrappers
+                env = EnvUtils.wrap_env_from_config(env, config=config)  # apply environment warpper, if applicable
 
-                    return env
-                
-                # it is a libero one:
-                from libero.libero import benchmark
-                from libero.libero.envs import OffScreenRenderEnv
-                from robomimic.envs.env_libero import EnvLibero
-                task_name = env_meta["env_name"]
-                task_description = env_meta["env_lang"]
-
-                env = EnvLibero(env_name=task_name,
-                                env_meta=env_meta,
-                                render=False, 
-                                render_offscreen=False, 
-                                use_image_obs=False, 
-                                env_lang=task_description)
-                
-                env = EnvUtils.wrap_env_from_config(env, config=config)
-                
                 return env
 
             if config.experiment.rollout.batched:

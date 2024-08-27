@@ -98,7 +98,7 @@ def get_env_metadata_from_dataset(dataset_path, ds_format="robomimic"):
     """
     dataset_path = os.path.expanduser(dataset_path)
     f = h5py.File(dataset_path, "r")
-    if ds_format == "robomimic":
+    if ds_format == "robomimic" or ds_format == "robosuite":
         env_meta = json.loads(f["data"].attrs["env_args"])
     elif ds_format == "r2d2":
         env_meta = dict(f.attrs)
@@ -138,7 +138,7 @@ def get_shape_metadata_from_dataset(dataset_path, action_keys, all_obs_keys=None
     dataset_path = os.path.expanduser(dataset_path)
     f = h5py.File(dataset_path, "r")
     
-    if ds_format == "robomimic":
+    if ds_format == "robomimic" or ds_format == "robosuite":
         demo_id = list(f["data"].keys())[0]
         demo = f["data/{}".format(demo_id)]
         

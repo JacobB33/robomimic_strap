@@ -124,25 +124,38 @@ def eval(config, device):
                     use_image_obs=shape_meta["use_images"],
                     seed=config.train.seed * 1000 + env_i,
                 )
-                env = EnvUtils.create_env_from_metadata(**env_kwargs)
-
-                # TODO if only single demo, load env model file and ep_meta
-                # dataset_path = "/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets/retrieval/sub_traj_len_25_stride_20/TurnOnMicrowave"
-                # demo_key = "demo_14"
-                # # import h5py
-                # # with h5py.File(dataset_path, "r") as f:
-
-                # # ep_meta_tmp = json.loads(f["data"][demo_key].attrs["ep_meta"])
-                # ep_meta_tmp = json.load(open(os.path.join(dataset_path, "ep_meta.json"), "r"))
                 
-                # env.env.set_ep_meta(ep_meta_tmp)
-                # env.env.reset()
+                if config.train.data_format == "robosuite":
+                    
+                    # delete keys not supported by robosuite v1.4.1
+                    del env_kwargs["seed"]
+                    del env_kwargs["env_meta"]["env_kwargs"]["generative_textures"]
+                    # only supports single robot: list -> string
+                    env_kwargs["env_meta"]["env_kwargs"]["robots"] = env_kwargs["env_meta"]["env_kwargs"]["robots"][0]
+                    # add robocasa wrapper to re-map obs keys
+                    import robomimic.envs.env_base as EB
+                    env_kwargs["env_meta"]["type"] = EB.EnvType.ROBOCASA_TYPE
 
-                # # model_file = f["data"][demo_key].attrs["model_file"]
-                # model_file = open(os.path.join(dataset_path, "model_file.mjcf"), "r").read()
-                # xml = env.env.edit_model_xml(model_file)
-                # env.env.reset_from_xml_string(xml)
-                # env.env.sim.reset()
+                    env = EnvUtils.create_env_from_metadata(**env_kwargs)
+
+                
+                elif config.train.data_format == "libero":
+
+                    from libero.libero import benchmark
+                    from libero.libero.envs import OffScreenRenderEnv
+                    from robomimic.envs.env_libero import EnvLibero
+                    task_name = env_meta["env_name"]
+                    task_description = env_meta["env_lang"]
+
+                    env = EnvLibero(env_name=task_name,
+                                    env_meta=env_meta,
+                                    render=False, 
+                                    render_offscreen=False, 
+                                    use_image_obs=False, 
+                                    env_lang=task_description)
+                
+                else: # elif config.train.data_format == "robomimic":
+                    env = EnvUtils.create_env_from_metadata(**env_kwargs)
 
                 # handle environment wrappers
                 env = EnvUtils.wrap_env_from_config(env, config=config)  # apply environment warpper, if applicable

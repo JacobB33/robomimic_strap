@@ -359,7 +359,8 @@ def run_rollout(
         except AttributeError as e:
             print("No action_dim attribute in env", e)
         except ModuleNotFoundError as e:
-            print("No robosuite module found (ignore if using LIBERO)", e)
+            if step_i == 0:
+                print("No robosuite module found (ignore if using LIBERO or robosuite)", e)
 
         # play action
         ob_dict, r, done, info = env.step(ac)

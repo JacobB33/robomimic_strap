@@ -14,7 +14,7 @@ class EnvType:
     ROBOSUITE_TYPE = 1
     GYM_TYPE = 2
     IG_MOMART_TYPE = 3
-
+    ROBOCASA_TYPE = 4
 
 class EnvBase(abc.ABC):
     """A base class method for environments used by this repo."""
