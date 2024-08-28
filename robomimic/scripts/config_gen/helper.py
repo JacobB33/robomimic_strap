@@ -801,6 +801,25 @@ def make_generator(args, make_generator_helper):
         values=[seq_length],
     )
 
+    generator.add_param(
+        key="algo.transformer.num_layers",
+        name="",
+        group=-1,
+        values=[8],
+    )
+    generator.add_param(
+        key="algo.transformer.embed_dim",
+        name="",
+        group=-1,
+        values=[256],
+    )
+    generator.add_param(
+        key="algo.transformer.num_heads",
+        name="",
+        group=-1,
+        values=[4],
+    )
+    
     # proper language conditioned architecture
     generator.add_param(
             key="algo.language_conditioned",
@@ -866,7 +885,7 @@ def make_generator(args, make_generator_helper):
         # baku-like changes that are not supported yet
         # baku has sequence length of 1 (history) and 10 (future)
         # baku has two-layer mlp to encode obs before transformer
-        seq_length = 10 # 5 works worse
+        seq_length = 5
         generator.add_param(
             key="train.seq_length",
             name="",
@@ -885,17 +904,18 @@ def make_generator(args, make_generator_helper):
             group=-1,
             values=[seq_length],
         )
+        # baku doesn't find it useful but it seems to be crucial for robocasa!
         generator.add_param(
             key="algo.gmm.enabled",
             name="",
             group=-1,
-            values=[False],
+            values=[True],
         )
         generator.add_param(
             key="algo.transformer.num_layers",
             name="",
             group=-1,
-            values=[8],
+            values=[8], # 6 robocasa, 8 baku
         )
         generator.add_param(
             key="algo.transformer.embed_dim",
@@ -907,7 +927,7 @@ def make_generator(args, make_generator_helper):
             key="algo.transformer.num_heads",
             name="",
             group=-1,
-            values=[4],
+            values=[4], # 8 robocasa, 4 baku
         )
         
     # generate jsons and script
