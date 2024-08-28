@@ -152,22 +152,25 @@ def train(config, device):
                     import robomimic.envs.env_base as EB
                     env_kwargs["env_meta"]["type"] = EB.EnvType.ROBOCASA_TYPE
 
+                    # take env_lang and copy, delete, set attribute
+                    # env_kwargs["env_meta"]["env_lang"] = env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
+                    task_description = env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
+                    import pdb; pdb.set_trace()
+                    del env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
                     env = EnvUtils.create_env_from_metadata(**env_kwargs)
-                    
+                    env.env_lang = task_description
                 
                 elif config.train.data_format == "libero":
 
-                    from libero.libero import benchmark
-                    from libero.libero.envs import OffScreenRenderEnv
                     from robomimic.envs.env_libero import EnvLibero
                     task_name = env_meta["env_name"]
-                    task_description = env_meta["env_lang"]
+                    task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
 
                     env = EnvLibero(env_name=task_name,
                                     env_meta=env_meta,
-                                    render=False, 
+                                    render=False,
                                     render_offscreen=False, 
-                                    use_image_obs=False, 
+                                    use_image_obs=False,
                                     env_lang=task_description)
                 
                 else: # elif config.train.data_format == "robomimic":

@@ -136,22 +136,26 @@ def eval(config, device):
                     import robomimic.envs.env_base as EB
                     env_kwargs["env_meta"]["type"] = EB.EnvType.ROBOCASA_TYPE
 
+                    # take env_lang and copy, delete, set attribute
+                    # env_kwargs["env_meta"]["env_lang"] = env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
+                    task_description = env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
+                    import pdb; pdb.set_trace()
+                    del env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
                     env = EnvUtils.create_env_from_metadata(**env_kwargs)
+                    env.env_lang = task_description
 
                 
                 elif config.train.data_format == "libero":
 
-                    from libero.libero import benchmark
-                    from libero.libero.envs import OffScreenRenderEnv
                     from robomimic.envs.env_libero import EnvLibero
                     task_name = env_meta["env_name"]
-                    task_description = env_meta["env_lang"]
+                    task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
 
                     env = EnvLibero(env_name=task_name,
                                     env_meta=env_meta,
-                                    render=False, 
+                                    render=False,
                                     render_offscreen=False, 
-                                    use_image_obs=False, 
+                                    use_image_obs=False,
                                     env_lang=task_description)
                 
                 else: # elif config.train.data_format == "robomimic":
@@ -243,11 +247,15 @@ def eval(config, device):
     # fetch model files in ckpt_path
     assert config.experiment.ckpt_path is not None
     ckpt_path = config.experiment.ckpt_path
-    file_names = os.listdir(ckpt_path)
-    # only keep ckpt files
-    file_names = [file_name for file_name in file_names if file_name.endswith(".pth")]
-    # sort by epoch number
-    file_names = sorted(file_names, key=lambda x: int(x.strip(".pth").split("_")[-1]))
+
+    if type(ckpt_path) is list:
+        file_names = os.listdir(ckpt_path)
+        # only keep ckpt files
+        file_names = [file_name for file_name in file_names if file_name.endswith(".pth")]
+        # sort by epoch number
+        file_names = sorted(file_names, key=lambda x: int(x.strip(".pth").split("_")[-1]))
+    elif type(ckpt_path) is str:
+        file_names = [ckpt_path]
 
     print("Found ckpt files: ", file_names)
     
