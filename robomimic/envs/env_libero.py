@@ -225,51 +225,36 @@ class EnvLibero(EB.EnvBase):
 
         # map libero keys to robosuite keys
         
-        # resize images and remap keys
-        robot0_eye_in_hand_image = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='eye_in_hand_rgb').transpose(2,0,1)
+        # don't flip images for libero env
+        robot0_eye_in_hand_image = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='robot0_eye_in_hand_image')
         new_di["robot0_eye_in_hand_image"] = robot0_eye_in_hand_image
-        
-        agentview_image = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='agentview_rgb').transpose(2,0,1)
+        agentview_image = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='robot0_agentview_left_image')
         new_di["robot0_agentview_left_image"] = agentview_image
-        
         # dataset only has single-view -> zero-pad right image (cf. Octo)
         new_di["robot0_agentview_right_image"] = np.zeros_like(agentview_image, dtype=agentview_image.dtype)
-        
+
         # remap state keys
         new_di["robot0_base_to_eef_pos"] = di["robot0_eef_pos"]
         new_di["robot0_base_to_eef_quat"] = di["robot0_eef_quat"] # T.quat2axisangle(di["robot0_eef_quat"])
         new_di["robot0_gripper_qpos"] = di["robot0_gripper_qpos"]
-        # new_di["robot0_joint_pos"] = di["robot0_joint_pos"]
 
         # add zeros for base pos and quat
         new_di["robot0_base_pos"] = np.zeros_like(di["robot0_eef_pos"])
         new_di["robot0_base_quat"] = np.zeros_like(di["robot0_eef_quat"])
+        
+        # # libero default
+        # new_di["ee_pos"] = di["robot0_eef_pos"]
+        # new_di["ee_ori"] = T.quat2axisangle(di["robot0_eef_quat"])
+        # new_di["ee_states"] = np.hstack((di["robot0_eef_pos"],  new_di["ee_ori"]))
+        # new_di["joint_states"] = di["robot0_joint_pos"]
+        # new_di["gripper_states"] = di["robot0_gripper_qpos"]
+        # new_di["agentview_rgb"] = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='agentview_rgb')
+        # new_di["eye_in_hand_rgb"] = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='robot0_eye_in_hand_rgb')
 
         # add in eef pose to not break other code that has it hardcoded:
-        new_di["robot0_eef_pos"] = di["robot0_eef_pos"]     
+        new_di["robot0_eef_pos"] = di["robot0_eef_pos"]
         di = new_di
-        # ret = {}
-        # for k in di:
-        #     if (k in ObsUtils.OBS_KEYS_TO_MODALITIES) and ObsUtils.key_is_obs_modality(key=k, obs_modality="rgb"):
-        #         ret[k] = di[k][::-1]
-        #         if self.postprocess_visual_obs:
-        #             ret[k] = ObsUtils.process_obs(obs=ret[k], obs_key=k)
-
-        # # "object" key contains object information
-        # if "object-state" in di:
-        #     ret["object"] = np.array(di["object-state"])
-
-        # for robot in self.env.robots:
-        #     # add all robot-arm-specific observations. Note the (k not in ret) check
-        #     # ensures that we don't accidentally add robot wrist images a second time
-        #     pf = robot.robot_model.naming_prefix
-        #     for k in di:
-        #         if k.startswith(pf) and (k not in ret) and \
-        #                 (not k.endswith("proprio-state")):
-        #             ret[k] = np.array(di[k])
-
-
-        # ret["lang_emb"] = np.array(self._ep_lang_emb)
+        
         return new_di
 
     def get_state(self):

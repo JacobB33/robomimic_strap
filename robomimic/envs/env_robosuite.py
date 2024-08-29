@@ -461,50 +461,7 @@ class EnvRobocasa(EnvRobosuite):
 
 
     def get_observation(self, di=None):
-        """
-        Get current environment observation dictionary.
 
-        Args:
-            di (dict): current raw observation dictionary from robosuite to wrap and provide 
-                as a dictionary. If not provided, will be queried from robosuite.
-        """
-
-        return self.map_obs(di)
-    
-        if di is None:
-            di = self.env._get_observations(force_update=True) if self._is_v1 else self.env._get_observation()
-        ret = {}
-        for k in di:
-            if (k in ObsUtils.OBS_KEYS_TO_MODALITIES) and ObsUtils.key_is_obs_modality(key=k, obs_modality="rgb"):
-                ret[k] = di[k][::-1]
-                if self.postprocess_visual_obs:
-                    ret[k] = ObsUtils.process_obs(obs=ret[k], obs_key=k)
-
-        # "object" key contains object information
-        if "object-state" in di:
-            ret["object"] = np.array(di["object-state"])
-
-        if self._is_v1:
-            for robot in self.env.robots:
-                # add all robot-arm-specific observations. Note the (k not in ret) check
-                # ensures that we don't accidentally add robot wrist images a second time
-                pf = robot.robot_model.naming_prefix
-                for k in di:
-                    if k.startswith(pf) and (k not in ret) and \
-                            (not k.endswith("proprio-state")):
-                        ret[k] = np.array(di[k])
-        else:
-            # minimal proprioception for older versions of robosuite
-            ret["proprio"] = np.array(di["robot-state"])
-            ret["eef_pos"] = np.array(di["eef_pos"])
-            ret["eef_quat"] = np.array(di["eef_quat"])
-            ret["gripper_qpos"] = np.array(di["gripper_qpos"])
-
-        # ret["lang_emb"] = np.array(self._ep_lang_emb)
-        return ret
-
-    
-    def map_obs(self, di):
         """
         Get current environment observation dictionary.
 
@@ -524,13 +481,14 @@ class EnvRobocasa(EnvRobosuite):
         new_di["robot0_base_pos"] = np.zeros_like(di["robot0_eef_pos"])
         new_di["robot0_base_quat"] = np.zeros_like(di["robot0_eef_quat"])
 
-        agentview_image = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='agentview_rgb').transpose(2,0,1)
+        # flip images for robomimic env
+        agentview_image = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='robot0_agentview_left_image')
         new_di["robot0_agentview_left_image"] = agentview_image
         # dataset only has single-view -> zero-pad right image (cf. Octo)
         new_di["robot0_agentview_right_image"] = np.zeros_like(agentview_image, dtype=agentview_image.dtype)
-        new_di["robot0_eye_in_hand_image"] = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='eye_in_hand_rgb').transpose(2,0,1)
+        new_di["robot0_eye_in_hand_image"] = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='robot0_eye_in_hand_image')
         
         # add in eef pose to not break other code that has it hardcoded:
-        new_di["robot0_eef_pos"] = di["robot0_eef_pos"]     
+        new_di["robot0_eef_pos"] = di["robot0_eef_pos"]
         di = new_di
         return new_di

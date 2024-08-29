@@ -127,30 +127,32 @@ def eval(config, device):
                 
                 if config.train.data_format == "robosuite":
                     
-                    # delete keys not supported by robosuite v1.4.1
-                    del env_kwargs["seed"]
-                    del env_kwargs["env_meta"]["env_kwargs"]["generative_textures"]
+                    # copy env_kwargs before modifying
+                    env_kwargs_tmp = deepcopy(env_kwargs)
+                    
+                    # manually set env language
+                    task_description = env_kwargs_tmp["env_meta"]["env_kwargs"]["env_lang"]
+                    del env_kwargs_tmp["env_meta"]["env_kwargs"]["env_lang"]
+                    
                     # only supports single robot: list -> string
-                    env_kwargs["env_meta"]["env_kwargs"]["robots"] = env_kwargs["env_meta"]["env_kwargs"]["robots"][0]
+                    env_kwargs_tmp["env_meta"]["env_kwargs"]["robots"] = env_kwargs_tmp["env_meta"]["env_kwargs"]["robots"][0]
                     # add robocasa wrapper to re-map obs keys
                     import robomimic.envs.env_base as EB
-                    env_kwargs["env_meta"]["type"] = EB.EnvType.ROBOCASA_TYPE
+                    env_kwargs_tmp["env_meta"]["type"] = EB.EnvType.ROBOCASA_TYPE
 
-                    # take env_lang and copy, delete, set attribute
-                    # env_kwargs["env_meta"]["env_lang"] = env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
-                    task_description = env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
-                    import pdb; pdb.set_trace()
-                    del env_kwargs["env_meta"]["env_kwargs"]["env_lang"]
-                    env = EnvUtils.create_env_from_metadata(**env_kwargs)
+                    # delete keys not supported by robosuite v1.4.1
+                    del env_kwargs_tmp["seed"]
+                    if hasattr(env_kwargs_tmp["env_meta"]["env_kwargs"], "generative_textures"):
+                        del env_kwargs_tmp["env_meta"]["env_kwargs"]["generative_textures"]
+                    
+                    env = EnvUtils.create_env_from_metadata(**env_kwargs_tmp)
                     env.env_lang = task_description
-
                 
                 elif config.train.data_format == "libero":
 
                     from robomimic.envs.env_libero import EnvLibero
                     task_name = env_meta["env_name"]
                     task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
-
                     env = EnvLibero(env_name=task_name,
                                     env_meta=env_meta,
                                     render=False,
