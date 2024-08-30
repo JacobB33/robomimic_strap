@@ -482,11 +482,11 @@ class EnvRobocasa(EnvRobosuite):
         new_di["robot0_base_quat"] = np.zeros_like(di["robot0_eef_quat"])
 
         # flip images for robomimic env
-        agentview_image = ObsUtils.process_obs(obs=di["agentview_image"], obs_key='robot0_agentview_left_image')
+        agentview_image = ObsUtils.process_obs(obs=di["agentview_image"][::-1], obs_key='robot0_agentview_left_image')
         new_di["robot0_agentview_left_image"] = agentview_image
         # dataset only has single-view -> zero-pad right image (cf. Octo)
         new_di["robot0_agentview_right_image"] = np.zeros_like(agentview_image, dtype=agentview_image.dtype)
-        new_di["robot0_eye_in_hand_image"] = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"], obs_key='robot0_eye_in_hand_image')
+        new_di["robot0_eye_in_hand_image"] = ObsUtils.process_obs(obs=di["robot0_eye_in_hand_image"][::-1], obs_key='robot0_eye_in_hand_image')
         
         # add in eef pose to not break other code that has it hardcoded:
         new_di["robot0_eef_pos"] = di["robot0_eef_pos"]
