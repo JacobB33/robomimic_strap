@@ -608,6 +608,11 @@ def get_argparser():
     )
 
     parser.add_argument(
+        "--no_pad",
+        action="store_true"
+    )
+
+    parser.add_argument(
         "--eval_task",
         type=str,
         nargs="+",  # This allows one or more arguments
@@ -794,6 +799,19 @@ def make_generator(args, make_generator_helper):
         group=-1,
         values=[seq_length],
     )
+    if args.no_pad:
+        generator.add_param(
+            key="train.pad_frame_stack",
+            name="",
+            group=-1,
+            values=[False]
+        )
+        generator.add_param(
+            key="train.pad_seq_length",
+            name="",
+            group=-1,
+            values=[False]
+        )
     generator.add_param(
         key="algo.transformer.context_length",
         name="",
