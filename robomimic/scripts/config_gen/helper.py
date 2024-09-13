@@ -611,6 +611,11 @@ def get_argparser():
         "--no_pad",
         action="store_true"
     )
+    
+    parser.add_argument(
+        "--file",
+        action="store_true"
+    )
 
     parser.add_argument(
         "--eval_task",
