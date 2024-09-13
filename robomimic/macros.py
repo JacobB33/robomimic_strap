@@ -17,7 +17,8 @@ WANDB_API_KEY = None
 
 # Key in obs dict used for CLIP language embeddings
 LANG_EMB_KEY = "lang_emb"
-
+LANG_KEY = "lang"
+assert LANG_KEY in ["lang_var", "lang"]
 try:
     from robomimic.macros_private import *
 except ImportError:

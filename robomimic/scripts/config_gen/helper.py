@@ -625,8 +625,8 @@ def get_argparser():
     parser.add_argument(
         "--base_path",
         type=str,
-        default='/gscratch/weirdlab/jacob33/retrieval/robocasa/datasets',
-        # default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
+        # default='/gscratch/weirdlab/jacob33/retrieval/robocasa/datasets',
+        default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
         # default="~/projects/robocasa_ret/datasets",
         help="base path to datasets",
     )
@@ -780,45 +780,45 @@ def make_generator(args, make_generator_helper):
             ],
         )
 
-    # lower context length for faster training
-    seq_length = 5
-    generator.add_param(
-        key="train.seq_length",
-        name="",
-        group=-1,
-        values=[seq_length],
-    )
-    generator.add_param(
-        key="train.frame_stack",
-        name="",
-        group=-1,
-        values=[seq_length],
-    )
-    generator.add_param(
-        key="algo.transformer.context_length",
-        name="",
-        group=-1,
-        values=[seq_length],
-    )
+    # # lower context length for faster training
+    # seq_length = 5
+    # generator.add_param(
+    #     key="train.seq_length",
+    #     name="",
+    #     group=-1,
+    #     values=[seq_length],
+    # )
+    # generator.add_param(
+    #     key="train.frame_stack",
+    #     name="",
+    #     group=-1,
+    #     values=[seq_length],
+    # )
+    # generator.add_param(
+    #     key="algo.transformer.context_length",
+    #     name="",
+    #     group=-1,
+    #     values=[seq_length],
+    # )
 
-    generator.add_param(
-        key="algo.transformer.num_layers",
-        name="",
-        group=-1,
-        values=[8],
-    )
-    generator.add_param(
-        key="algo.transformer.embed_dim",
-        name="",
-        group=-1,
-        values=[256],
-    )
-    generator.add_param(
-        key="algo.transformer.num_heads",
-        name="",
-        group=-1,
-        values=[4],
-    )
+    # generator.add_param(
+    #     key="algo.transformer.num_layers",
+    #     name="",
+    #     group=-1,
+    #     values=[8],
+    # )
+    # generator.add_param(
+    #     key="algo.transformer.embed_dim",
+    #     name="",
+    #     group=-1,
+    #     values=[256],
+    # )
+    # generator.add_param(
+    #     key="algo.transformer.num_heads",
+    #     name="",
+    #     group=-1,
+    #     values=[4],
+    # )
     
     # proper language conditioned architecture
     generator.add_param(

@@ -7,153 +7,153 @@ SINGLE_STAGE_TASK_DATASETS = OrderedDict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPCounterToCab/2024-04-24",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPCounterToCab/2024-04-24",
     ),
     PnPCabToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPCabToCounter/2024-04-24",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPCabToCounter/2024-04-24",
     ),
     PnPCounterToSink=dict(
         horizon=700,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPCounterToSink/2024-04-25",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPCounterToSink/2024-04-25",
     ),
     PnPSinkToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPSinkToCounter/2024-04-26_2",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPSinkToCounter/2024-04-26_2",
     ),
     PnPCounterToMicrowave=dict(
         horizon=600,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPCounterToMicrowave/2024-04-27",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPCounterToMicrowave/2024-04-27",
     ),
     PnPMicrowaveToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPMicrowaveToCounter/2024-04-26",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPMicrowaveToCounter/2024-04-26",
     ),
     PnPCounterToStove=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPCounterToStove/2024-04-26",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPCounterToStove/2024-04-26",
     ),
     PnPStoveToCounter=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_pnp/PnPStoveToCounter/2024-05-01",
+        path="robocasa/v0.1/single_stage/kitchen_pnp/PnPStoveToCounter/2024-05-01",
     ),
     OpenSingleDoor=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_doors/OpenSingleDoor/2024-04-24",
+        path="robocasa/v0.1/single_stage/kitchen_doors/OpenSingleDoor/2024-04-24",
     ),
     CloseSingleDoor=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_doors/CloseSingleDoor/2024-04-24",
+        path="robocasa/v0.1/single_stage/kitchen_doors/CloseSingleDoor/2024-04-24",
     ),
     OpenDoubleDoor=dict(
         horizon=1000,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_doors/OpenDoubleDoor/2024-04-26",
+        path="robocasa/v0.1/single_stage/kitchen_doors/OpenDoubleDoor/2024-04-26",
     ),
     CloseDoubleDoor=dict(
         horizon=700,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_doors/CloseDoubleDoor/2024-04-29",
+        path="robocasa/v0.1/single_stage/kitchen_doors/CloseDoubleDoor/2024-04-29",
     ),
     OpenDrawer=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_drawer/OpenDrawer/2024-05-03",
+        path="robocasa/v0.1/single_stage/kitchen_drawer/OpenDrawer/2024-05-03",
     ),
     CloseDrawer=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_drawer/CloseDrawer/2024-04-30",
+        path="robocasa/v0.1/single_stage/kitchen_drawer/CloseDrawer/2024-04-30",
     ),
     TurnOnSinkFaucet=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_sink/TurnOnSinkFaucet/2024-04-25",
+        path="robocasa/v0.1/single_stage/kitchen_sink/TurnOnSinkFaucet/2024-04-25",
     ),
     TurnOffSinkFaucet=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_sink/TurnOffSinkFaucet/2024-04-25",
+        path="robocasa/v0.1/single_stage/kitchen_sink/TurnOffSinkFaucet/2024-04-25",
     ),
     TurnSinkSpout=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_sink/TurnSinkSpout/2024-04-29",
+        path="robocasa/v0.1/single_stage/kitchen_sink/TurnSinkSpout/2024-04-29",
     ),
     # exclude for now -> has navigation
     # TurnOnStove=dict(
     #     horizon=500,
     #     file_name="demo_gentex_im128_randcams.hdf5",
     # filter_key="50_demos",
-    # path="v0.1/single_stage/kitchen_stove/TurnOnStove/2024-05-02",
+    # path="robocasa/v0.1/single_stage/kitchen_stove/TurnOnStove/2024-05-02",
     # ),
     TurnOffStove=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_stove/TurnOffStove/2024-05-02",
+        path="robocasa/v0.1/single_stage/kitchen_stove/TurnOffStove/2024-05-02",
     ),
     CoffeeSetupMug=dict(
         horizon=600,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_coffee/CoffeeSetupMug/2024-04-25",
+        path="robocasa/v0.1/single_stage/kitchen_coffee/CoffeeSetupMug/2024-04-25",
     ),
     CoffeeServeMug=dict(
         horizon=600,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_coffee/CoffeeServeMug/2024-05-01",
+        path="robocasa/v0.1/single_stage/kitchen_coffee/CoffeeServeMug/2024-05-01",
     ),
     CoffeePressButton=dict(
         horizon=300,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_coffee/CoffeePressButton/2024-04-25",
+        path="robocasa/v0.1/single_stage/kitchen_coffee/CoffeePressButton/2024-04-25",
     ),
     TurnOnMicrowave=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_microwave/TurnOnMicrowave/2024-04-25",
+        path="robocasa/v0.1/single_stage/kitchen_microwave/TurnOnMicrowave/2024-04-25",
     ),
     TurnOffMicrowave=dict(
         horizon=500,
         file_name="demo_gentex_im128_randcams.hdf5",
         filter_key="50_demos",
-        path="v0.1/single_stage/kitchen_microwave/TurnOffMicrowave/2024-04-25",
+        path="robocasa/v0.1/single_stage/kitchen_microwave/TurnOffMicrowave/2024-04-25",
     ),
     # exclude for now -> has navigation
     # NavigateKitchen=dict(
     #     horizon=500,
     #     file_name="demo_gentex_im128_randcams.hdf5",
     # filter_key="50_demos",
-    # path="v0.1/single_stage/kitchen_navigate/NavigateKitchen/2024-05-09",
+    # path="robocasa/v0.1/single_stage/kitchen_navigate/NavigateKitchen/2024-05-09",
     # ),
 )
 
@@ -161,35 +161,35 @@ MULTI_STAGE_TASK_DATASETS = OrderedDict(
     ArrangeVegetables=dict(
         file_name="demo_gentex_im128.hdf5",
         filter_key="50_demos",
-        path="v0.1/multi_stage/chopping_food/ArrangeVegetables/2024-05-11",
+        path="robocasa/v0.1/multi_stage/chopping_food/ArrangeVegetables/2024-05-11",
         horizon=1200,
         activity="chopping_food",
     ),
     MicrowaveThawing=dict(
         file_name="demo_gentex_im128.hdf5",
         filter_key="50_demos",
-        path="v0.1/multi_stage/defrosting_food/MicrowaveThawing/2024-05-11",
+        path="robocasa/v0.1/multi_stage/defrosting_food/MicrowaveThawing/2024-05-11",
         horizon=1000,
         activity="defrosting_food",
     ),
     RestockPantry=dict(
         file_name="demo_gentex_im128.hdf5",
         filter_key="50_demos",
-        path="v0.1/multi_stage/restocking_supplies/RestockPantry/2024-05-10",
+        path="robocasa/v0.1/multi_stage/restocking_supplies/RestockPantry/2024-05-10",
         horizon=1000,
         activity="restocking_supplies",
     ),
     PreSoakPan=dict(
         file_name="demo_gentex_im128.hdf5",
         filter_key="50_demos",
-        path="v0.1/multi_stage/washing_dishes/PreSoakPan/2024-05-10",
+        path="robocasa/v0.1/multi_stage/washing_dishes/PreSoakPan/2024-05-10",
         horizon=1500,
         activity="washing_dishes",
     ),
     PrepareCoffee=dict(
         file_name="demo_gentex_im128.hdf5",
         filter_key="50_demos",
-        path="v0.1/multi_stage/brewing/PrepareCoffee/2024-05-07",
+        path="robocasa/v0.1/multi_stage/brewing/PrepareCoffee/2024-05-07",
         horizon=1000,
         activity="brewing",
     ),
@@ -484,10 +484,10 @@ DROID_DATASETS = OrderedDict(
     ),
 )
 
-LIBERO_90 = OrderedDict(
-    {f"DATASET_{i + 1}": dict(file_name=file, filter_key=None, path=f"libero_90", horizon=500) for (i, file) in enumerate(os.listdir(f"/home/jacob/projects/robocasa/datasets/libero_90")) if file.endswith(".hdf5")} 
+# LIBERO_90 = OrderedDict(
+#     {f"DATASET_{i + 1}": dict(file_name=file, filter_key=None, path=f"libero_90", horizon=500) for (i, file) in enumerate(os.listdir(f"/home/jacob/projects/robocasa/datasets/libero_90")) if file.endswith(".hdf5")} 
     
-)
+# )
 
 LIBERO_10 = OrderedDict(
     KitchenScene3=dict(
@@ -572,8 +572,28 @@ ALL_DATASETS["viola_sim"] = VIOLA_SIM_TASK_DATASETS
 ALL_DATASETS["droid"] = DROID_DATASETS
 ALL_DATASETS["retrieval"] = RETRIEVAL_DATASETS
 ALL_DATASETS["sub_traj_retrieval"] = RETRIEVAL_SUB_TRAJ_DATASETS
-ALL_DATASETS["libero_90"] = LIBERO_90
-ALL_DATASETS["libero_10"] = LIBERO_10
+# ALL_DATASETS["libero_90"] = LIBERO_90
+# ALL_DATASETS["libero_10"] = LIBERO_10
+
+from data_utils import get_dataset_paths, DATASET_ROOT_DIR, DATASET_REGISTRY
+# no filter_key, no horizon/eval
+for key in DATASET_REGISTRY.keys(): # ["libero_converted", "robomimic_converted", "mimicgen_converted"]:
+    dataset_registry = {key: DATASET_REGISTRY[key]}
+    dataset_paths = get_dataset_paths(root_dir=DATASET_ROOT_DIR, dataset_registry=dataset_registry, return_embed_paths=False)
+    odict = OrderedDict()
+    for i, ds in enumerate(dataset_paths):
+        split = ds.split("/")
+        path = "/".join(split[:-1])
+        file_name = split[-1]
+        name = file_name.split(".")[0] + str(i)
+        odict[name] = dict(
+            file_name=file_name,
+            filter_key=None,
+            path=path,
+            horizon=500,
+        )
+    print(key, len(odict))
+    ALL_DATASETS[key] = odict
 
 # TODO: add datasets here
 
@@ -596,6 +616,23 @@ def get_ds_cfg(
         ds_names = list(all_datasets.keys())
     elif ds_names in ALL_DATASETS:
         ds_names = list(ALL_DATASETS[ds_names].keys())
+
+    elif ds_names == "robosuite_mix_large":
+        ds_names = []
+        ds_names += list(ALL_DATASETS["single_stage"].keys())
+        ds_names += list(ALL_DATASETS["libero_converted"].keys())
+        ds_names += list(ALL_DATASETS["robomimic_converted"].keys())
+        # ds_names += list(ALL_DATASETS["mimicgen_converted"].keys())
+    
+    elif ds_names == "robosuite_mix_small":
+        ds_names = []
+        ds_names += list(ALL_DATASETS["robocasa_no_pnp"].keys())
+        ds_names += list(ALL_DATASETS["libero_10_converted"].keys())
+        ds_names += list(ALL_DATASETS["robomimic_converted"].keys())
+    
+    elif ds_names == "libero_90_converted":
+        ds_names = []
+        ds_names += list(ALL_DATASETS["libero_90_converted"].keys())
 
     elif ds_names == "real_co":
         ds_names = []

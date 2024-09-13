@@ -17,7 +17,7 @@ import robomimic.utils.obs_utils as ObsUtils
 import robomimic.utils.lang_utils as LangUtils
 import robomimic.envs.env_base as EB
 from robomimic.macros import LANG_EMB_KEY
-
+from robomimic.macros import LANG_KEY
 
 class EnvRobosuite(EB.EnvBase):
     """Wrapper class for robosuite environments (https://github.com/ARISE-Initiative/robosuite)"""
@@ -134,7 +134,7 @@ class EnvRobosuite(EB.EnvBase):
         elif hasattr(self.env, "get_ep_meta"):
             # get ep_meta if applicable
             ep_meta = self.env.get_ep_meta()
-            self._ep_lang_str = ep_meta.get("lang", "dummy")
+            self._ep_lang_str = ep_meta.get(LANG_KEY, "dummy")
         else:
             self._ep_lang_str = "dummy"
 

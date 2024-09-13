@@ -163,7 +163,7 @@ class Algo(object):
                 self.subgoal_shapes[k] = obs_key_shapes[k]
 
         if self.algo_config.language_conditioned:
-            self.obs_shapes[LANG_EMB_KEY] = [768] # clip is 768-dim embedding
+            self.obs_shapes[LANG_EMB_KEY] = [768 if self.algo_config.language_encoder in ["clip", "distillbert"] else 384] # clip and distillbert are 768-dim embedding, mimilm is 384-dim
 
     def _create_networks(self):
         """

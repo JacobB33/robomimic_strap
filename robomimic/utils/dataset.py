@@ -21,6 +21,7 @@ import robomimic.utils.obs_utils as ObsUtils
 import robomimic.utils.action_utils as AcUtils
 import robomimic.utils.log_utils as LogUtils
 import robomimic.utils.lang_utils as LangUtils
+from robomimic.macros import LANG_KEY
 from robomimic.macros import LANG_EMB_KEY
 
 
@@ -238,7 +239,7 @@ class SequenceDataset(torch.utils.data.Dataset):
                 ep_meta = self.hdf5_file["data/{}".format(ep)].attrs.get("ep_meta", None)
                 if ep_meta is not None:
                     ep_meta = json.loads(ep_meta)
-                    lang = ep_meta.get("lang", "dummy")
+                    lang = ep_meta.get(LANG_KEY, "dummy")
                     if lang is not None:
                         self._demo_id_to_demo_lang_str[ep] = lang
             # print(self._demo_id_to_demo_lang_str[ep])
@@ -782,7 +783,7 @@ class R2D2Dataset(SequenceDataset):
             ep_meta = self.hdf5_file["data/{}".format(ep)].attrs.get("ep_meta", None)
             if ep_meta is not None:
                 ep_meta = json.loads(ep_meta)
-                lang = ep_meta.get("lang", "dummy")
+                lang = ep_meta.get(LANG_KEY, "dummy")
                 if lang is not None:
                     self._demo_id_to_demo_lang_str[ep] = lang
         # print(self._demo_id_to_demo_lang_str[ep])

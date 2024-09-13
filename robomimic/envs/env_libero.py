@@ -26,12 +26,8 @@ import robosuite.utils.transform_utils as T
 class EnvLibero(EB.EnvBase):
     """Wrapper class for libero environments"""
     def __init__(
-        self, 
-        env_name, 
+        self,
         env_meta,
-        render=False, 
-        render_offscreen=False, 
-        use_image_obs=False, 
         postprocess_visual_obs=True,
         env_lang=None, 
     ):
@@ -57,8 +53,7 @@ class EnvLibero(EB.EnvBase):
         """
         self.postprocess_visual_obs = postprocess_visual_obs
 
-        self._env_name = f"{env_name}_{env_lang}"
-        # task_bddl_file = os.path.join(f"/mmfs1/gscratch/weirdlab/jacob33/retrieval/LIBERO/{env_meta['bddl_file_name']}", )
+        self._env_name = env_meta["bddl_file_name"].split(".bddl")[0].split("/")[-1]
         task_bddl_file = os.path.join(f"/home/mem1pi/projects/LIBERO/{env_meta['bddl_file_name']}", )
                 
         env_args = {

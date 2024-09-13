@@ -104,8 +104,11 @@ def get_env_metadata_from_dataset(dataset_path, ds_format="robomimic"):
         env_meta = dict(f.attrs)
     elif ds_format == "libero":
         env_meta = json.loads(f["data"].attrs["env_args"])
-        env_meta["language_instruction"] = json.loads(f["data"].attrs["problem_info"])["language_instruction"]
-        env_meta["bddl_file_name"] = str(f["data"].attrs["bddl_file_name"])
+        try:
+            env_meta["language_instruction"] = json.loads(f["data"].attrs["problem_info"])["language_instruction"]
+            env_meta["bddl_file_name"] = str(f["data"].attrs["bddl_file_name"])
+        except:
+            print(f"WARNING: {env_meta['env_name']} not a LIBERO env!")
     else:
         raise ValueError
     f.close()

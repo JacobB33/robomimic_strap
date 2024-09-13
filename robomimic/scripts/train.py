@@ -42,6 +42,7 @@ import robomimic.utils.lang_utils as LangUtils
 from robomimic.config import config_factory
 from robomimic.algo import algo_factory, RolloutPolicy
 from robomimic.utils.log_utils import PrintLogger, DataLogger, flush_warnings
+from robomimic.macros import LANG_KEY
 
 
 def train(config, device):
@@ -86,7 +87,7 @@ def train(config, device):
         env_meta = FileUtils.get_env_metadata_from_dataset(dataset_path=dataset_path, ds_format=ds_format)
 
         # populate language instruction for env in env_meta
-        env_meta["env_lang"] = dataset_cfg.get("lang", None)
+        env_meta["env_lang"] = dataset_cfg.get(LANG_KEY, None)
         if ds_format == "libero":
             env_meta["env_lang"] = env_meta["language_instruction"]
             
@@ -122,10 +123,13 @@ def train(config, device):
             continue
         eval_env_meta_list.append(env_meta_list[dataset_i])
         eval_shape_meta_list.append(shape_meta_list[dataset_i])
+        
         if ds_format == "libero":
-            eval_env_name_list.append(f'{env_meta_list[dataset_i]["env_name"]}_{env_meta_list[dataset_i]["env_lang"]}')
+            # env_meta_list[dataset_i]["env_name"] is same for all libero envs -> extract name from .bddl file
+            eval_env_name_list.append(env_meta_list[dataset_i]["bddl_file_name"].split(".bddl")[0].split("/")[-1])
         else:
             eval_env_name_list.append(env_meta_list[dataset_i]["env_name"])
+        
         horizon = dataset_cfg.get("horizon", config.experiment.rollout.horizon)
         eval_env_horizon_list.append(horizon)
     
@@ -148,8 +152,8 @@ def train(config, device):
                     env_kwargs_tmp = deepcopy(env_kwargs)
                     
                     # manually set env language
-                    task_description = env_kwargs_tmp["env_meta"]["env_kwargs"]["env_lang"]
-                    del env_kwargs_tmp["env_meta"]["env_kwargs"]["env_lang"]
+                    task_description = env_kwargs_tmp["env_meta"]["env_kwargs"]["env_"+LANG_KEY]
+                    del env_kwargs_tmp["env_meta"]["env_kwargs"]["env_"+LANG_KEY]
                     
                     # only supports single robot: list -> string
                     env_kwargs_tmp["env_meta"]["env_kwargs"]["robots"] = env_kwargs_tmp["env_meta"]["env_kwargs"]["robots"][0]
@@ -168,17 +172,18 @@ def train(config, device):
                 elif config.train.data_format == "libero":
 
                     from robomimic.envs.env_libero import EnvLibero
-                    task_name = env_meta["env_name"]
-                    task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
-                    env = EnvLibero(env_name=task_name,
-                                    env_meta=env_meta,
-                                    render=False,
-                                    render_offscreen=False, 
-                                    use_image_obs=False,
-                                    env_lang=task_description)
+                    try:
+                        task_description = env_meta["language_instruction"] if env_meta["env_"+LANG_KEY] is None else env_meta["env_"+LANG_KEY]
+                    except:
+                        # no retrieval dataset give
+                        print(f"WARNING: No language instruction [env_{LANG_KEY}] found in dataset, using default language instruction")
+                        task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
+                    env = EnvLibero(env_meta=env_meta, env_lang=task_description)
                 
                 else: # elif config.train.data_format == "robomimic":
                     env = EnvUtils.create_env_from_metadata(**env_kwargs)
+                    # overwrite language with custom key
+                    env.env_lang = env_meta["env_"+LANG_KEY]
 
                 # handle environment wrappers
                 env = EnvUtils.wrap_env_from_config(env, config=config)  # apply environment warpper, if applicable
@@ -237,6 +242,8 @@ def train(config, device):
         lang_encoder = LangUtils.CLIPLangEncoder(device=device)
     elif config.algo.language_encoder == "minilm":
         lang_encoder = LangUtils.MiniLMLangEncoder(device=device)
+    elif config.algo.language_encoder == "distillbert":
+        lang_encoder = LangUtils.DistilBERTLangEncoder(device=device)
         
     trainset, validset = TrainUtils.load_data_for_training(
         config, obs_keys=shape_meta["all_obs_keys"], lang_encoder=lang_encoder)

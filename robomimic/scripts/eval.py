@@ -23,6 +23,7 @@ import sys
 import traceback
 
 import torch
+from copy import deepcopy
 
 import robomimic
 import robomimic.utils.train_utils as TrainUtils
@@ -34,6 +35,7 @@ import robomimic.utils.lang_utils as LangUtils
 from robomimic.config import config_factory
 from robomimic.algo import algo_factory, RolloutPolicy
 from robomimic.utils.log_utils import PrintLogger, DataLogger, flush_warnings
+from robomimic.macros import LANG_KEY
 
 
 def eval(config, device):
@@ -77,7 +79,7 @@ def eval(config, device):
         env_meta = FileUtils.get_env_metadata_from_dataset(dataset_path=dataset_path, ds_format=ds_format)
 
         # populate language instruction for env in env_meta
-        env_meta["env_lang"] = dataset_cfg.get("lang", None)
+        env_meta["env_lang"] = dataset_cfg.get(LANG_KEY, None)
 
         # update env meta if applicable
         from robomimic.utils.script_utils import deep_update
@@ -108,7 +110,11 @@ def eval(config, device):
             continue
         eval_env_meta_list.append(env_meta_list[dataset_i])
         eval_shape_meta_list.append(shape_meta_list[dataset_i])
-        eval_env_name_list.append(env_meta_list[dataset_i]["env_name"])
+        if ds_format == "libero":
+            # env_meta_list[dataset_i]["env_name"] is same for all libero envs -> extract name from .bddl file
+            eval_env_name_list.append(env_meta_list[dataset_i]["bddl_file_name"].split(".bddl")[0].split("/")[-1])
+        else:
+            eval_env_name_list.append(env_meta_list[dataset_i]["env_name"])
         horizon = dataset_cfg.get("horizon", config.experiment.rollout.horizon)
         eval_env_horizon_list.append(horizon)
     
@@ -131,8 +137,8 @@ def eval(config, device):
                     env_kwargs_tmp = deepcopy(env_kwargs)
                     
                     # manually set env language
-                    task_description = env_kwargs_tmp["env_meta"]["env_kwargs"]["env_lang"]
-                    del env_kwargs_tmp["env_meta"]["env_kwargs"]["env_lang"]
+                    task_description = env_kwargs_tmp["env_meta"]["env_kwargs"]["env_"+LANG_KEY]
+                    del env_kwargs_tmp["env_meta"]["env_kwargs"]["env_"+LANG_KEY]
                     
                     # only supports single robot: list -> string
                     env_kwargs_tmp["env_meta"]["env_kwargs"]["robots"] = env_kwargs_tmp["env_meta"]["env_kwargs"]["robots"][0]
@@ -152,7 +158,7 @@ def eval(config, device):
 
                     from robomimic.envs.env_libero import EnvLibero
                     task_name = env_meta["env_name"]
-                    task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
+                    task_description = env_meta["language_instruction"] if env_meta["env_"+LANG_KEY] is None else env_meta["env_"+LANG_KEY]
                     env = EnvLibero(env_name=task_name,
                                     env_meta=env_meta,
                                     render=False,
@@ -162,10 +168,10 @@ def eval(config, device):
                 
                 else: # elif config.train.data_format == "robomimic":
                     env = EnvUtils.create_env_from_metadata(**env_kwargs)
-
+                    # overwrite language with custom key
+                    env.env_lang = env_meta["env_"+LANG_KEY]
                 # handle environment wrappers
                 env = EnvUtils.wrap_env_from_config(env, config=config)  # apply environment warpper, if applicable
-
                 return env
 
             if config.experiment.rollout.batched:
@@ -250,7 +256,7 @@ def eval(config, device):
     assert config.experiment.ckpt_path is not None
     ckpt_path = config.experiment.ckpt_path
 
-    if type(ckpt_path) is list:
+    if type(ckpt_path) is list or (type(ckpt_path) is str and not ckpt_path.endswith(".pth")):
         file_names = os.listdir(ckpt_path)
         # only keep ckpt files
         file_names = [file_name for file_name in file_names if file_name.endswith(".pth")]

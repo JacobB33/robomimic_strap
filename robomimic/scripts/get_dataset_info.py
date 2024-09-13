@@ -26,6 +26,7 @@ import h5py
 import json
 import argparse
 import numpy as np
+from robomimic.macros import LANG_KEY
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -138,7 +139,7 @@ if __name__ == "__main__":
         langs = []
         for ep in demos:
             ep_meta = json.loads(f["data/{}".format(ep)].attrs["ep_meta"])
-            langs.append(ep_meta["lang"])
+            langs.append(ep_meta[LANG_KEY])
             obj_cfgs = ep_meta["object_cfgs"]
             cat = None
             for cfg in obj_cfgs:
