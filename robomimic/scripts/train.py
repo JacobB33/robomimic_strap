@@ -645,8 +645,8 @@ if __name__ == "__main__":
         action='store_true',
         help="set this flag to run a quick training run for debugging purposes"
     )
-    import faulthandler
+    # import faulthandler
 
-    faulthandler.enable()
+    # faulthandler.enable()
     args = parser.parse_args()
     main(args)

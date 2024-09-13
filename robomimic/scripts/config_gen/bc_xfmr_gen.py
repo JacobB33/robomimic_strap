@@ -29,13 +29,22 @@ def make_generator_helper(args):
     ##### DATA #####
 
     # Add training tasks to dataset
-    values_and_names = [
-        (
-            get_ds_cfg(args.train_task, base_path=args.base_path, eval=args.eval_task, filter_key=args.filter_key),
-            "human-50",
+    if not args.file:
+        values_and_names = [
+            (
+                get_ds_cfg(args.train_task, base_path=args.base_path, eval=args.eval_task, filter_key=args.filter_key),
+                "human-50",
+            )
+        ]
+        print(values_and_names)
+    else:
+        config = dict(
+            path=args.train_task,
+            horizon=500,
+            do_eval=True,
+            filter_key=None,
         )
-    ]
-
+        values_and_names = [([config], "human-50")]
     # # Add evaluation tasks to dataset
     # all_paths = [ds["path"] for ds in values_and_names[0][0]]
     # if args.eval_task is not None:
