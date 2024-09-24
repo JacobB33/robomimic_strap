@@ -172,13 +172,12 @@ def train(config, device):
                 elif config.train.data_format == "libero":
 
                     from robomimic.envs.env_libero import EnvLibero
-                    try:
-                        task_description = env_meta["language_instruction"] if env_meta["env_"+LANG_KEY] is None else env_meta["env_"+LANG_KEY]
-                    except:
-                        # no retrieval dataset give
-                        print(f"WARNING: No language instruction [env_{LANG_KEY}] found in dataset, using default language instruction")
-                        task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
-                    env = EnvLibero(env_meta=env_meta, env_lang=task_description)
+                    task_description = env_meta["language_instruction"] if env_meta["env_lang"] is None else env_meta["env_lang"]
+
+                    env = EnvLibero(
+                                    env_meta=env_meta,
+                                    env_lang=task_description,
+                                    env_seed=config.train.seed * 1000 + env_i)
                 
                 else: # elif config.train.data_format == "robomimic":
                     env = EnvUtils.create_env_from_metadata(**env_kwargs)
@@ -522,6 +521,26 @@ def main(args):
             "filter_key": filter_key,
             "path": args.dataset
         }]
+    elif args.co_dataset is not None:
+        horizon = config.train.data[0]["horizon"]
+        config.train.data = [
+            {
+                "horizon": horizon,
+                "do_eval": True,
+                "filter_key": "demos",
+                "path": args.co_dataset,
+                "weight": 1.0
+            },
+            {
+                "horizon": horizon,
+                "do_eval": False,
+                "filter_key": "retrieval",
+                "path": args.co_dataset,
+                "weight": 1.0
+            }
+        ]
+        config.train.normalize_weights_by_ds_size = True
+        config.train.hdf5_cache_mode = None
 
     if args.name is not None:
         config.experiment.name = args.name
@@ -601,6 +620,12 @@ if __name__ == "__main__":
         type=str,
         default=None,
         help="(optional) if provided, override the dataset path defined in the config",
+    )
+    parser.add_argument(
+        "--co_dataset",
+        type=str,
+        default=None,
+        help="(optional) if provided, override the dataset path defined in the config w/ co-training",
     )
     parser.add_argument(
         "--filter_key",

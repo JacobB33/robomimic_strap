@@ -69,28 +69,57 @@ def get_generator(algo_name, config_file, args, algo_name_short=None, pt=False):
 def set_env_settings(generator, args):
 
 
-    if args.env == "libero":
+    if args.env == "robocasa":
         generator.add_param(
-        key="train.action_config",
-        name="",
-        group=-1,
-        #TODO: could be wrong
-        values=[
-            {
-                "actions": {
-                    "normalization": None,
-                }
-            }
-        ],
-        )
-        
-        # Add in the dataformat:
-        generator.add_param(
-            key="train.data_format",
+            key="train.action_keys",
             name="",
             group=-1,
-            values=["libero"],
-        ),
+            values=[
+                [
+                    "action_dict/rel_pos",
+                    "action_dict/rel_rot_axis_angle",
+                    "action_dict/gripper"
+                ]
+            ],
+        )
+        generator.add_param(
+            key="train.action_config",
+            name="",
+            group=-1,
+            values=[
+                {
+                    "actions": {
+                        "normalization": None,
+                    },
+                    "action_dict/abs_pos": {"normalization": "min_max"},
+                    "action_dict/abs_rot_axis_angle": {
+                        "normalization": "min_max",
+                        "format": "rot_axis_angle",
+                    },
+                    "action_dict/abs_rot_6d": {
+                        "normalization": None,
+                        "format": "rot_6d",
+                    },
+                    "action_dict/rel_pos": {
+                        "normalization": None,
+                    },
+                    "action_dict/rel_rot_axis_angle": {
+                        "normalization": None,
+                        "format": "rot_axis_angle",
+                    },
+                    "action_dict/rel_rot_6d": {
+                        "normalization": None,
+                        "format": "rot_6d",
+                    },
+                    "action_dict/gripper": {
+                        "normalization": None,
+                    },
+                    "action_dict/base_mode": {
+                        "normalization": None,
+                    },
+                }
+            ],
+        )
 
         # language conditioned architecture
         generator.add_param(
@@ -106,8 +135,29 @@ def set_env_settings(generator, args):
             values=["ResNet18ConvFiLM"],
         )
 
+        if args.env_kwargs_path:
+            env_kwargs = json.load(open(args.env_kwargs_path, "r"))
+        else:
+            env_kwargs = {
+                "generative_textures": None,
+                "scene_split": None,
+                "style_ids": None,
+                "layout_ids": None,
+                "layout_and_style_ids": [[1, 1] , [2, 2], [4, 4], [6, 9], [7, 10]],
+                "randomize_cameras": False,
+                "obj_instance_split": "B",
+            }
+
         if args.abs_actions:
             env_kwargs["controller_configs"] = {"control_delta": False}
+
+        # don't use generative textures for evaluation
+        generator.add_param(
+            key="experiment.env_meta_update_dict",
+            name="",
+            group=-1,
+            values=[{"env_kwargs": env_kwargs}],
+        )
 
         generator.add_param(
             key="observation.encoder.rgb.obs_randomizer_kwargs",
@@ -135,7 +185,160 @@ def set_env_settings(generator, args):
             key="experiment.rollout.horizon",
             name="",
             group=-1,
-            values=[300],
+            values=[500],
+            value_names=[""],
+        )
+        if args.mod == "im":
+            generator.add_param(
+                key="observation.modalities.obs.low_dim",
+                name="",
+                group=-1,
+                values=[
+                    [
+                        "robot0_base_to_eef_pos",
+                        "robot0_base_to_eef_quat",
+                        # base_pose varies between episodes
+                        "robot0_base_pos",
+                        "robot0_base_quat",
+                        "robot0_gripper_qpos"
+                     ]
+                ],
+            )
+            generator.add_param(
+                key="observation.modalities.obs.rgb",
+                name="",
+                group=-1,
+                values=[
+                    [
+                        "robot0_agentview_left_image",
+                        "robot0_agentview_right_image",
+                        "robot0_eye_in_hand_image",
+                    ]
+                ],
+            )
+        else:
+            generator.add_param(
+                key="observation.modalities.obs.low_dim",
+                name="",
+                group=-1,
+                values=[
+                    [
+                        "robot0_eef_pos",
+                        "robot0_eef_quat",
+                        "robot0_gripper_qpos",
+                         "robot0_base_pos",
+                         "object",
+                    ]
+                ],
+            )
+    elif args.env == "libero":
+        generator.add_param(
+        key="train.action_config",
+        name="",
+        group=-1,
+        #TODO: could be wrong
+        values=[
+            {
+                "actions": {
+                    "normalization": None,
+                },
+                # "action_dict/abs_pos": {"normalization": "min_max"},
+                # "action_dict/abs_rot_axis_angle": {
+                #     "normalization": "min_max",
+                #     "format": "rot_axis_angle",
+                # },
+                # "action_dict/abs_rot_6d": {
+                #     "normalization": None,
+                #     "format": "rot_6d",
+                # },
+                # "action_dict/rel_pos": {
+                #     "normalization": None,
+                # },
+                # "action_dict/rel_rot_axis_angle": {
+                #     "normalization": None,
+                #     "format": "rot_axis_angle",
+                # },
+                # "action_dict/rel_rot_6d": {
+                #     "normalization": None,
+                #     "format": "rot_6d",
+                # },
+                # "action_dict/gripper": {
+                #     "normalization": None,
+                # },
+                # "action_dict/base_mode": {
+                #     "normalization": None,
+                # },
+                }
+            ],
+        )
+        
+        # Add in the dataformat:
+        generator.add_param(
+            key="train.data_format",
+            name="",
+            group=-1,
+            values=["libero"],
+        ),
+
+        # language conditioned architecture
+        generator.add_param(
+            key="observation.encoder.rgb.core_class",
+            name="",
+            group=-1,
+            values=["VisualCoreLanguageConditioned"],
+        )
+        generator.add_param(
+            key="observation.encoder.rgb.core_kwargs.backbone_class",
+            name="",
+            group=-1,
+            values=["ResNet18ConvFiLM"],
+        )
+
+        if args.env_kwargs_path:
+            env_kwargs = json.load(open(args.env_kwargs_path, "r"))
+        else:
+            env_kwargs = {
+                "generative_textures": None
+            }
+
+        if args.abs_actions:
+            env_kwargs["controller_configs"] = {"control_delta": False}
+
+        # don't use generative textures for evaluation
+        generator.add_param(
+            key="experiment.env_meta_update_dict",
+            name="",
+            group=-1,
+            values=[{"env_kwargs": env_kwargs}],
+        )
+
+        generator.add_param(
+            key="observation.encoder.rgb.obs_randomizer_kwargs",
+            name="obsrandargs",
+            group=-1,
+            values=[
+                {
+                    "crop_height": 116,
+                    "crop_width": 116,
+                    "num_crops": 1,
+                    "pos_enc": False,
+                },
+            ],
+            hidename=True,
+        )
+        if "experiment.rollout.n" not in generator.parameters:
+            generator.add_param(
+                key="experiment.rollout.n",
+                name="",
+                group=-1,
+                values=[50],
+                value_names=[""],
+            )
+        generator.add_param(
+            key="experiment.rollout.horizon",
+            name="",
+            group=-1,
+            values=[500],
             value_names=[""],
         )
         generator.add_param(
@@ -153,6 +356,7 @@ def set_env_settings(generator, args):
                 ],
             )
         if args.mod == "im":
+           
             generator.add_param(
                 key="observation.modalities.obs.rgb",
                 name="",
@@ -190,21 +394,43 @@ def set_mod_settings(generator, args):
             key="experiment.epoch_every_n_steps",
             name="",
             group=-1,
-            values=[200],
+            values=[500],
         )
         if "train.num_data_workers" not in generator.parameters:
             generator.add_param(
                 key="train.num_data_workers",
                 name="",
                 group=-1,
-                values=[4],
+                values=[5],
+            )
+        # generator.add_param(
+        #     key="train.hdf5_cache_mode",
+        #     name="",
+        #     group=-1,
+        #     # values=["low_dim"],
+        #     values=[None],
+        # )
+        if "train.batch_size" not in generator.parameters:
+            generator.add_param(
+                key="train.batch_size",
+                name="",
+                group=-1,
+                values=[16],
+            )
+        if "train.num_epochs" not in generator.parameters:
+            generator.add_param(
+                key="train.num_epochs",
+                name="",
+                group=-1,
+                values=[1000],
             )
         if "experiment.rollout.rate" not in generator.parameters:
             generator.add_param(
                 key="experiment.rollout.rate",
                 name="",
                 group=-1,
-                values=[50],
+                values=[200],
+                # values=[100],
             )
 
 
@@ -239,13 +465,13 @@ def set_debug_mode(generator, args):
     for ds_cfg in ds_cfg_list:
         for d in ds_cfg:
             d["horizon"] = 30
-    generator.add_param(
-        key="experiment.rollout.horizon",
-        name="",
-        group=-1,
-        values=[30],
-        value_names=[""],
-    )
+    # generator.add_param(
+    #     key="experiment.rollout.horizon",
+    #     name="",
+    #     group=-1,
+    #     values=[30],
+    #     value_names=[""],
+    # )
 
     generator.add_param(
         key="experiment.rollout.rate",
@@ -409,8 +635,8 @@ def get_argparser():
     parser.add_argument(
         "--base_path",
         type=str,
-        default='/gscratch/weirdlab/jacob33/retrieval/robocasa/datasets',
-        # default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
+        # default='/gscratch/weirdlab/jacob33/retrieval/robocasa/datasets',
+        default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
         # default="~/projects/robocasa_ret/datasets",
         help="base path to datasets",
     )
@@ -420,11 +646,6 @@ def get_argparser():
         type=str,
         choices=["ld", "im"],
         default="im",
-    )
-
-    parser.add_argument(
-        "--co_train",
-        action="store_true",
     )
 
     parser.add_argument(
@@ -567,6 +788,169 @@ def make_generator(args, make_generator_helper):
             values=[
                 args.ckpt_path,
             ],
+        )
+
+    # lower context length for faster training
+    seq_length = 5
+    generator.add_param(
+        key="train.seq_length",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+    generator.add_param(
+        key="train.frame_stack",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+    if args.no_pad:
+        generator.add_param(
+            key="train.pad_frame_stack",
+            name="",
+            group=-1,
+            values=[False]
+        )
+        generator.add_param(
+            key="train.pad_seq_length",
+            name="",
+            group=-1,
+            values=[False]
+        )
+    generator.add_param(
+        key="algo.transformer.context_length",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+
+    # generator.add_param(
+    #     key="algo.transformer.num_layers",
+    #     name="",
+    #     group=-1,
+    #     values=[8],
+    # )
+    # generator.add_param(
+    #     key="algo.transformer.embed_dim",
+    #     name="",
+    #     group=-1,
+    #     values=[256],
+    # )
+    # generator.add_param(
+    #     key="algo.transformer.num_heads",
+    #     name="",
+    #     group=-1,
+    #     values=[4],
+    # )
+    
+    # proper language conditioned architecture
+    generator.add_param(
+            key="algo.language_conditioned",
+            name="",
+            group=-1,
+            values=[True],
+        )
+
+    # 
+        # if args.eval_only:
+        #     # disable save
+        #     generator.add_param(
+        #         key="experiment.save.enabled",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             False,
+        #         ],
+        #     )
+        #     # disable train and eval
+        #     generator.add_param(
+        #         key="experiment.epoch_every_n_steps",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             0,
+        #         ],
+        #     )
+        #     generator.add_param(
+        #         key="experiment.validation_epoch_every_n_steps",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             0,
+        #         ],
+        #     )
+        #     # immediate eval rollout
+        #     generator.add_param(
+        #         key="experiment.rollout.rate",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             1,
+        #         ],
+        #     )
+        #     # set model ckpt_path
+        #     generator.add_param(
+        #         key="experiment.ckpt_path",
+        #         name="",
+        #         group=-1,
+        #         values=[
+        #             args.ckpt_path,
+        #         ],
+        #     )
+
+    if args.baku:
+        generator.add_param(
+            key="algo.language_conditioned",
+            name="",
+            group=-1,
+            values=[True],
+        )
+        # baku-like changes that are not supported yet
+        # baku has sequence length of 1 (history) and 10 (future)
+        # baku has two-layer mlp to encode obs before transformer
+        seq_length = 5
+        generator.add_param(
+            key="train.seq_length",
+            name="",
+            group=-1,
+            values=[seq_length],
+        )
+        generator.add_param(
+            key="train.frame_stack",
+            name="",
+            group=-1,
+            values=[seq_length],
+        )
+        generator.add_param(
+            key="algo.transformer.context_length",
+            name="",
+            group=-1,
+            values=[seq_length],
+        )
+        # baku doesn't find it useful but it seems to be crucial for robocasa!
+        generator.add_param(
+            key="algo.gmm.enabled",
+            name="",
+            group=-1,
+            values=[True],
+        )
+        generator.add_param(
+            key="algo.transformer.num_layers",
+            name="",
+            group=-1,
+            values=[8], # 6 robocasa, 8 baku
+        )
+        generator.add_param(
+            key="algo.transformer.embed_dim",
+            name="",
+            group=-1,
+            values=[256],
+        )
+        generator.add_param(
+            key="algo.transformer.num_heads",
+            name="",
+            group=-1,
+            values=[4], # 8 robocasa, 4 baku
         )
         
     # generate jsons and script

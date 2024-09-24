@@ -97,7 +97,7 @@ def get_env_metadata_from_dataset(dataset_path, ds_format="robomimic"):
             :`'env_kwargs'`: dictionary of keyword arguments to pass to environment constructor
     """
     dataset_path = os.path.expanduser(dataset_path)
-    f = h5py.File(dataset_path, "r")
+    f = h5py.File(dataset_path, "r", swmr=True)
     if ds_format == "robomimic" or ds_format == "robosuite":
         env_meta = json.loads(f["data"].attrs["env_args"])
     elif ds_format == "r2d2":
