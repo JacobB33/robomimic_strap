@@ -16,6 +16,9 @@ SLURM = False
 TASK_DATASET_KEY = "libero_10"
 RETRIEVAL_DATASET_KEY = "libero_90"
 
+sub_traj_length = None
+sub_traj_stride = None
+
 names = [
     # "mugs_state",
     # "book_state"
@@ -159,8 +162,8 @@ class TrainingJob(st.BaseJob):
             n_demos = self.job_config.n_demos,
             n_retrieve = self.job_config.n_retrieve,
             
-            demo_sub_traj_length = None,
-            demo_sub_traj_stride = None,
+            demo_sub_traj_length = sub_traj_length,
+            demo_sub_traj_stride = sub_traj_stride,
             
             img_key="agentview_rgb",
             embed_key = "model_class_facebook_dinov2-base_pooling_avg_model_DINOv2",

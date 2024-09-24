@@ -81,8 +81,9 @@ def retrieve_data(retrieval_task: str,
     if chunks is not None or auto_slice == True:
         demo_embeds, _ = slice_demos(task_dataset, demo_idcs, slices=chunks, auto=auto_slice)
     else:
-        pass
-        # demo_embeds, _ = chunk_demos(task_dataset, demo_idcs, demo_sub_traj_length, demo_sub_traj_stride)
+        demo_embeds, _ = chunk_demos(task_dataset, demo_idcs, demo_sub_traj_length, demo_sub_traj_stride)
+    
+    # import IPython; IPython.embed()
     demo_embeds = [np.mean(demo_embed, keepdims=True, axis=1) for demo_embed in demo_embeds]
 
     # match demo to retrieval embeddings
