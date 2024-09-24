@@ -6,11 +6,17 @@ from copy import copy
 import h5py
 import json
 from tqdm import trange, tqdm
+from robomimic.macros import PERSON
 TQDM = False
 
 # add explore_ret to path so it doesn't break:
 import sys
-sys.path.append("/home/mem1pi/projects/explore_ret")
+if PERSON == "marius":
+    sys.path.append("/home/mem1pi/projects/explore_ret")
+elif PERSON == "jacob":
+    sys.path.append("/gscratch/weirdlab/jacob33/retrieval/explore_ret")
+else:
+    assert False
 print("Current working directory:", os.getcwd())
 print("sys.path:", sys.path)
 
