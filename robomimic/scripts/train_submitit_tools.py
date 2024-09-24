@@ -7,14 +7,19 @@ import subprocess
 import os
 from argparse import Namespace
 from tqdm import tqdm
-
-DATASET_ROOT_DIR = "/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/retrieval_logs"
-
+from robomimic.macros import PERSON
+if PERSON == "marius":
+    DATASET_ROOT_DIR = "/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/retrieval_logs"
+elif PERSON == "jacob":
+    DATASET_ROOT_DIR = "/gscratch/weirdlab/jacob33/retrieval/robocasa/datasets"
+else:
+    assert False
 DEBUG = False
 SLURM = False
 
 TASK_DATASET_KEY = "libero_10"
 RETRIEVAL_DATASET_KEY = "libero_90"
+WANDB_PROJECT_NAME = "multitask"
 
 sub_traj_length = None
 sub_traj_stride = None
@@ -219,6 +224,7 @@ class TrainingJob(st.BaseJob):
                     output_dir=None,
                     seed=self.job_config.train_seed,
                     debug=False,
+                    wandb_name=WANDB_PROJECT_NAME,
                 )
             print(config_path)
             config_paths.append(config_path)
