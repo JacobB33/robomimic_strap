@@ -70,7 +70,7 @@
                     "scheduler_type": "constant_with_warmup"
                 },
                 "regularization": {
-                    "L2": 0.01
+                    "L2": 0.00001
                 }
             }
         },

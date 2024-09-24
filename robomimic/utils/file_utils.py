@@ -76,7 +76,7 @@ def get_demos_for_filter_key(hdf5_path, filter_key):
             correspond to this filter key. For example, ["demo_0", 
             "demo_1"].
     """
-    f = h5py.File(hdf5_path, "r")
+    f = h5py.File(hdf5_path, "r", swmr=True)
     demo_keys = [elem.decode("utf-8") for elem in np.array(f["mask/{}".format(filter_key)][:])]
     f.close()
     return demo_keys
