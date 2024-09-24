@@ -207,7 +207,7 @@ def dataset_factory(config, obs_keys, filter_by_attribute=None, dataset_path=Non
     ds_weights = [ds_cfg.get("weight", 1.0) for ds_cfg in config.train.data]
     if config.train.data_format == "libero":
         ds_langs = [ds_cfg.get(LANG_KEY, None) for ds_cfg in config.train.data]
-        
+        assert all(l is None for l in ds_langs), "You need the dataset to not have a unified language key"
         # ds_files = [ds_cfg["path"] for ds_cfg in config.train.data]
         # print([ds_cfg for ds_cfg in config.train.data])
         # ds_langs = [FileUtils.get_env_metadata_from_dataset(dataset_path=ds_file, ds_format="libero")["language_instruction"] for ds_file in ds_files]
@@ -363,8 +363,9 @@ def run_rollout(
         except AttributeError as e:
             print("No action_dim attribute in env", e)
         except ModuleNotFoundError as e:
-            if step_i == 0:
-                print("No robosuite module found (ignore if using LIBERO or robosuite)", e)
+            # if step_i == 0:
+            #     print("No robosuite module found (ignore if using LIBERO or robosuite)", e)
+            pass
 
         # play action
         ob_dict, r, done, info = env.step(ac)

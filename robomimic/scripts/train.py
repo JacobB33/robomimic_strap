@@ -499,6 +499,9 @@ def main(args):
     else:
         config = config_factory(args.algo)
 
+    if args.wandb_name:
+        config.train.config.experiment.logging.wandb_proj_name = args.wandb_name
+        
     # print(config.train.action_keys)
     # exit()
     if args.ckpt_path is not None:
@@ -597,6 +600,12 @@ if __name__ == "__main__":
         default=None,
         help="(optional) path to a config json that will be used to override the default settings. \
             If omitted, default settings are used. This is the preferred way to run experiments.",
+    )
+    
+    parser.add_argument(
+        "--wandb_name",
+        type=str,
+        default=None,
     )
 
     # Algorithm Name

@@ -17,7 +17,7 @@ except ImportError:
 import robomimic.utils.obs_utils as ObsUtils
 import robomimic.utils.lang_utils as LangUtils
 import robomimic.envs.env_base as EB
-from robomimic.macros import LANG_EMB_KEY
+from robomimic.macros import LANG_EMB_KEY, PERSON
 from libero.libero import benchmark
 from libero.libero.envs import OffScreenRenderEnv
 import robosuite.utils.transform_utils as T
@@ -55,8 +55,14 @@ class EnvLibero(EB.EnvBase):
         self.postprocess_visual_obs = postprocess_visual_obs
 
         self._env_name = env_meta["bddl_file_name"].split(".bddl")[0].split("/")[-1]
-        task_bddl_file = os.path.join(f"/home/mem1pi/projects/LIBERO/{env_meta['bddl_file_name']}", )
-                
+        if PERSON == "marius":
+            task_bddl_file = os.path.join(f"/home/mem1pi/projects/LIBERO/{env_meta['bddl_file_name']}", )
+        elif PERSON == "jacob":
+            task_bddl_file = os.path.join(f"/mmfs1/gscratch/weirdlab/jacob33/retrieval/LIBERO/{env_meta['bddl_file_name']}", )
+        else:
+            raise NotImplementedError(f"Person {PERSON} does not exist")
+        
+        
         env_args = {
             "bddl_file_name": task_bddl_file,
             "camera_heights": 128,
