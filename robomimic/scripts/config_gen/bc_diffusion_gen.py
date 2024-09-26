@@ -17,7 +17,7 @@ def make_generator_helper(args):
         algo_name="diffusion_policy",
         config_file=os.path.join(
             robomimic_base_path,
-            "robomimic/exps/templates/diffusion_policy.json",
+            "robomimic/exps/templates/diff_base.json" if args.co_train else "robomimic/exps/templates/diff_base_co.json",
         ),
         args=args,
         algo_name_short=algo_name_short,
@@ -27,27 +27,44 @@ def make_generator_helper(args):
         args.ckpt_mode = "off"
 
     ##### DATA #####
-
     # Add training tasks to dataset
-    values_and_names = [
-        (
-            get_ds_cfg(args.train_task, base_path=args.base_path, eval=args.eval_task, filter_key=args.filter_key),
-            "human-50",
+    if args.co_train:
+        config0 = dict(
+                path=args.train_task,
+                horizon=300,
+                do_eval=True,
+                filter_key="demos",
+                weight=1.0
+            )
+        config1 = dict(
+                path=args.train_task,
+                horizon=300,
+                do_eval=False,
+                filter_key="retrieval",
+                weight=1.0
+            )
+        values_and_names = [([config0, config1], "co_train")]
+        generator.add_param(key="train.normalize_weights_by_ds_size", name="", group=-1, values=[True])
+        generator.add_param(
+            key="train.hdf5_cache_mode",
+            name="",
+            group=-1,
+            values=[None],
         )
-    ]
-
-    # # Add evaluation tasks to dataset
-    # all_paths = [ds["path"] for ds in values_and_names[0][0]]
-    # if args.eval_task is not None:
-    #     for eval_task in args.eval_task:
-    #         value = get_ds_cfg(
-    #             eval_task,
-    #             base_path=args.base_path,
-    #             eval=args.eval_task,
-    #         )[0]
-    #         if value["path"] not in all_paths:
-    #             values_and_names[0][0].append(value)
-
+    else:
+        config = dict(
+            path=args.train_task,
+            horizon=300,
+            do_eval=True,
+            filter_key=args.filter_key,
+        )
+        values_and_names = [([config], "mix_train")]
+        generator.add_param(
+            key="train.hdf5_cache_mode",
+            name="",
+            group=-1,
+            values=["all"],
+        )
     generator.add_param(key="experiment.name", name="", group=-1, values=[args.name])
 
     generator.add_param(
@@ -63,19 +80,11 @@ def make_generator_helper(args):
         group=-1,
         values=[
             "/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/robomimic_logs/{env}/{mod}/{algo_name_short}".format(
-            # "~/expdata/{env}/{mod}/{algo_name_short}".format(
                 env=args.env,
                 mod=args.mod,
                 algo_name_short=algo_name_short,
             )
         ],
-    )
-
-    generator.add_param(
-        key="train.hdf5_cache_mode",
-        name="",
-        group=-1,
-        values=["all"],
     )
 
     ##### ALGORITHM #####

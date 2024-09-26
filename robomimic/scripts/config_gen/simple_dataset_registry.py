@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from copy import deepcopy
 import os
+from robomimic.macros import PERSON
 
 SINGLE_STAGE_TASK_DATASETS = OrderedDict(
     PnPCounterToCab=dict(

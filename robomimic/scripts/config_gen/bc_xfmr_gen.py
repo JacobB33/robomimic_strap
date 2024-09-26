@@ -4,11 +4,14 @@ from robomimic.scripts.config_gen.helper import (
     get_argparser,
     make_generator,
 )
-from robomimic.scripts.config_gen.simple_dataset_registry import *
-
+import os
+# from robomimic.scripts.config_gen.simple_dataset_registry import *
+from robomimic.macros import PERSON
 
 def make_generator_helper(args):
     algo_name_short = "bc_xfmr"
+    seq_length = 5
+
 
     robomimic_base_path = os.path.abspath(
         os.path.join(os.path.dirname(robomimic.__file__), os.pardir)
@@ -29,33 +32,14 @@ def make_generator_helper(args):
     ##### DATA #####
 
     # Add training tasks to dataset
-    if not args.file:
-        values_and_names = [
-            (
-                get_ds_cfg(args.train_task, base_path=args.base_path, eval=args.eval_task, filter_key=args.filter_key),
-                "human-50",
-            )
-        ]
-        print(values_and_names)
-    else:
-        config = dict(
-            path=args.train_task,
-            horizon=500,
-            do_eval=True,
-            filter_key=None,
-        )
-        values_and_names = [([config], "human-50")]
-    # # Add evaluation tasks to dataset
-    # all_paths = [ds["path"] for ds in values_and_names[0][0]]
-    # if args.eval_task is not None:
-    #     for eval_task in args.eval_task:
-    #         value = get_ds_cfg(
-    #             eval_task,
-    #             base_path=args.base_path,
-    #             eval=args.eval_task,
-    #         )[0]
-    #         if value["path"] not in all_paths:
-    #             values_and_names[0][0].append(value)
+    
+    config = dict(
+        path=args.train_task,
+        horizon=300,
+        do_eval=True,
+        filter_key=args.filter_key,
+    )
+    values_and_names = [([config], "human-50")]
 
     generator.add_param(key="experiment.name", name="", group=-1, values=[args.name])
 
@@ -65,19 +49,19 @@ def make_generator_helper(args):
         group=123456,
         values_and_names=values_and_names,
     )
-
+    if PERSON == "jacob":
+        output_dir_path = f"/gscratch/weirdlab/jacob33/expdata/{args.env}/{args.mod}/{algo_name_short}"
+    elif PERSON == "marius":
+        output_dir_path = f"/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/robomimic_logs/{args.env}/{args.mod}/{algo_name_short}"
+    else:
+        assert False
+        
+    
     generator.add_param(
         key="train.output_dir",
         name="",
         group=-1,
-        values=[
-            "/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/robomimic_logs/{env}/{mod}/{algo_name_short}".format(
-            # "~/expdata/{env}/{mod}/{algo_name_short}".format(
-                env=args.env,
-                mod=args.mod,
-                algo_name_short=algo_name_short,
-            )
-        ],
+        values=[output_dir_path],
     )
 
     generator.add_param(
@@ -89,25 +73,79 @@ def make_generator_helper(args):
 
     ##### ALGORITHM #####
 
-    # # pass language to transformer
-    # generator.add_param(
-    #     key="algo.language_conditioned",
-    #     name="",
-    #     group=1234,
-    #     values=[
-    #         # True,
-    #         False,
-    #     ],
-    #     hidename=True,
-    # )
+    if "train.batch_size" not in generator.parameters:
+            generator.add_param(
+                key="train.batch_size",
+                name="",
+                group=-1,
+                values=[32],
+            )
+    if "train.num_epochs" not in generator.parameters:
+        generator.add_param(
+            key="train.num_epochs",
+            name="",
+            group=-1,
+            values=[300],
+        )
 
-    # generator.add_param(
-    #     key="algo.gmm.enabled",
-    #     name="gmm",
-    #     group=-1,
-    #     values=[False],
-    #     hidename=True,
-    # )
+    generator.add_param(
+        key="train.seq_length",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+    generator.add_param(
+        key="train.frame_stack",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+    if args.no_pad:
+        generator.add_param(
+            key="train.pad_frame_stack",
+            name="",
+            group=-1,
+            values=[False]
+        )
+        generator.add_param(
+            key="train.pad_seq_length",
+            name="",
+            group=-1,
+            values=[False]
+        )
+    generator.add_param(
+        key="algo.transformer.context_length",
+        name="",
+        group=-1,
+        values=[seq_length],
+    )
+
+    generator.add_param(
+        key="algo.transformer.num_layers",
+        name="",
+        group=-1,
+        values=[8],
+    )
+    generator.add_param(
+        key="algo.transformer.embed_dim",
+        name="",
+        group=-1,
+        values=[256],
+    )
+    generator.add_param(
+        key="algo.transformer.num_heads",
+        name="",
+        group=-1,
+        values=[4],
+    )
+    
+    # proper language conditioned architecture
+    generator.add_param(
+            key="algo.language_conditioned",
+            name="",
+            group=-1,
+            values=[True],
+        )
 
     return generator
 
