@@ -100,7 +100,8 @@ def get_env_metadata_from_dataset(dataset_path, ds_format="robomimic"):
     f = h5py.File(dataset_path, "r")
     if ds_format == "robomimic" or ds_format == "robosuite":
         env_meta = json.loads(f["data"].attrs["env_args"])
-    elif ds_format == "r2d2":
+    # elif ds_format == "r2d2":
+    elif ds_format == "droid":
         env_meta = dict(f.attrs)
     elif ds_format == "libero":
         env_meta = json.loads(f["data"].attrs["env_args"])
@@ -166,10 +167,18 @@ def get_shape_metadata_from_dataset(dataset_path, action_keys, all_obs_keys=None
                 obs_modality=ObsUtils.OBS_KEYS_TO_MODALITIES[k],
                 input_shape=initial_shape,
             )
-    elif ds_format == "r2d2":
+    elif ds_format == "droid":
+        
+        demo_id = list(f["data"].keys())[0]
+        print("data/{}".format(demo_id))
+        demo = f["data/{}".format(demo_id)]
         for key in action_keys:
-            assert len(f[key].shape) == 2 # shape should be (B, D)
-        action_dim = sum([f[key].shape[1] for key in action_keys])
+            print(demo["action_dict"].keys(), key)
+            assert len(demo[key].shape) == 2 # shape should be (B, D)
+        tmp = []
+        for key in action_keys:
+            tmp.append(demo[key].shape[1])
+        action_dim = sum(tmp)
         shape_meta["ac_dim"] = action_dim
         
         # observation dimensions
@@ -177,25 +186,29 @@ def get_shape_metadata_from_dataset(dataset_path, action_keys, all_obs_keys=None
 
         # hack all relevant obs shapes for now
         for k in [
-            "robot_state/cartesian_position",
-            "robot_state/gripper_position",
-            "robot_state/joint_positions",
-            "camera/image/hand_camera_left_image",
-            "camera/image/hand_camera_right_image",
-            "camera/image/varied_camera_1_left_image",
-            "camera/image/varied_camera_1_right_image",
-            "camera/image/varied_camera_2_left_image",
-            "camera/image/varied_camera_2_right_image",
-            "camera/extrinsics/hand_camera_left",
-            "camera/extrinsics/hand_camera_left_gripper_offset",
-            "camera/extrinsics/hand_camera_right",
-            "camera/extrinsics/hand_camera_right_gripper_offset",
-            "camera/extrinsics/varied_camera_1_left",
-            "camera/extrinsics/varied_camera_1_right",
-            "camera/extrinsics/varied_camera_2_left",
-            "camera/extrinsics/varied_camera_2_right",
+            # "robot_state/cartesian_position",
+            # "robot_state/gripper_position",
+            # "robot_state/joint_positions",
+            # "camera/image/hand_camera_left_image",
+            # "camera/image/hand_camera_right_image",
+            # "camera/image/varied_camera_1_left_image",
+            # "camera/image/varied_camera_1_right_image",
+            # "camera/image/varied_camera_2_left_image",
+            # "camera/image/varied_camera_2_right_image",
+            # "camera/extrinsics/hand_camera_left",
+            # "camera/extrinsics/hand_camera_left_gripper_offset",
+            # "camera/extrinsics/hand_camera_right",
+            # "camera/extrinsics/hand_camera_right_gripper_offset",
+            # "camera/extrinsics/varied_camera_1_left",
+            # "camera/extrinsics/varied_camera_1_right",
+            # "camera/extrinsics/varied_camera_2_left",
+            # "camera/extrinsics/varied_camera_2_right",
+            "exterior_image_1_left",
+            "exterior_image_2_left",
+            "cartesian_position",
+            "gripper_position"
         ]:
-            initial_shape = f["observation/{}".format(k)].shape[1:]
+            initial_shape = demo["observation/{}".format(k)].shape[1:]
             if len(initial_shape) == 0:
                 initial_shape = (1,)
 
