@@ -20,7 +20,7 @@ LANG_EMB_KEY = "lang_emb"
 LANG_KEY = "lang"
 
 # SWITCH THIS TO "marius"
-PERSON = "jacob"
+PERSON = "marius"
 
 assert LANG_KEY in ["lang_var", "lang"]
 try:

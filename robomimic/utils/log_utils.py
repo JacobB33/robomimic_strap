@@ -78,7 +78,7 @@ class DataLogger(object):
 
                     self._wandb_logger.init(
                         entity=Macros.WANDB_ENTITY,
-                        project=config.experiment.logging.wandb_proj_name,
+                        project="multitask",
                         config={"config_file": config},
                         name=config.experiment.name,
                         dir=log_dir,
