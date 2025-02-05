@@ -370,34 +370,29 @@ def get_argparser():
     )
 
     parser.add_argument(
-        "--env",
+        "--train_ds_path",
         type=str,
-        default="robocasa",
-    )
-
-    parser.add_argument(
-        "--train_task",
-        type=str,
-        default="single",  # ["single", "pnp", "turn", "viola_real", "openclose", "all"]
+        required=True
     )
 
     parser.add_argument(
         "--no_pad",
-        action="store_true"
+        action="store_false",
     )
     
     parser.add_argument(
-        "--file",
-        action="store_true"
+        "--env",
+        type=str,
+        default="libero",
     )
 
     parser.add_argument(
-        "--eval_task",
-        type=str,
-        nargs="+",  # This allows one or more arguments
-        default=None, # ["TurnOnMicrowave"],
-        help="tasks that the policy is evaluated on.", #  + tasks are added to the training dataset",
+        "--seq_length",
+        type=int,
+        default=5,
+        help="sequence length for training action chunking and frame stack",
     )
+    
 
     parser.add_argument(
         "--filter_key",
@@ -410,8 +405,6 @@ def get_argparser():
         "--base_path",
         type=str,
         default='/gscratch/weirdlab/jacob33/retrieval/robocasa/datasets',
-        # default="/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/datasets",
-        # default="~/projects/robocasa_ret/datasets",
         help="base path to datasets",
     )
 

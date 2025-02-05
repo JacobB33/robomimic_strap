@@ -9,16 +9,12 @@ import numpy as np
 from copy import deepcopy
 
 import robosuite
-try:
-    import robocasa
-except ImportError:
-    pass
 
 import robomimic.utils.obs_utils as ObsUtils
 import robomimic.utils.lang_utils as LangUtils
 import robomimic.envs.env_base as EB
-from robomimic.macros import LANG_EMB_KEY, PERSON
-from libero.libero import benchmark
+from robomimic.macros import LANG_EMB_KEY
+from libero.libero import benchmark, get_default_path_dict
 from libero.libero.envs import OffScreenRenderEnv
 import robosuite.utils.transform_utils as T
 
@@ -52,15 +48,13 @@ class EnvLibero(EB.EnvBase):
 
             lang: TODO add documentation
         """
+        file_paths = get_default_path_dict()
+        bdl_paths = file_paths["benchmark_root"]
         self.postprocess_visual_obs = postprocess_visual_obs
 
         self._env_name = env_meta["bddl_file_name"].split(".bddl")[0].split("/")[-1]
-        if PERSON == "marius":
-            task_bddl_file = os.path.join(f"/home/mem1pi/projects/LIBERO/{env_meta['bddl_file_name']}", )
-        elif PERSON == "jacob":
-            task_bddl_file = os.path.join(f"/mmfs1/gscratch/weirdlab/jacob33/retrieval/LIBERO/{env_meta['bddl_file_name']}", )
-        else:
-            raise NotImplementedError(f"Person {PERSON} does not exist")
+        print(bdl_paths)
+        task_bddl_file = os.path.join(f"{bdl_paths}/../../{env_meta['bddl_file_name']}", )
         
         
         env_args = {

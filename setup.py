@@ -5,7 +5,8 @@ from os import path
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     lines = f.readlines()
-
+with open(path.join(this_directory, 'requirements.txt'), encoding='utf-8') as f:
+    requirements = f.readlines()    
 # remove images from README
 lines = [x for x in lines if (('.png' not in x) and ('.gif' not in x))]
 long_description = ''.join(lines)
@@ -15,24 +16,7 @@ setup(
     packages=[
         package for package in find_packages() if package.startswith("robomimic")
     ],
-    install_requires=[
-        "numpy==1.23.2",
-        "h5py",
-        "psutil",
-        "tqdm",
-        "termcolor",
-        "tensorboard",
-        "tensorboardX",
-        "imageio",
-        "imageio-ffmpeg",
-        "matplotlib",
-        #"egl_probe>=1.0.1",
-        "torch==2.0.1",
-        "torchvision==0.15.2",
-        "diffusers==0.11.1",
-        "tianshou==0.4.10",
-        "transformers",
-    ],
+    install_requires=requirements,
     eager_resources=['*'],
     include_package_data=True,
     python_requires='>=3',

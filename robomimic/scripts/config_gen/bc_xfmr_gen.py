@@ -5,17 +5,17 @@ from robomimic.scripts.config_gen.helper import (
     make_generator,
 )
 import os
-# from robomimic.scripts.config_gen.simple_dataset_registry import *
-from robomimic.macros import PERSON
 
 def make_generator_helper(args):
     algo_name_short = "bc_xfmr"
-    seq_length = 5
+    seq_length = args.seq_length
+    
 
 
     robomimic_base_path = os.path.abspath(
         os.path.join(os.path.dirname(robomimic.__file__), os.pardir)
     )
+    
     generator = get_generator(
         algo_name="bc",
         config_file=os.path.join(
@@ -34,7 +34,7 @@ def make_generator_helper(args):
     # Add training tasks to dataset
     
     config = dict(
-        path=args.train_task,
+        path=args.train_ds_path,
         horizon=300,
         do_eval=True,
         filter_key=args.filter_key,
@@ -49,13 +49,8 @@ def make_generator_helper(args):
         group=123456,
         values_and_names=values_and_names,
     )
-    if PERSON == "jacob":
-        output_dir_path = f"/gscratch/weirdlab/jacob33/expdata/{args.env}/{args.mod}/{algo_name_short}"
-    elif PERSON == "marius":
-        output_dir_path = f"/fs/scratch/rb_bd_dlp_rng_dl01_cr_ICT_employees/students/mem1pi/robomimic_logs/{args.env}/{args.mod}/{algo_name_short}"
-    else:
-        assert False
-        
+    
+    output_dir_path = f"{robomimic_base_path}/expdata/{args.env}/{args.mod}/{algo_name_short}"
     
     generator.add_param(
         key="train.output_dir",
@@ -113,6 +108,7 @@ def make_generator_helper(args):
             group=-1,
             values=[False]
         )
+    
     generator.add_param(
         key="algo.transformer.context_length",
         name="",

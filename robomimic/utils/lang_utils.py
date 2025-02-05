@@ -20,7 +20,6 @@ class DistilBERTLangEncoder:
         self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True)
 
     def get_lang_emb(self, lang):
-        print(lang)
         if lang is None:
             return None
             
@@ -107,7 +106,6 @@ class CLIPLangEncoder:
             self.tz = AutoTokenizer.from_pretrained(model_variant, TOKENIZERS_PARALLELISM=True, proxies={'http': 'rb-proxy-sl.bosch.com:8080'})
 
     def get_lang_emb(self, lang):
-        print(lang)
         if lang is None:
             return None
             

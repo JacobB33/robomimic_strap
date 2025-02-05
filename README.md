@@ -4,10 +4,31 @@ This is the official policy learning repo accompanying the [RoboCasa](https://ro
 
 -------
 ## Installation
-After installing the [RoboCasa codebase](https://github.com/robocasa/robocasa), follow the instructions below:
+Create the conda environment:
 ```
-git clone https://github.com/memmelma/robomimic_ret.git
-cd robomimic
+conda create -n strap python=3.10
+conda activate strap
+```
+
+First insall LIBERO and STRAP. 
+To install LIBERO run:
+```
+git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git
+cd LIBERO
+pip install -e .  ## NOTE: Do not install the requirements for libero
+```
+
+
+To install strap run:
+```
+git clone https://github.com/WEIRDLabUW/STRAP.git
+cd STRAP
+pip install -e .
+```
+
+Then install this repository
+```
+cd robomimic_ret
 pip install -e .
 ```
 

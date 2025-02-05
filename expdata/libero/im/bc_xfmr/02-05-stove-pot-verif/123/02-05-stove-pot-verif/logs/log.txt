@@ -1,0 +1,516 @@
+
+============= Initialized Observation Utils with Obs Spec =============
+
+using obs modality: low_dim with keys: ['gripper_states', 'joint_states', 'ee_ori', 'ee_pos', 'ee_states']
+using obs modality: rgb with keys: ['eye_in_hand_rgb', 'agentview_rgb']
+using obs modality: depth with keys: []
+using obs modality: scan with keys: []
+
+============= Loaded Environment Metadata =============
+/home/jacob/projects/strap_project/STRAP/data/retrieval_results/stove-pot_retrieved_dataset.hdf5
+obs key agentview_rgb with shape (128, 128, 3)
+obs key ee_ori with shape (3,)
+obs key ee_pos with shape (3,)
+obs key ee_states with shape (6,)
+obs key eye_in_hand_rgb with shape (128, 128, 3)
+obs key gripper_states with shape (2,)
+obs key joint_states with shape (7,)
+
+wandb: Currently logged in as: hockeyviolin to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Tracking run with wandb version 0.19.5
+wandb: Run data is saved locally in /home/jacob/projects/strap_project/robomimic_strap/expdata/libero/im/bc_xfmr/02-05-stove-pot-verif/123/02-05-stove-pot-verif/logs/wandb/run-20250205_121109-o70cjom2
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run 02-05-stove-pot-verif
+wandb:  View project at https://wandb.ai/hockeyviolin/multitask
+wandb:  View run at https://wandb.ai/hockeyviolin/multitask/runs/o70cjom2
+ObservationKeyToModalityDict: lang_emb not found, adding lang_emb to mapping with assumed low_dim modality!
+/home/jacob/miniforge3/envs/strap2/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/jacob/miniforge3/envs/strap2/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+Created GPT_Backbone model with number of parameters: 6312448
+Initialized model with 34868619 parameters
+
+============= Model Summary =============
+ObservationKeyToModalityDict: mean not found, adding mean to mapping with assumed low_dim modality!
+ObservationKeyToModalityDict: scale not found, adding scale to mapping with assumed low_dim modality!
+ObservationKeyToModalityDict: logits not found, adding logits to mapping with assumed low_dim modality!
+BC_Transformer_GMM (
+  ModuleDict(
+    (policy): TransformerGMMActorNetwork(
+        action_dim=7, std_activation=softplus, low_noise_eval=True, num_nodes=5, min_std=0.005
+  
+        encoder=ObservationGroupEncoder(
+            group=obs
+            ObservationEncoder(
+                Key(
+                    name=agentview_rgb
+                    shape=[3, 128, 128]
+                    modality=rgb
+                    randomizer=ModuleList(
+                      (0): CropRandomizer(input_shape=[3, 128, 128], crop_size=[116, 116], num_crops=1)
+                    )
+                    net=VisualCoreLanguageConditioned(
+                      input_shape=[3, 116, 116]
+                      output_shape=[64]
+                      backbone_net=ResNet18ConvFiLM(input_channel=3, input_coord_conv=False)
+                      pool_net=SpatialSoftmax(num_kp=32, temperature=1.0, noise=0.0)
+                    )
+                    sharing_from=None
+                )
+                Key(
+                    name=ee_ori
+                    shape=[3]
+                    modality=low_dim
+                    randomizer=ModuleList(
+                      (0): None
+                    )
+                    net=None
+                    sharing_from=None
+                )
+                Key(
+                    name=ee_pos
+                    shape=[3]
+                    modality=low_dim
+                    randomizer=ModuleList(
+                      (0): None
+                    )
+                    net=None
+                    sharing_from=None
+                )
+                Key(
+                    name=ee_states
+                    shape=[6]
+                    modality=low_dim
+                    randomizer=ModuleList(
+                      (0): None
+                    )
+                    net=None
+                    sharing_from=None
+                )
+                Key(
+                    name=eye_in_hand_rgb
+                    shape=[3, 128, 128]
+                    modality=rgb
+                    randomizer=ModuleList(
+                      (0): CropRandomizer(input_shape=[3, 128, 128], crop_size=[116, 116], num_crops=1)
+                    )
+                    net=VisualCoreLanguageConditioned(
+                      input_shape=[3, 116, 116]
+                      output_shape=[64]
+                      backbone_net=ResNet18ConvFiLM(input_channel=3, input_coord_conv=False)
+                      pool_net=SpatialSoftmax(num_kp=32, temperature=1.0, noise=0.0)
+                    )
+                    sharing_from=None
+                )
+                Key(
+                    name=gripper_states
+                    shape=[2]
+                    modality=low_dim
+                    randomizer=ModuleList(
+                      (0): None
+                    )
+                    net=None
+                    sharing_from=None
+                )
+                Key(
+                    name=joint_states
+                    shape=[7]
+                    modality=low_dim
+                    randomizer=ModuleList(
+                      (0): None
+                    )
+                    net=None
+                    sharing_from=None
+                )
+                Key(
+                    name=lang_emb
+                    shape=[768]
+                    modality=low_dim
+                    randomizer=ModuleList(
+                      (0): None
+                    )
+                    net=None
+                    sharing_from=None
+                )
+                output_shape=[917]
+            )
+        )
+  
+        transformer=GPT_Backbone(
+          (activation): GELU(approximate='none')
+          (nets): ModuleDict(
+            (transformer): Sequential(
+              (0): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+              (1): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+              (2): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+              (3): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+              (4): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+              (5): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+              (6): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+              (7): SelfAttentionBlock(
+                (nets): ModuleDict(
+                  (attention): CausalSelfAttention(
+                    (nets): ModuleDict(
+                      (qkv): Linear(in_features=256, out_features=768, bias=False)
+                      (attn_dropout): Dropout(p=0.1, inplace=False)
+                      (output_dropout): Dropout(p=0.1, inplace=False)
+                      (output): Linear(in_features=256, out_features=256, bias=True)
+                    )
+                  )
+                  (mlp): Sequential(
+                    (0): Linear(in_features=256, out_features=1024, bias=True)
+                    (1): GELU(approximate='none')
+                    (2): Linear(in_features=1024, out_features=256, bias=True)
+                    (3): Dropout(p=0.1, inplace=False)
+                  )
+                  (ln1): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                  (ln2): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+                )
+              )
+            )
+            (output_ln): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          )
+        )
+  
+        decoder=ObservationDecoder(
+            Key(
+                name=mean
+                shape=(5, 7)
+                modality=low_dim
+                net=(Linear(in_features=256, out_features=35, bias=True))
+            )
+            Key(
+                name=scale
+                shape=(5, 7)
+                modality=low_dim
+                net=(Linear(in_features=256, out_features=35, bias=True))
+            )
+            Key(
+                name=logits
+                shape=(5,)
+                modality=low_dim
+                net=(Linear(in_features=256, out_features=5, bias=True))
+            )
+        )
+    )
+  )
+)
+
+getting language embeddings...
+  0%|          | 0/2 [00:00<?, ?it/s] 50%|#####     | 1/2 [00:00<00:00,  4.07it/s]100%|##########| 2/2 [00:00<00:00,  7.35it/s]
+SequenceDataset: loading dataset into memory...
+  0%|          | 0/98 [00:00<?, ?it/s] 43%|####2     | 42/98 [00:00<00:00, 414.07it/s] 90%|########9 | 88/98 [00:00<00:00, 438.22it/s]100%|##########| 98/98 [00:00<00:00, 381.13it/s]
+SequenceDataset: caching get_item calls...
+  0%|          | 0/5940 [00:00<?, ?it/s]SequenceDataset: normalizing actions...
+
+  0%|          | 0/97 [00:00<?, ?it/s][A100%|##########| 97/97 [00:00<00:00, 13717.51it/s]
+  6%|6         | 359/5940 [00:00<00:01, 3580.96it/s] 12%|#2        | 735/5940 [00:00<00:01, 3685.31it/s] 19%|#8        | 1116/5940 [00:00<00:01, 3738.82it/s] 25%|##5       | 1497/5940 [00:00<00:01, 3764.84it/s] 32%|###1      | 1874/5940 [00:00<00:01, 3765.51it/s] 38%|###7      | 2251/5940 [00:00<00:00, 3740.22it/s] 44%|####4     | 2626/5940 [00:00<00:00, 3712.11it/s] 51%|#####     | 3002/5940 [00:00<00:00, 3726.25it/s] 57%|#####6    | 3385/5940 [00:00<00:00, 3755.51it/s] 63%|######3   | 3768/5940 [00:01<00:00, 3778.35it/s] 70%|######9   | 4153/5940 [00:01<00:00, 3799.94it/s] 76%|#######6  | 4534/5940 [00:01<00:00, 3801.01it/s] 83%|########2 | 4919/5940 [00:01<00:00, 3813.63it/s] 89%|########9 | 5304/5940 [00:01<00:00, 3823.66it/s] 96%|#########5| 5687/5940 [00:01<00:00, 3805.02it/s]100%|##########| 5940/5940 [00:01<00:00, 3769.61it/s]
+
+============= Training Dataset =============
+SequenceDataset (
+	path=/home/jacob/projects/strap_project/STRAP/data/retrieval_results/stove-pot_retrieved_dataset.hdf5
+	obs_keys=('agentview_rgb', 'ee_ori', 'ee_pos', 'ee_states', 'eye_in_hand_rgb', 'gripper_states', 'joint_states')
+	seq_length=5
+	filter_key=none
+	frame_stack=5
+	pad_seq_length=False
+	pad_frame_stack=False
+	goal_mode=none
+	cache_mode=all
+	num_demos=98
+	num_sequences=5940
+)
+
+**************************************************
+Warnings generated by robomimic have been duplicated here (from above) for convenience. Please check them carefully.
+[33mROBOMIMIC WARNING(
+    No private macro file found!
+    It is recommended to use a private macro file
+    To setup, run: python /home/jacob/projects/strap_project/robomimic_strap/robomimic/scripts/setup_macros.py
+)[0m
+**************************************************
+
+
+Epoch 0 Memory Usage: 7302 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]ObservationKeyToModalityDict: pad_mask not found, adding pad_mask to mapping with assumed low_dim modality!
+  0%|          | 1/200 [00:00<02:42,  1.22it/s]  2%|1         | 3/200 [00:00<00:52,  3.77it/s]  2%|2         | 5/200 [00:01<00:31,  6.20it/s]  4%|3         | 7/200 [00:01<00:23,  8.34it/s]  4%|4         | 9/200 [00:01<00:18, 10.12it/s]  6%|5         | 11/200 [00:01<00:16, 11.53it/s]  6%|6         | 13/200 [00:01<00:14, 12.53it/s]  8%|7         | 15/200 [00:01<00:13, 13.50it/s]  8%|8         | 17/200 [00:01<00:12, 14.22it/s] 10%|9         | 19/200 [00:01<00:12, 14.64it/s] 10%|#         | 21/200 [00:02<00:11, 15.06it/s] 12%|#1        | 23/200 [00:02<00:11, 15.35it/s] 12%|#2        | 25/200 [00:02<00:11, 15.59it/s] 14%|#3        | 27/200 [00:02<00:10, 15.75it/s] 14%|#4        | 29/200 [00:02<00:10, 15.85it/s] 16%|#5        | 31/200 [00:02<00:10, 15.91it/s] 16%|#6        | 33/200 [00:02<00:10, 15.96it/s] 18%|#7        | 35/200 [00:02<00:10, 15.89it/s] 18%|#8        | 37/200 [00:03<00:10, 15.94it/s] 20%|#9        | 39/200 [00:03<00:10, 16.01it/s] 20%|##        | 41/200 [00:03<00:09, 16.02it/s] 22%|##1       | 43/200 [00:03<00:09, 16.01it/s] 22%|##2       | 45/200 [00:03<00:09, 16.01it/s] 24%|##3       | 47/200 [00:03<00:09, 16.02it/s] 24%|##4       | 49/200 [00:03<00:09, 16.02it/s] 26%|##5       | 51/200 [00:03<00:09, 15.98it/s] 26%|##6       | 53/200 [00:04<00:09, 16.04it/s] 28%|##7       | 55/200 [00:04<00:09, 16.07it/s] 28%|##8       | 57/200 [00:04<00:08, 15.94it/s] 30%|##9       | 59/200 [00:04<00:08, 15.94it/s] 30%|###       | 61/200 [00:04<00:08, 15.86it/s] 32%|###1      | 63/200 [00:04<00:08, 15.78it/s] 32%|###2      | 65/200 [00:04<00:08, 15.85it/s] 34%|###3      | 67/200 [00:04<00:08, 15.91it/s] 34%|###4      | 69/200 [00:05<00:08, 15.89it/s] 36%|###5      | 71/200 [00:05<00:08, 15.88it/s] 36%|###6      | 73/200 [00:05<00:07, 15.97it/s] 38%|###7      | 75/200 [00:05<00:07, 15.91it/s] 38%|###8      | 77/200 [00:05<00:07, 15.98it/s] 40%|###9      | 79/200 [00:05<00:07, 15.99it/s] 40%|####      | 81/200 [00:05<00:07, 16.00it/s] 42%|####1     | 83/200 [00:05<00:07, 16.02it/s] 42%|####2     | 85/200 [00:06<00:07, 15.98it/s] 44%|####3     | 87/200 [00:06<00:07, 15.75it/s] 44%|####4     | 89/200 [00:06<00:06, 15.88it/s] 46%|####5     | 91/200 [00:06<00:06, 15.93it/s] 46%|####6     | 93/200 [00:06<00:06, 16.01it/s] 48%|####7     | 95/200 [00:06<00:06, 16.00it/s] 48%|####8     | 97/200 [00:06<00:06, 16.02it/s] 50%|####9     | 99/200 [00:06<00:06, 16.05it/s] 50%|#####     | 101/200 [00:07<00:06, 16.10it/s] 52%|#####1    | 103/200 [00:07<00:06, 16.14it/s] 52%|#####2    | 105/200 [00:07<00:05, 16.15it/s] 54%|#####3    | 107/200 [00:07<00:05, 16.11it/s] 55%|#####4    | 109/200 [00:07<00:05, 16.14it/s] 56%|#####5    | 111/200 [00:07<00:05, 16.06it/s] 56%|#####6    | 113/200 [00:07<00:05, 16.07it/s] 57%|#####7    | 115/200 [00:07<00:05, 16.04it/s] 58%|#####8    | 117/200 [00:08<00:05, 16.03it/s] 60%|#####9    | 119/200 [00:08<00:05, 16.02it/s] 60%|######    | 121/200 [00:08<00:04, 16.05it/s] 62%|######1   | 123/200 [00:08<00:04, 16.07it/s] 62%|######2   | 125/200 [00:08<00:04, 15.97it/s] 64%|######3   | 127/200 [00:08<00:04, 15.97it/s] 64%|######4   | 129/200 [00:08<00:04, 15.98it/s] 66%|######5   | 131/200 [00:08<00:04, 16.03it/s] 66%|######6   | 133/200 [00:09<00:04, 16.00it/s] 68%|######7   | 135/200 [00:09<00:04, 16.05it/s] 68%|######8   | 137/200 [00:09<00:03, 16.07it/s] 70%|######9   | 139/200 [00:09<00:03, 16.08it/s] 70%|#######   | 141/200 [00:09<00:03, 16.10it/s] 72%|#######1  | 143/200 [00:09<00:03, 16.11it/s] 72%|#######2  | 145/200 [00:09<00:03, 16.12it/s] 74%|#######3  | 147/200 [00:09<00:03, 16.12it/s] 74%|#######4  | 149/200 [00:10<00:03, 16.14it/s] 76%|#######5  | 151/200 [00:10<00:03, 16.15it/s] 76%|#######6  | 153/200 [00:10<00:02, 16.13it/s] 78%|#######7  | 155/200 [00:10<00:02, 16.10it/s] 78%|#######8  | 157/200 [00:10<00:02, 16.11it/s] 80%|#######9  | 159/200 [00:10<00:02, 16.06it/s] 80%|########  | 161/200 [00:10<00:02, 16.02it/s] 82%|########1 | 163/200 [00:10<00:02, 16.06it/s] 82%|########2 | 165/200 [00:11<00:02, 16.10it/s] 84%|########3 | 167/200 [00:11<00:02, 16.12it/s] 84%|########4 | 169/200 [00:11<00:01, 16.14it/s] 86%|########5 | 171/200 [00:11<00:01, 16.15it/s] 86%|########6 | 173/200 [00:11<00:01, 16.11it/s] 88%|########7 | 175/200 [00:11<00:01, 16.01it/s] 88%|########8 | 177/200 [00:11<00:01, 15.76it/s] 90%|########9 | 179/200 [00:11<00:01, 15.93it/s] 90%|######### | 181/200 [00:12<00:01, 16.06it/s] 92%|#########1| 183/200 [00:12<00:01, 16.15it/s] 92%|#########2| 185/200 [00:12<00:00, 16.21it/s] 94%|#########3| 187/200 [00:12<00:01,  9.98it/s] 94%|#########4| 189/200 [00:12<00:00, 11.22it/s] 96%|#########5| 191/200 [00:12<00:00, 12.31it/s] 96%|#########6| 193/200 [00:13<00:00, 13.25it/s] 98%|#########7| 195/200 [00:13<00:00, 14.00it/s] 98%|#########8| 197/200 [00:13<00:00, 14.58it/s]100%|#########9| 199/200 [00:13<00:00, 15.01it/s]100%|##########| 200/200 [00:13<00:00, 14.79it/s]
+Train Epoch 1
+{
+    "Log_Likelihood": -4.926115898489952,
+    "Loss": 4.926115898489952,
+    "Optimizer/policy0_lr": 1.0050000000000001e-06,
+    "Policy_Grad_Norms": 1565.4908307761768,
+    "Time_Data_Loading": 0.0024819771448771157,
+    "Time_Epoch": 0.22793025573094686,
+    "Time_Log_Info": 0.007145877679189046,
+    "Time_Process_Batch": 0.032914936542510986,
+    "Time_Train_Batch": 0.17939383586247762
+}
+
+Epoch 1 Memory Usage: 7890 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:26,  7.53it/s]  2%|1         | 3/200 [00:00<00:15, 12.35it/s]  2%|2         | 5/200 [00:00<00:13, 14.04it/s]  4%|3         | 7/200 [00:00<00:12, 14.85it/s]  4%|4         | 9/200 [00:00<00:12, 15.32it/s]  6%|5         | 11/200 [00:00<00:12, 15.53it/s]  6%|6         | 13/200 [00:00<00:11, 15.69it/s]  8%|7         | 15/200 [00:01<00:11, 15.79it/s]  8%|8         | 17/200 [00:01<00:11, 15.86it/s] 10%|9         | 19/200 [00:01<00:11, 15.82it/s] 10%|#         | 21/200 [00:01<00:11, 15.90it/s] 12%|#1        | 23/200 [00:01<00:11, 15.94it/s] 12%|#2        | 25/200 [00:01<00:10, 16.01it/s] 14%|#3        | 27/200 [00:01<00:10, 16.04it/s] 14%|#4        | 29/200 [00:01<00:10, 16.02it/s] 16%|#5        | 31/200 [00:02<00:10, 16.05it/s] 16%|#6        | 33/200 [00:02<00:10, 16.06it/s] 18%|#7        | 35/200 [00:02<00:10, 16.05it/s] 18%|#8        | 37/200 [00:02<00:10, 16.06it/s] 20%|#9        | 39/200 [00:02<00:10, 16.07it/s] 20%|##        | 41/200 [00:02<00:09, 16.01it/s] 22%|##1       | 43/200 [00:02<00:09, 15.98it/s] 22%|##2       | 45/200 [00:02<00:09, 16.00it/s] 24%|##3       | 47/200 [00:03<00:09, 16.01it/s] 24%|##4       | 49/200 [00:03<00:09, 16.05it/s] 26%|##5       | 51/200 [00:03<00:09, 16.04it/s] 26%|##6       | 53/200 [00:03<00:09, 16.06it/s] 28%|##7       | 55/200 [00:03<00:09, 16.10it/s] 28%|##8       | 57/200 [00:03<00:08, 16.08it/s] 30%|##9       | 59/200 [00:03<00:08, 16.07it/s] 30%|###       | 61/200 [00:03<00:08, 16.02it/s] 32%|###1      | 63/200 [00:03<00:08, 16.01it/s] 32%|###2      | 65/200 [00:04<00:08, 16.04it/s] 34%|###3      | 67/200 [00:04<00:08, 16.07it/s] 34%|###4      | 69/200 [00:04<00:08, 16.07it/s] 36%|###5      | 71/200 [00:04<00:08, 16.03it/s] 36%|###6      | 73/200 [00:04<00:07, 16.07it/s] 38%|###7      | 75/200 [00:04<00:07, 16.10it/s] 38%|###8      | 77/200 [00:04<00:07, 16.10it/s] 40%|###9      | 79/200 [00:04<00:07, 15.88it/s] 40%|####      | 81/200 [00:05<00:07, 15.85it/s] 42%|####1     | 83/200 [00:05<00:07, 15.91it/s] 42%|####2     | 85/200 [00:05<00:07, 15.96it/s] 44%|####3     | 87/200 [00:05<00:07, 15.98it/s] 44%|####4     | 89/200 [00:05<00:06, 16.00it/s] 46%|####5     | 91/200 [00:05<00:06, 16.04it/s] 46%|####6     | 93/200 [00:05<00:06, 16.08it/s] 48%|####7     | 95/200 [00:05<00:06, 16.10it/s] 48%|####8     | 97/200 [00:06<00:06, 16.06it/s] 50%|####9     | 99/200 [00:06<00:06, 16.05it/s] 50%|#####     | 101/200 [00:06<00:06, 16.03it/s] 52%|#####1    | 103/200 [00:06<00:06, 16.01it/s] 52%|#####2    | 105/200 [00:06<00:05, 16.08it/s] 54%|#####3    | 107/200 [00:06<00:05, 16.03it/s] 55%|#####4    | 109/200 [00:06<00:05, 16.04it/s] 56%|#####5    | 111/200 [00:06<00:05, 16.05it/s] 56%|#####6    | 113/200 [00:07<00:05, 16.03it/s] 57%|#####7    | 115/200 [00:07<00:05, 16.02it/s] 58%|#####8    | 117/200 [00:07<00:05, 16.01it/s] 60%|#####9    | 119/200 [00:07<00:05, 16.07it/s] 60%|######    | 121/200 [00:07<00:04, 16.10it/s] 62%|######1   | 123/200 [00:07<00:04, 16.09it/s] 62%|######2   | 125/200 [00:07<00:04, 16.11it/s] 64%|######3   | 127/200 [00:07<00:04, 16.12it/s] 64%|######4   | 129/200 [00:08<00:04, 16.12it/s] 66%|######5   | 131/200 [00:08<00:04, 16.10it/s] 66%|######6   | 133/200 [00:08<00:04, 16.07it/s] 68%|######7   | 135/200 [00:08<00:04, 16.07it/s] 68%|######8   | 137/200 [00:08<00:03, 15.98it/s] 70%|######9   | 139/200 [00:08<00:03, 15.96it/s] 70%|#######   | 141/200 [00:08<00:03, 15.97it/s] 72%|#######1  | 143/200 [00:08<00:03, 15.91it/s] 72%|#######2  | 145/200 [00:09<00:03, 15.98it/s] 74%|#######3  | 147/200 [00:09<00:03, 15.95it/s] 74%|#######4  | 149/200 [00:09<00:03, 15.89it/s] 76%|#######5  | 151/200 [00:09<00:03, 15.91it/s] 76%|#######6  | 153/200 [00:09<00:02, 15.98it/s] 78%|#######7  | 155/200 [00:09<00:02, 16.03it/s] 78%|#######8  | 157/200 [00:09<00:02, 16.06it/s] 80%|#######9  | 159/200 [00:09<00:02, 16.07it/s] 80%|########  | 161/200 [00:10<00:02, 16.08it/s] 82%|########1 | 163/200 [00:10<00:02, 16.11it/s] 82%|########2 | 165/200 [00:10<00:02, 16.11it/s] 84%|########3 | 167/200 [00:10<00:02, 16.14it/s] 84%|########4 | 169/200 [00:10<00:01, 16.14it/s] 86%|########5 | 171/200 [00:10<00:01, 16.16it/s] 86%|########6 | 173/200 [00:10<00:01, 16.16it/s] 88%|########7 | 175/200 [00:10<00:01, 16.17it/s] 88%|########8 | 177/200 [00:11<00:01, 16.17it/s] 90%|########9 | 179/200 [00:11<00:01, 16.20it/s] 90%|######### | 181/200 [00:11<00:01, 16.22it/s] 92%|#########1| 183/200 [00:11<00:01, 16.23it/s] 92%|#########2| 185/200 [00:11<00:00, 16.26it/s] 94%|#########3| 187/200 [00:11<00:01,  9.80it/s] 94%|#########4| 189/200 [00:12<00:00, 11.10it/s] 96%|#########5| 191/200 [00:12<00:00, 12.23it/s] 96%|#########6| 193/200 [00:12<00:00, 13.19it/s] 98%|#########7| 195/200 [00:12<00:00, 13.96it/s] 98%|#########8| 197/200 [00:12<00:00, 14.54it/s]100%|#########9| 199/200 [00:12<00:00, 14.97it/s]100%|##########| 200/200 [00:12<00:00, 15.63it/s]
+Train Epoch 2
+{
+    "Log_Likelihood": 0.6648462891578675,
+    "Loss": -0.6648462891578675,
+    "Optimizer/policy0_lr": 3.005e-06,
+    "Policy_Grad_Norms": 1620.6319037275564,
+    "Time_Data_Loading": 0.0016677141189575194,
+    "Time_Epoch": 0.21551952759424844,
+    "Time_Log_Info": 0.007183281580607096,
+    "Time_Process_Batch": 0.03226367632548014,
+    "Time_Train_Batch": 0.168416957060496
+}
+
+Epoch 2 Memory Usage: 7890 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:27,  7.17it/s]  2%|1         | 3/200 [00:00<00:16, 11.94it/s]  2%|2         | 5/200 [00:00<00:14, 13.69it/s]  4%|3         | 7/200 [00:00<00:13, 14.63it/s]  4%|4         | 9/200 [00:00<00:12, 15.11it/s]  6%|5         | 11/200 [00:00<00:12, 15.42it/s]  6%|6         | 13/200 [00:00<00:11, 15.66it/s]  8%|7         | 15/200 [00:01<00:11, 15.81it/s]  8%|8         | 17/200 [00:01<00:11, 15.91it/s] 10%|9         | 19/200 [00:01<00:11, 15.96it/s] 10%|#         | 21/200 [00:01<00:11, 16.01it/s] 12%|#1        | 23/200 [00:01<00:11, 15.94it/s] 12%|#2        | 25/200 [00:01<00:11, 15.73it/s] 14%|#3        | 27/200 [00:01<00:10, 15.80it/s] 14%|#4        | 29/200 [00:01<00:10, 15.90it/s] 16%|#5        | 31/200 [00:02<00:10, 15.95it/s] 16%|#6        | 33/200 [00:02<00:10, 16.01it/s] 18%|#7        | 35/200 [00:02<00:10, 15.99it/s] 18%|#8        | 37/200 [00:02<00:10, 16.04it/s] 20%|#9        | 39/200 [00:02<00:10, 16.04it/s] 20%|##        | 41/200 [00:02<00:09, 16.06it/s] 22%|##1       | 43/200 [00:02<00:09, 16.03it/s] 22%|##2       | 45/200 [00:02<00:09, 15.91it/s] 24%|##3       | 47/200 [00:03<00:09, 15.96it/s] 24%|##4       | 49/200 [00:03<00:09, 16.01it/s] 26%|##5       | 51/200 [00:03<00:09, 15.98it/s] 26%|##6       | 53/200 [00:03<00:09, 16.03it/s] 28%|##7       | 55/200 [00:03<00:09, 15.99it/s] 28%|##8       | 57/200 [00:03<00:08, 16.00it/s] 30%|##9       | 59/200 [00:03<00:08, 15.99it/s] 30%|###       | 61/200 [00:03<00:08, 16.03it/s] 32%|###1      | 63/200 [00:04<00:08, 15.99it/s] 32%|###2      | 65/200 [00:04<00:08, 16.06it/s] 34%|###3      | 67/200 [00:04<00:08, 16.03it/s] 34%|###4      | 69/200 [00:04<00:08, 16.03it/s] 36%|###5      | 71/200 [00:04<00:08, 16.05it/s] 36%|###6      | 73/200 [00:04<00:07, 15.97it/s] 38%|###7      | 75/200 [00:04<00:07, 16.04it/s] 38%|###8      | 77/200 [00:04<00:07, 16.03it/s] 40%|###9      | 79/200 [00:05<00:07, 16.04it/s] 40%|####      | 81/200 [00:05<00:07, 16.08it/s] 42%|####1     | 83/200 [00:05<00:07, 16.00it/s] 42%|####2     | 85/200 [00:05<00:07, 15.98it/s] 44%|####3     | 87/200 [00:05<00:07, 16.01it/s] 44%|####4     | 89/200 [00:05<00:06, 16.07it/s] 46%|####5     | 91/200 [00:05<00:06, 16.11it/s] 46%|####6     | 93/200 [00:05<00:06, 16.08it/s] 48%|####7     | 95/200 [00:06<00:06, 16.07it/s] 48%|####8     | 97/200 [00:06<00:06, 15.97it/s] 50%|####9     | 99/200 [00:06<00:06, 15.94it/s] 50%|#####     | 101/200 [00:06<00:06, 15.95it/s] 52%|#####1    | 103/200 [00:06<00:06, 16.00it/s] 52%|#####2    | 105/200 [00:06<00:05, 16.04it/s] 54%|#####3    | 107/200 [00:06<00:05, 16.04it/s] 55%|#####4    | 109/200 [00:06<00:05, 16.06it/s] 56%|#####5    | 111/200 [00:07<00:05, 16.07it/s] 56%|#####6    | 113/200 [00:07<00:05, 16.10it/s] 57%|#####7    | 115/200 [00:07<00:05, 16.10it/s] 58%|#####8    | 117/200 [00:07<00:05, 16.08it/s] 60%|#####9    | 119/200 [00:07<00:05, 16.10it/s] 60%|######    | 121/200 [00:07<00:04, 16.06it/s] 62%|######1   | 123/200 [00:07<00:04, 15.96it/s] 62%|######2   | 125/200 [00:07<00:04, 15.96it/s] 64%|######3   | 127/200 [00:08<00:04, 15.94it/s] 64%|######4   | 129/200 [00:08<00:04, 15.96it/s] 66%|######5   | 131/200 [00:08<00:04, 15.97it/s] 66%|######6   | 133/200 [00:08<00:04, 15.97it/s] 68%|######7   | 135/200 [00:08<00:04, 16.00it/s] 68%|######8   | 137/200 [00:08<00:03, 16.03it/s] 70%|######9   | 139/200 [00:08<00:03, 16.06it/s] 70%|#######   | 141/200 [00:08<00:03, 16.09it/s] 72%|#######1  | 143/200 [00:09<00:03, 16.08it/s] 72%|#######2  | 145/200 [00:09<00:03, 15.97it/s] 74%|#######3  | 147/200 [00:09<00:03, 15.98it/s] 74%|#######4  | 149/200 [00:09<00:03, 15.98it/s] 76%|#######5  | 151/200 [00:09<00:03, 16.04it/s] 76%|#######6  | 153/200 [00:09<00:02, 16.08it/s] 78%|#######7  | 155/200 [00:09<00:02, 16.08it/s] 78%|#######8  | 157/200 [00:09<00:02, 16.07it/s] 80%|#######9  | 159/200 [00:10<00:02, 16.10it/s] 80%|########  | 161/200 [00:10<00:02, 16.10it/s] 82%|########1 | 163/200 [00:10<00:02, 16.04it/s] 82%|########2 | 165/200 [00:10<00:02, 16.06it/s] 84%|########3 | 167/200 [00:10<00:02, 15.98it/s] 84%|########4 | 169/200 [00:10<00:01, 15.98it/s] 86%|########5 | 171/200 [00:10<00:01, 16.04it/s] 86%|########6 | 173/200 [00:10<00:01, 16.03it/s] 88%|########7 | 175/200 [00:11<00:01, 16.04it/s] 88%|########8 | 177/200 [00:11<00:01, 16.04it/s] 90%|########9 | 179/200 [00:11<00:01, 16.10it/s] 90%|######### | 181/200 [00:11<00:01, 16.15it/s] 92%|#########1| 183/200 [00:11<00:01, 16.19it/s] 92%|#########2| 185/200 [00:11<00:00, 16.21it/s] 94%|#########3| 187/200 [00:12<00:01,  9.98it/s] 94%|#########4| 189/200 [00:12<00:00, 11.24it/s] 96%|#########5| 191/200 [00:12<00:00, 12.35it/s] 96%|#########6| 193/200 [00:12<00:00, 13.25it/s] 98%|#########7| 195/200 [00:12<00:00, 13.97it/s] 98%|#########8| 197/200 [00:12<00:00, 14.48it/s]100%|#########9| 199/200 [00:12<00:00, 14.90it/s]100%|##########| 200/200 [00:12<00:00, 15.61it/s]
+Train Epoch 3
+{
+    "Log_Likelihood": 3.8515759992599485,
+    "Loss": -3.8515759992599485,
+    "Optimizer/policy0_lr": 5.0049999999999995e-06,
+    "Policy_Grad_Norms": 1851.0331634450156,
+    "Time_Data_Loading": 0.0014933109283447265,
+    "Time_Epoch": 0.21588735183080038,
+    "Time_Log_Info": 0.007190795739491781,
+    "Time_Process_Batch": 0.03237692912419637,
+    "Time_Train_Batch": 0.1690857768058777
+}
+
+Epoch 3 Memory Usage: 7890 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:30,  6.58it/s]  2%|1         | 3/200 [00:00<00:16, 11.68it/s]  2%|2         | 5/200 [00:00<00:14, 13.55it/s]  4%|3         | 7/200 [00:00<00:13, 14.37it/s]  4%|4         | 9/200 [00:00<00:12, 14.95it/s]  6%|5         | 11/200 [00:00<00:12, 15.30it/s]  6%|6         | 13/200 [00:00<00:12, 15.54it/s]  8%|7         | 15/200 [00:01<00:11, 15.71it/s]  8%|8         | 17/200 [00:01<00:11, 15.85it/s] 10%|9         | 19/200 [00:01<00:11, 15.94it/s] 10%|#         | 21/200 [00:01<00:11, 16.01it/s] 12%|#1        | 23/200 [00:01<00:11, 16.03it/s] 12%|#2        | 25/200 [00:01<00:10, 16.03it/s] 14%|#3        | 27/200 [00:01<00:10, 15.87it/s] 14%|#4        | 29/200 [00:01<00:10, 15.96it/s] 16%|#5        | 31/200 [00:02<00:10, 16.02it/s] 16%|#6        | 33/200 [00:02<00:10, 16.06it/s] 18%|#7        | 35/200 [00:02<00:10, 15.99it/s] 18%|#8        | 37/200 [00:02<00:10, 15.91it/s] 20%|#9        | 39/200 [00:02<00:10, 15.89it/s] 20%|##        | 41/200 [00:02<00:09, 15.97it/s] 22%|##1       | 43/200 [00:02<00:09, 15.99it/s] 22%|##2       | 45/200 [00:02<00:09, 15.95it/s] 24%|##3       | 47/200 [00:03<00:09, 15.95it/s] 24%|##4       | 49/200 [00:03<00:09, 15.96it/s] 26%|##5       | 51/200 [00:03<00:09, 15.83it/s] 26%|##6       | 53/200 [00:03<00:09, 15.87it/s] 28%|##7       | 55/200 [00:03<00:09, 15.93it/s] 28%|##8       | 57/200 [00:03<00:08, 15.99it/s] 30%|##9       | 59/200 [00:03<00:08, 15.93it/s] 30%|###       | 61/200 [00:03<00:08, 15.97it/s] 32%|###1      | 63/200 [00:04<00:08, 15.93it/s] 32%|###2      | 65/200 [00:04<00:08, 15.97it/s] 34%|###3      | 67/200 [00:04<00:08, 15.97it/s] 34%|###4      | 69/200 [00:04<00:08, 16.02it/s] 36%|###5      | 71/200 [00:04<00:08, 16.01it/s] 36%|###6      | 73/200 [00:04<00:07, 16.05it/s] 38%|###7      | 75/200 [00:04<00:07, 15.99it/s] 38%|###8      | 77/200 [00:04<00:07, 15.92it/s] 40%|###9      | 79/200 [00:05<00:07, 15.97it/s] 40%|####      | 81/200 [00:05<00:07, 15.98it/s] 42%|####1     | 83/200 [00:05<00:07, 15.97it/s] 42%|####2     | 85/200 [00:05<00:07, 15.99it/s] 44%|####3     | 87/200 [00:05<00:07, 16.03it/s] 44%|####4     | 89/200 [00:05<00:06, 16.06it/s] 46%|####5     | 91/200 [00:05<00:06, 16.07it/s] 46%|####6     | 93/200 [00:05<00:06, 15.98it/s] 48%|####7     | 95/200 [00:06<00:06, 16.03it/s] 48%|####8     | 97/200 [00:06<00:06, 16.04it/s] 50%|####9     | 99/200 [00:06<00:06, 16.03it/s] 50%|#####     | 101/200 [00:06<00:06, 16.05it/s] 52%|#####1    | 103/200 [00:06<00:06, 16.07it/s] 52%|#####2    | 105/200 [00:06<00:05, 16.10it/s] 54%|#####3    | 107/200 [00:06<00:05, 16.08it/s] 55%|#####4    | 109/200 [00:06<00:05, 16.07it/s] 56%|#####5    | 111/200 [00:07<00:05, 16.03it/s] 56%|#####6    | 113/200 [00:07<00:05, 16.00it/s] 57%|#####7    | 115/200 [00:07<00:05, 15.81it/s] 58%|#####8    | 117/200 [00:07<00:05, 15.73it/s] 60%|#####9    | 119/200 [00:07<00:05, 15.82it/s] 60%|######    | 121/200 [00:07<00:05, 15.80it/s] 62%|######1   | 123/200 [00:07<00:04, 15.80it/s] 62%|######2   | 125/200 [00:07<00:04, 15.82it/s] 64%|######3   | 127/200 [00:08<00:04, 15.84it/s] 64%|######4   | 129/200 [00:08<00:04, 15.81it/s] 66%|######5   | 131/200 [00:08<00:04, 15.84it/s] 66%|######6   | 133/200 [00:08<00:04, 15.90it/s] 68%|######7   | 135/200 [00:08<00:04, 15.88it/s] 68%|######8   | 137/200 [00:08<00:03, 15.78it/s] 70%|######9   | 139/200 [00:08<00:03, 15.70it/s] 70%|#######   | 141/200 [00:08<00:03, 15.79it/s] 72%|#######1  | 143/200 [00:09<00:03, 15.86it/s] 72%|#######2  | 145/200 [00:09<00:03, 15.92it/s] 74%|#######3  | 147/200 [00:09<00:03, 15.98it/s] 74%|#######4  | 149/200 [00:09<00:03, 15.90it/s] 76%|#######5  | 151/200 [00:09<00:03, 15.98it/s] 76%|#######6  | 153/200 [00:09<00:02, 16.04it/s] 78%|#######7  | 155/200 [00:09<00:02, 16.00it/s] 78%|#######8  | 157/200 [00:09<00:02, 16.03it/s] 80%|#######9  | 159/200 [00:10<00:02, 16.07it/s] 80%|########  | 161/200 [00:10<00:02, 16.08it/s] 82%|########1 | 163/200 [00:10<00:02, 16.11it/s] 82%|########2 | 165/200 [00:10<00:02, 16.12it/s] 84%|########3 | 167/200 [00:10<00:02, 16.07it/s] 84%|########4 | 169/200 [00:10<00:01, 15.99it/s] 86%|########5 | 171/200 [00:10<00:01, 16.05it/s] 86%|########6 | 173/200 [00:10<00:01, 16.06it/s] 88%|########7 | 175/200 [00:11<00:01, 16.06it/s] 88%|########8 | 177/200 [00:11<00:01, 16.05it/s] 90%|########9 | 179/200 [00:11<00:01, 16.13it/s] 90%|######### | 181/200 [00:11<00:01, 16.21it/s] 92%|#########1| 183/200 [00:11<00:01, 16.25it/s] 92%|#########2| 185/200 [00:11<00:00, 16.27it/s] 94%|#########3| 187/200 [00:12<00:01, 10.09it/s] 94%|#########4| 189/200 [00:12<00:00, 11.33it/s] 96%|#########5| 191/200 [00:12<00:00, 12.42it/s] 96%|#########6| 193/200 [00:12<00:00, 13.32it/s] 98%|#########7| 195/200 [00:12<00:00, 13.98it/s] 98%|#########8| 197/200 [00:12<00:00, 14.53it/s]100%|#########9| 199/200 [00:12<00:00, 14.88it/s]100%|##########| 200/200 [00:12<00:00, 15.56it/s]
+Train Epoch 4
+{
+    "Log_Likelihood": 5.816116571426392,
+    "Loss": -5.816116571426392,
+    "Optimizer/policy0_lr": 7.005000000000001e-06,
+    "Policy_Grad_Norms": 3204.81335214971,
+    "Time_Data_Loading": 0.0017560720443725586,
+    "Time_Epoch": 0.2165422519048055,
+    "Time_Log_Info": 0.007173025608062744,
+    "Time_Process_Batch": 0.03217990795771281,
+    "Time_Train_Batch": 0.16955502033233644
+}
+
+Epoch 4 Memory Usage: 7890 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:27,  7.13it/s]  2%|1         | 3/200 [00:00<00:16, 12.14it/s]  2%|2         | 5/200 [00:00<00:14, 13.82it/s]  4%|3         | 7/200 [00:00<00:13, 14.67it/s]  4%|4         | 9/200 [00:00<00:12, 15.15it/s]  6%|5         | 11/200 [00:00<00:12, 15.44it/s]  6%|6         | 13/200 [00:00<00:11, 15.63it/s]  8%|7         | 15/200 [00:01<00:11, 15.71it/s]  8%|8         | 17/200 [00:01<00:11, 15.80it/s] 10%|9         | 19/200 [00:01<00:11, 15.83it/s] 10%|#         | 21/200 [00:01<00:11, 15.88it/s] 12%|#1        | 23/200 [00:01<00:11, 15.93it/s] 12%|#2        | 25/200 [00:01<00:10, 15.98it/s] 14%|#3        | 27/200 [00:01<00:10, 15.96it/s] 14%|#4        | 29/200 [00:01<00:10, 15.94it/s] 16%|#5        | 31/200 [00:02<00:10, 15.85it/s] 16%|#6        | 33/200 [00:02<00:10, 15.81it/s] 18%|#7        | 35/200 [00:02<00:10, 15.71it/s] 18%|#8        | 37/200 [00:02<00:10, 15.63it/s] 20%|#9        | 39/200 [00:02<00:10, 15.67it/s] 20%|##        | 41/200 [00:02<00:10, 15.80it/s] 22%|##1       | 43/200 [00:02<00:09, 15.78it/s] 22%|##2       | 45/200 [00:02<00:09, 15.84it/s] 24%|##3       | 47/200 [00:03<00:09, 15.78it/s] 24%|##4       | 49/200 [00:03<00:09, 15.78it/s] 26%|##5       | 51/200 [00:03<00:09, 15.80it/s] 26%|##6       | 53/200 [00:03<00:09, 15.85it/s] 28%|##7       | 55/200 [00:03<00:09, 15.89it/s] 28%|##8       | 57/200 [00:03<00:08, 15.90it/s] 30%|##9       | 59/200 [00:03<00:08, 15.83it/s] 30%|###       | 61/200 [00:03<00:08, 15.89it/s] 32%|###1      | 63/200 [00:04<00:08, 15.96it/s] 32%|###2      | 65/200 [00:04<00:08, 15.97it/s] 34%|###3      | 67/200 [00:04<00:08, 15.98it/s] 34%|###4      | 69/200 [00:04<00:08, 15.98it/s] 36%|###5      | 71/200 [00:04<00:08, 16.02it/s] 36%|###6      | 73/200 [00:04<00:07, 16.02it/s] 38%|###7      | 75/200 [00:04<00:07, 16.04it/s] 38%|###8      | 77/200 [00:04<00:07, 16.04it/s] 40%|###9      | 79/200 [00:05<00:07, 16.05it/s] 40%|####      | 81/200 [00:05<00:07, 16.04it/s] 42%|####1     | 83/200 [00:05<00:07, 15.98it/s] 42%|####2     | 85/200 [00:05<00:07, 16.00it/s] 44%|####3     | 87/200 [00:05<00:07, 16.03it/s] 44%|####4     | 89/200 [00:05<00:06, 16.04it/s] 46%|####5     | 91/200 [00:05<00:06, 16.05it/s] 46%|####6     | 93/200 [00:05<00:06, 15.98it/s] 48%|####7     | 95/200 [00:06<00:06, 16.03it/s] 48%|####8     | 97/200 [00:06<00:06, 16.05it/s] 50%|####9     | 99/200 [00:06<00:06, 16.03it/s] 50%|#####     | 101/200 [00:06<00:06, 15.96it/s] 52%|#####1    | 103/200 [00:06<00:06, 16.00it/s] 52%|#####2    | 105/200 [00:06<00:05, 16.03it/s] 54%|#####3    | 107/200 [00:06<00:05, 16.06it/s] 55%|#####4    | 109/200 [00:06<00:05, 16.01it/s] 56%|#####5    | 111/200 [00:07<00:05, 16.05it/s] 56%|#####6    | 113/200 [00:07<00:05, 16.04it/s] 57%|#####7    | 115/200 [00:07<00:05, 16.01it/s] 58%|#####8    | 117/200 [00:07<00:05, 16.01it/s] 60%|#####9    | 119/200 [00:07<00:05, 16.03it/s] 60%|######    | 121/200 [00:07<00:04, 16.04it/s] 62%|######1   | 123/200 [00:07<00:04, 16.03it/s] 62%|######2   | 125/200 [00:07<00:04, 16.00it/s] 64%|######3   | 127/200 [00:08<00:04, 16.04it/s] 64%|######4   | 129/200 [00:08<00:04, 16.01it/s] 66%|######5   | 131/200 [00:08<00:04, 16.01it/s] 66%|######6   | 133/200 [00:08<00:04, 15.97it/s] 68%|######7   | 135/200 [00:08<00:04, 16.00it/s] 68%|######8   | 137/200 [00:08<00:03, 16.03it/s] 70%|######9   | 139/200 [00:08<00:03, 15.97it/s] 70%|#######   | 141/200 [00:08<00:03, 15.97it/s] 72%|#######1  | 143/200 [00:09<00:03, 15.95it/s] 72%|#######2  | 145/200 [00:09<00:03, 15.83it/s] 74%|#######3  | 147/200 [00:09<00:03, 15.91it/s] 74%|#######4  | 149/200 [00:09<00:03, 15.77it/s] 76%|#######5  | 151/200 [00:09<00:03, 15.80it/s] 76%|#######6  | 153/200 [00:09<00:02, 15.90it/s] 78%|#######7  | 155/200 [00:09<00:02, 15.96it/s] 78%|#######8  | 157/200 [00:09<00:02, 15.93it/s] 80%|#######9  | 159/200 [00:10<00:02, 15.90it/s] 80%|########  | 161/200 [00:10<00:02, 15.98it/s] 82%|########1 | 163/200 [00:10<00:02, 15.98it/s] 82%|########2 | 165/200 [00:10<00:02, 16.02it/s] 84%|########3 | 167/200 [00:10<00:02, 16.00it/s] 84%|########4 | 169/200 [00:10<00:01, 16.05it/s] 86%|########5 | 171/200 [00:10<00:01, 15.93it/s] 86%|########6 | 173/200 [00:10<00:01, 15.95it/s] 88%|########7 | 175/200 [00:11<00:01, 15.97it/s] 88%|########8 | 177/200 [00:11<00:01, 16.01it/s] 90%|########9 | 179/200 [00:11<00:01, 16.07it/s] 90%|######### | 181/200 [00:11<00:01, 16.13it/s] 92%|#########1| 183/200 [00:11<00:01, 16.18it/s] 92%|#########2| 185/200 [00:11<00:00, 16.19it/s] 94%|#########3| 187/200 [00:12<00:01,  9.81it/s] 94%|#########4| 189/200 [00:12<00:00, 11.10it/s] 96%|#########5| 191/200 [00:12<00:00, 12.23it/s] 96%|#########6| 193/200 [00:12<00:00, 13.18it/s] 98%|#########7| 195/200 [00:12<00:00, 13.93it/s] 98%|#########8| 197/200 [00:12<00:00, 14.49it/s]100%|#########9| 199/200 [00:12<00:00, 14.93it/s]100%|##########| 200/200 [00:12<00:00, 15.55it/s]
+Train Epoch 5
+{
+    "Log_Likelihood": 7.368295836448669,
+    "Loss": -7.368295836448669,
+    "Optimizer/policy0_lr": 9.005000000000001e-06,
+    "Policy_Grad_Norms": 5218.398906882439,
+    "Time_Data_Loading": 0.0017707546552022297,
+    "Time_Epoch": 0.2167612632115682,
+    "Time_Log_Info": 0.007147292296091716,
+    "Time_Process_Batch": 0.03230339288711548,
+    "Time_Train_Batch": 0.16959492762883505
+}
+
+Epoch 5 Memory Usage: 7890 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:28,  6.91it/s]  2%|1         | 3/200 [00:00<00:16, 11.96it/s]  2%|2         | 5/200 [00:00<00:14, 13.80it/s]  4%|3         | 7/200 [00:00<00:13, 14.68it/s]  4%|4         | 9/200 [00:00<00:12, 15.17it/s]  6%|5         | 11/200 [00:00<00:12, 15.46it/s]  6%|6         | 13/200 [00:00<00:11, 15.66it/s]  8%|7         | 15/200 [00:01<00:11, 15.72it/s]  8%|8         | 17/200 [00:01<00:11, 15.79it/s] 10%|9         | 19/200 [00:01<00:11, 15.83it/s] 10%|#         | 21/200 [00:01<00:11, 15.92it/s] 12%|#1        | 23/200 [00:01<00:11, 15.99it/s] 12%|#2        | 25/200 [00:01<00:10, 15.98it/s] 14%|#3        | 27/200 [00:01<00:10, 16.03it/s] 14%|#4        | 29/200 [00:01<00:10, 16.06it/s] 16%|#5        | 31/200 [00:02<00:10, 16.09it/s] 16%|#6        | 33/200 [00:02<00:10, 16.09it/s] 18%|#7        | 35/200 [00:02<00:10, 16.08it/s] 18%|#8        | 37/200 [00:02<00:10, 16.11it/s] 20%|#9        | 39/200 [00:02<00:09, 16.12it/s] 20%|##        | 41/200 [00:02<00:09, 16.10it/s] 22%|##1       | 43/200 [00:02<00:09, 16.12it/s] 22%|##2       | 45/200 [00:02<00:09, 16.15it/s] 24%|##3       | 47/200 [00:03<00:09, 16.11it/s] 24%|##4       | 49/200 [00:03<00:09, 16.12it/s] 26%|##5       | 51/200 [00:03<00:09, 16.09it/s] 26%|##6       | 53/200 [00:03<00:09, 16.10it/s] 28%|##7       | 55/200 [00:03<00:09, 16.06it/s] 28%|##8       | 57/200 [00:03<00:08, 16.00it/s] 30%|##9       | 59/200 [00:03<00:08, 16.03it/s] 30%|###       | 61/200 [00:03<00:08, 16.06it/s] 32%|###1      | 63/200 [00:04<00:08, 16.04it/s] 32%|###2      | 65/200 [00:04<00:08, 15.98it/s] 34%|###3      | 67/200 [00:04<00:08, 15.95it/s] 34%|###4      | 69/200 [00:04<00:08, 15.90it/s] 36%|###5      | 71/200 [00:04<00:08, 15.96it/s] 36%|###6      | 73/200 [00:04<00:07, 16.01it/s] 38%|###7      | 75/200 [00:04<00:07, 15.99it/s] 38%|###8      | 77/200 [00:04<00:07, 16.01it/s] 40%|###9      | 79/200 [00:05<00:07, 16.05it/s] 40%|####      | 81/200 [00:05<00:07, 16.01it/s] 42%|####1     | 83/200 [00:05<00:07, 15.98it/s] 42%|####2     | 85/200 [00:05<00:07, 15.93it/s] 44%|####3     | 87/200 [00:05<00:07, 15.95it/s] 44%|####4     | 89/200 [00:05<00:06, 15.96it/s] 46%|####5     | 91/200 [00:05<00:06, 15.96it/s] 46%|####6     | 93/200 [00:05<00:06, 15.97it/s] 48%|####7     | 95/200 [00:06<00:06, 15.97it/s] 48%|####8     | 97/200 [00:06<00:06, 15.96it/s] 50%|####9     | 99/200 [00:06<00:06, 15.95it/s] 50%|#####     | 101/200 [00:06<00:06, 15.95it/s] 52%|#####1    | 103/200 [00:06<00:06, 16.01it/s] 52%|#####2    | 105/200 [00:06<00:05, 16.01it/s] 54%|#####3    | 107/200 [00:06<00:05, 15.99it/s] 55%|#####4    | 109/200 [00:06<00:05, 15.98it/s] 56%|#####5    | 111/200 [00:07<00:05, 15.88it/s] 56%|#####6    | 113/200 [00:07<00:05, 15.95it/s] 57%|#####7    | 115/200 [00:07<00:05, 15.93it/s] 58%|#####8    | 117/200 [00:07<00:05, 15.95it/s] 60%|#####9    | 119/200 [00:07<00:05, 15.98it/s] 60%|######    | 121/200 [00:07<00:04, 16.02it/s] 62%|######1   | 123/200 [00:07<00:04, 15.96it/s] 62%|######2   | 125/200 [00:07<00:04, 15.92it/s] 64%|######3   | 127/200 [00:08<00:04, 15.94it/s] 64%|######4   | 129/200 [00:08<00:04, 15.99it/s] 66%|######5   | 131/200 [00:08<00:04, 16.02it/s] 66%|######6   | 133/200 [00:08<00:04, 16.06it/s] 68%|######7   | 135/200 [00:08<00:04, 16.09it/s] 68%|######8   | 137/200 [00:08<00:03, 16.11it/s] 70%|######9   | 139/200 [00:08<00:03, 16.10it/s] 70%|#######   | 141/200 [00:08<00:03, 16.09it/s] 72%|#######1  | 143/200 [00:09<00:03, 16.10it/s] 72%|#######2  | 145/200 [00:09<00:03, 16.09it/s] 74%|#######3  | 147/200 [00:09<00:03, 16.08it/s] 74%|#######4  | 149/200 [00:09<00:03, 16.05it/s] 76%|#######5  | 151/200 [00:09<00:03, 16.02it/s] 76%|#######6  | 153/200 [00:09<00:02, 16.00it/s] 78%|#######7  | 155/200 [00:09<00:02, 16.04it/s] 78%|#######8  | 157/200 [00:09<00:02, 16.08it/s] 80%|#######9  | 159/200 [00:10<00:02, 16.06it/s] 80%|########  | 161/200 [00:10<00:02, 16.05it/s] 82%|########1 | 163/200 [00:10<00:02, 16.07it/s] 82%|########2 | 165/200 [00:10<00:02, 16.07it/s] 84%|########3 | 167/200 [00:10<00:02, 16.07it/s] 84%|########4 | 169/200 [00:10<00:01, 16.04it/s] 86%|########5 | 171/200 [00:10<00:01, 16.02it/s] 86%|########6 | 173/200 [00:10<00:01, 16.03it/s] 88%|########7 | 175/200 [00:11<00:01, 16.06it/s] 88%|########8 | 177/200 [00:11<00:01, 16.06it/s] 90%|########9 | 179/200 [00:11<00:01, 16.14it/s] 90%|######### | 181/200 [00:11<00:01, 16.17it/s] 92%|#########1| 183/200 [00:11<00:01, 16.22it/s] 92%|#########2| 185/200 [00:11<00:00, 16.24it/s] 94%|#########3| 187/200 [00:12<00:01,  9.92it/s] 94%|#########4| 189/200 [00:12<00:00, 11.20it/s] 96%|#########5| 191/200 [00:12<00:00, 12.32it/s] 96%|#########6| 193/200 [00:12<00:00, 13.24it/s] 98%|#########7| 195/200 [00:12<00:00, 13.94it/s] 98%|#########8| 197/200 [00:12<00:00, 14.48it/s]100%|#########9| 199/200 [00:12<00:00, 14.92it/s]100%|##########| 200/200 [00:12<00:00, 15.61it/s]
+Train Epoch 6
+{
+    "Log_Likelihood": 8.552648396492005,
+    "Loss": -8.552648396492005,
+    "Optimizer/policy0_lr": 1.1004999999999999e-05,
+    "Policy_Grad_Norms": 8031.002332009185,
+    "Time_Data_Loading": 0.00189668337504069,
+    "Time_Epoch": 0.2158615271250407,
+    "Time_Log_Info": 0.007199227809906006,
+    "Time_Process_Batch": 0.032377131779988605,
+    "Time_Train_Batch": 0.16860249042510986
+}
+
+Epoch 6 Memory Usage: 7891 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:26,  7.44it/s]  2%|1         | 3/200 [00:00<00:16, 12.31it/s]  2%|2         | 5/200 [00:00<00:13, 13.95it/s]  4%|3         | 7/200 [00:00<00:13, 14.70it/s]  4%|4         | 9/200 [00:00<00:12, 15.19it/s]  6%|5         | 11/200 [00:00<00:12, 15.38it/s]  6%|6         | 13/200 [00:00<00:12, 15.55it/s]  8%|7         | 15/200 [00:01<00:11, 15.65it/s]  8%|8         | 17/200 [00:01<00:11, 15.76it/s] 10%|9         | 19/200 [00:01<00:11, 15.78it/s] 10%|#         | 21/200 [00:01<00:11, 15.87it/s] 12%|#1        | 23/200 [00:01<00:11, 15.92it/s] 12%|#2        | 25/200 [00:01<00:10, 15.92it/s] 14%|#3        | 27/200 [00:01<00:10, 15.93it/s] 14%|#4        | 29/200 [00:01<00:10, 15.74it/s] 16%|#5        | 31/200 [00:02<00:10, 15.77it/s] 16%|#6        | 33/200 [00:02<00:10, 15.84it/s] 18%|#7        | 35/200 [00:02<00:10, 15.87it/s] 18%|#8        | 37/200 [00:02<00:10, 15.89it/s] 20%|#9        | 39/200 [00:02<00:10, 15.94it/s] 20%|##        | 41/200 [00:02<00:09, 15.98it/s] 22%|##1       | 43/200 [00:02<00:10, 15.65it/s] 22%|##2       | 45/200 [00:02<00:09, 15.78it/s] 24%|##3       | 47/200 [00:03<00:09, 15.82it/s] 24%|##4       | 49/200 [00:03<00:09, 15.87it/s] 26%|##5       | 51/200 [00:03<00:09, 15.92it/s] 26%|##6       | 53/200 [00:03<00:09, 15.96it/s] 28%|##7       | 55/200 [00:03<00:09, 15.99it/s] 28%|##8       | 57/200 [00:03<00:08, 15.99it/s] 30%|##9       | 59/200 [00:03<00:08, 15.99it/s] 30%|###       | 61/200 [00:03<00:08, 15.95it/s] 32%|###1      | 63/200 [00:04<00:08, 15.92it/s] 32%|###2      | 65/200 [00:04<00:08, 15.95it/s] 34%|###3      | 67/200 [00:04<00:08, 15.92it/s] 34%|###4      | 69/200 [00:04<00:08, 15.96it/s] 36%|###5      | 71/200 [00:04<00:08, 15.94it/s] 36%|###6      | 73/200 [00:04<00:07, 15.91it/s] 38%|###7      | 75/200 [00:04<00:07, 15.81it/s] 38%|###8      | 77/200 [00:04<00:07, 15.91it/s] 40%|###9      | 79/200 [00:05<00:07, 15.96it/s] 40%|####      | 81/200 [00:05<00:07, 15.97it/s] 42%|####1     | 83/200 [00:05<00:07, 15.95it/s] 42%|####2     | 85/200 [00:05<00:07, 15.99it/s] 44%|####3     | 87/200 [00:05<00:07, 15.96it/s] 44%|####4     | 89/200 [00:05<00:06, 16.01it/s] 46%|####5     | 91/200 [00:05<00:06, 16.03it/s] 46%|####6     | 93/200 [00:05<00:06, 16.06it/s] 48%|####7     | 95/200 [00:06<00:06, 16.08it/s] 48%|####8     | 97/200 [00:06<00:06, 15.64it/s] 50%|####9     | 99/200 [00:06<00:06, 15.77it/s] 50%|#####     | 101/200 [00:06<00:06, 15.80it/s] 52%|#####1    | 103/200 [00:06<00:06, 15.91it/s] 52%|#####2    | 105/200 [00:06<00:05, 15.98it/s] 54%|#####3    | 107/200 [00:06<00:05, 16.00it/s] 55%|#####4    | 109/200 [00:06<00:05, 15.96it/s] 56%|#####5    | 111/200 [00:07<00:05, 15.94it/s] 56%|#####6    | 113/200 [00:07<00:05, 16.00it/s] 57%|#####7    | 115/200 [00:07<00:05, 16.04it/s] 58%|#####8    | 117/200 [00:07<00:05, 16.05it/s] 60%|#####9    | 119/200 [00:07<00:05, 16.09it/s] 60%|######    | 121/200 [00:07<00:04, 16.10it/s] 62%|######1   | 123/200 [00:07<00:04, 16.08it/s] 62%|######2   | 125/200 [00:07<00:04, 16.08it/s] 64%|######3   | 127/200 [00:08<00:04, 16.11it/s] 64%|######4   | 129/200 [00:08<00:04, 16.09it/s] 66%|######5   | 131/200 [00:08<00:04, 16.05it/s] 66%|######6   | 133/200 [00:08<00:04, 16.07it/s] 68%|######7   | 135/200 [00:08<00:04, 16.10it/s] 68%|######8   | 137/200 [00:08<00:03, 16.10it/s] 70%|######9   | 139/200 [00:08<00:03, 16.01it/s] 70%|#######   | 141/200 [00:08<00:03, 16.00it/s] 72%|#######1  | 143/200 [00:09<00:03, 15.96it/s] 72%|#######2  | 145/200 [00:09<00:03, 15.96it/s] 74%|#######3  | 147/200 [00:09<00:03, 15.96it/s] 74%|#######4  | 149/200 [00:09<00:03, 16.00it/s] 76%|#######5  | 151/200 [00:09<00:03, 16.03it/s] 76%|#######6  | 153/200 [00:09<00:02, 16.01it/s] 78%|#######7  | 155/200 [00:09<00:02, 16.04it/s] 78%|#######8  | 157/200 [00:09<00:02, 16.00it/s] 80%|#######9  | 159/200 [00:10<00:02, 15.95it/s] 80%|########  | 161/200 [00:10<00:02, 16.00it/s] 82%|########1 | 163/200 [00:10<00:02, 16.06it/s] 82%|########2 | 165/200 [00:10<00:02, 16.06it/s] 84%|########3 | 167/200 [00:10<00:02, 15.96it/s] 84%|########4 | 169/200 [00:10<00:01, 15.97it/s] 86%|########5 | 171/200 [00:10<00:01, 15.97it/s] 86%|########6 | 173/200 [00:10<00:01, 15.99it/s] 88%|########7 | 175/200 [00:11<00:01, 16.04it/s] 88%|########8 | 177/200 [00:11<00:01, 16.05it/s] 90%|########9 | 179/200 [00:11<00:01, 16.13it/s] 90%|######### | 181/200 [00:11<00:01, 16.19it/s] 92%|#########1| 183/200 [00:11<00:01, 16.23it/s] 92%|#########2| 185/200 [00:11<00:00, 16.21it/s] 94%|#########3| 187/200 [00:12<00:01, 10.09it/s] 94%|#########4| 189/200 [00:12<00:00, 11.29it/s] 96%|#########5| 191/200 [00:12<00:00, 12.39it/s] 96%|#########6| 193/200 [00:12<00:00, 13.32it/s] 98%|#########7| 195/200 [00:12<00:00, 14.04it/s] 98%|#########8| 197/200 [00:12<00:00, 14.58it/s]100%|#########9| 199/200 [00:12<00:00, 14.99it/s]100%|##########| 200/200 [00:12<00:00, 15.58it/s]
+Train Epoch 7
+{
+    "Log_Likelihood": 9.437924642562866,
+    "Loss": -9.437924642562866,
+    "Optimizer/policy0_lr": 1.3005e-05,
+    "Policy_Grad_Norms": 9256.005301686904,
+    "Time_Data_Loading": 0.0015364845593770346,
+    "Time_Epoch": 0.21639605363210043,
+    "Time_Log_Info": 0.007184465726216634,
+    "Time_Process_Batch": 0.032589960098266604,
+    "Time_Train_Batch": 0.169146200021108
+}
+
+Epoch 7 Memory Usage: 7865 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:29,  6.73it/s]  2%|1         | 3/200 [00:00<00:16, 11.86it/s]  2%|2         | 5/200 [00:00<00:14, 13.66it/s]  4%|3         | 7/200 [00:00<00:13, 14.57it/s]  4%|4         | 9/200 [00:00<00:12, 15.00it/s]  6%|5         | 11/200 [00:00<00:12, 15.38it/s]  6%|6         | 13/200 [00:00<00:12, 15.58it/s]  8%|7         | 15/200 [00:01<00:11, 15.71it/s]  8%|8         | 17/200 [00:01<00:11, 15.77it/s] 10%|9         | 19/200 [00:01<00:11, 15.90it/s] 10%|#         | 21/200 [00:01<00:11, 15.98it/s] 12%|#1        | 23/200 [00:01<00:11, 15.96it/s] 12%|#2        | 25/200 [00:01<00:10, 16.00it/s] 14%|#3        | 27/200 [00:01<00:10, 15.93it/s] 14%|#4        | 29/200 [00:01<00:10, 15.97it/s] 16%|#5        | 31/200 [00:02<00:10, 15.98it/s] 16%|#6        | 33/200 [00:02<00:10, 15.99it/s] 18%|#7        | 35/200 [00:02<00:10, 16.00it/s] 18%|#8        | 37/200 [00:02<00:10, 16.04it/s] 20%|#9        | 39/200 [00:02<00:10, 16.04it/s] 20%|##        | 41/200 [00:02<00:09, 16.07it/s] 22%|##1       | 43/200 [00:02<00:09, 16.10it/s] 22%|##2       | 45/200 [00:02<00:09, 16.05it/s] 24%|##3       | 47/200 [00:03<00:09, 16.01it/s] 24%|##4       | 49/200 [00:03<00:09, 15.96it/s] 26%|##5       | 51/200 [00:03<00:09, 15.95it/s] 26%|##6       | 53/200 [00:03<00:09, 15.97it/s] 28%|##7       | 55/200 [00:03<00:09, 15.99it/s] 28%|##8       | 57/200 [00:03<00:08, 16.00it/s] 30%|##9       | 59/200 [00:03<00:08, 16.03it/s] 30%|###       | 61/200 [00:03<00:08, 16.03it/s] 32%|###1      | 63/200 [00:04<00:08, 16.00it/s] 32%|###2      | 65/200 [00:04<00:08, 16.00it/s] 34%|###3      | 67/200 [00:04<00:08, 16.01it/s] 34%|###4      | 69/200 [00:04<00:08, 16.02it/s] 36%|###5      | 71/200 [00:04<00:08, 16.06it/s] 36%|###6      | 73/200 [00:04<00:07, 16.02it/s] 38%|###7      | 75/200 [00:04<00:07, 16.04it/s] 38%|###8      | 77/200 [00:04<00:07, 16.05it/s] 40%|###9      | 79/200 [00:05<00:07, 16.04it/s] 40%|####      | 81/200 [00:05<00:07, 15.97it/s] 42%|####1     | 83/200 [00:05<00:07, 15.95it/s] 42%|####2     | 85/200 [00:05<00:07, 16.02it/s] 44%|####3     | 87/200 [00:05<00:07, 16.05it/s] 44%|####4     | 89/200 [00:05<00:06, 16.08it/s] 46%|####5     | 91/200 [00:05<00:06, 16.04it/s] 46%|####6     | 93/200 [00:05<00:06, 16.04it/s] 48%|####7     | 95/200 [00:06<00:06, 16.04it/s] 48%|####8     | 97/200 [00:06<00:06, 15.96it/s] 50%|####9     | 99/200 [00:06<00:06, 15.94it/s] 50%|#####     | 101/200 [00:06<00:06, 15.98it/s] 52%|#####1    | 103/200 [00:06<00:06, 15.95it/s] 52%|#####2    | 105/200 [00:06<00:05, 15.97it/s] 54%|#####3    | 107/200 [00:06<00:05, 15.95it/s] 55%|#####4    | 109/200 [00:06<00:05, 15.92it/s] 56%|#####5    | 111/200 [00:07<00:05, 15.92it/s] 56%|#####6    | 113/200 [00:07<00:05, 15.93it/s] 57%|#####7    | 115/200 [00:07<00:05, 15.95it/s] 58%|#####8    | 117/200 [00:07<00:05, 15.96it/s] 60%|#####9    | 119/200 [00:07<00:05, 15.99it/s] 60%|######    | 121/200 [00:07<00:04, 16.03it/s] 62%|######1   | 123/200 [00:07<00:04, 16.06it/s] 62%|######2   | 125/200 [00:07<00:04, 16.07it/s] 64%|######3   | 127/200 [00:08<00:04, 16.00it/s] 64%|######4   | 129/200 [00:08<00:04, 15.98it/s] 66%|######5   | 131/200 [00:08<00:04, 15.94it/s] 66%|######6   | 133/200 [00:08<00:04, 15.98it/s] 68%|######7   | 135/200 [00:08<00:04, 15.89it/s] 68%|######8   | 137/200 [00:08<00:03, 15.93it/s] 70%|######9   | 139/200 [00:08<00:03, 15.91it/s] 70%|#######   | 141/200 [00:08<00:03, 15.91it/s] 72%|#######1  | 143/200 [00:09<00:03, 15.96it/s] 72%|#######2  | 145/200 [00:09<00:03, 15.97it/s] 74%|#######3  | 147/200 [00:09<00:03, 15.98it/s] 74%|#######4  | 149/200 [00:09<00:03, 15.98it/s] 76%|#######5  | 151/200 [00:09<00:03, 15.99it/s] 76%|#######6  | 153/200 [00:09<00:02, 15.98it/s] 78%|#######7  | 155/200 [00:09<00:02, 15.97it/s] 78%|#######8  | 157/200 [00:09<00:02, 15.94it/s] 80%|#######9  | 159/200 [00:10<00:02, 15.96it/s] 80%|########  | 161/200 [00:10<00:02, 15.96it/s] 82%|########1 | 163/200 [00:10<00:02, 15.92it/s] 82%|########2 | 165/200 [00:10<00:02, 15.96it/s] 84%|########3 | 167/200 [00:10<00:02, 16.00it/s] 84%|########4 | 169/200 [00:10<00:01, 16.05it/s] 86%|########5 | 171/200 [00:10<00:01, 16.08it/s] 86%|########6 | 173/200 [00:10<00:01, 16.07it/s] 88%|########7 | 175/200 [00:11<00:01, 16.08it/s] 88%|########8 | 177/200 [00:11<00:01, 16.01it/s] 90%|########9 | 179/200 [00:11<00:01, 16.07it/s] 90%|######### | 181/200 [00:11<00:01, 16.15it/s] 92%|#########1| 183/200 [00:11<00:01, 16.24it/s] 92%|#########2| 185/200 [00:11<00:00, 16.30it/s] 94%|#########3| 187/200 [00:12<00:01,  9.81it/s] 94%|#########4| 189/200 [00:12<00:00, 11.08it/s] 96%|#########5| 191/200 [00:12<00:00, 12.15it/s] 96%|#########6| 193/200 [00:12<00:00, 13.10it/s] 98%|#########7| 195/200 [00:12<00:00, 13.84it/s] 98%|#########8| 197/200 [00:12<00:00, 14.43it/s]100%|#########9| 199/200 [00:12<00:00, 14.89it/s]100%|##########| 200/200 [00:12<00:00, 15.57it/s]
+Train Epoch 8
+{
+    "Log_Likelihood": 10.23807740688324,
+    "Loss": -10.23807740688324,
+    "Optimizer/policy0_lr": 1.5005000000000001e-05,
+    "Policy_Grad_Norms": 9648.759822007163,
+    "Time_Data_Loading": 0.0021315693855285646,
+    "Time_Epoch": 0.2164235313733419,
+    "Time_Log_Info": 0.00719990332921346,
+    "Time_Process_Batch": 0.03255956967671712,
+    "Time_Train_Batch": 0.1687244653701782
+}
+
+Epoch 8 Memory Usage: 7865 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:31,  6.22it/s]  2%|1         | 3/200 [00:00<00:17, 11.37it/s]  2%|2         | 5/200 [00:00<00:14, 13.32it/s]  4%|3         | 7/200 [00:00<00:13, 14.36it/s]  4%|4         | 9/200 [00:00<00:12, 14.97it/s]  6%|5         | 11/200 [00:00<00:12, 15.32it/s]  6%|6         | 13/200 [00:00<00:12, 15.39it/s]  8%|7         | 15/200 [00:01<00:11, 15.47it/s]  8%|8         | 17/200 [00:01<00:11, 15.53it/s] 10%|9         | 19/200 [00:01<00:11, 15.68it/s] 10%|#         | 21/200 [00:01<00:11, 15.81it/s] 12%|#1        | 23/200 [00:01<00:11, 15.92it/s] 12%|#2        | 25/200 [00:01<00:10, 15.95it/s] 14%|#3        | 27/200 [00:01<00:10, 15.95it/s] 14%|#4        | 29/200 [00:01<00:10, 15.98it/s] 16%|#5        | 31/200 [00:02<00:10, 16.00it/s] 16%|#6        | 33/200 [00:02<00:10, 15.91it/s] 18%|#7        | 35/200 [00:02<00:10, 15.92it/s] 18%|#8        | 37/200 [00:02<00:10, 15.96it/s] 20%|#9        | 39/200 [00:02<00:10, 15.96it/s] 20%|##        | 41/200 [00:02<00:09, 16.00it/s] 22%|##1       | 43/200 [00:02<00:09, 15.96it/s] 22%|##2       | 45/200 [00:02<00:09, 16.01it/s] 24%|##3       | 47/200 [00:03<00:09, 15.99it/s] 24%|##4       | 49/200 [00:03<00:09, 16.00it/s] 26%|##5       | 51/200 [00:03<00:09, 15.99it/s] 26%|##6       | 53/200 [00:03<00:09, 16.01it/s] 28%|##7       | 55/200 [00:03<00:09, 16.01it/s] 28%|##8       | 57/200 [00:03<00:08, 15.99it/s] 30%|##9       | 59/200 [00:03<00:08, 16.03it/s] 30%|###       | 61/200 [00:03<00:08, 16.04it/s] 32%|###1      | 63/200 [00:04<00:08, 16.04it/s] 32%|###2      | 65/200 [00:04<00:08, 16.05it/s] 34%|###3      | 67/200 [00:04<00:08, 16.07it/s] 34%|###4      | 69/200 [00:04<00:08, 16.06it/s] 36%|###5      | 71/200 [00:04<00:08, 16.07it/s] 36%|###6      | 73/200 [00:04<00:07, 16.06it/s] 38%|###7      | 75/200 [00:04<00:07, 16.02it/s] 38%|###8      | 77/200 [00:04<00:07, 16.03it/s] 40%|###9      | 79/200 [00:05<00:07, 16.01it/s] 40%|####      | 81/200 [00:05<00:07, 15.92it/s] 42%|####1     | 83/200 [00:05<00:07, 15.95it/s] 42%|####2     | 85/200 [00:05<00:07, 15.97it/s] 44%|####3     | 87/200 [00:05<00:07, 15.97it/s] 44%|####4     | 89/200 [00:05<00:06, 16.00it/s] 46%|####5     | 91/200 [00:05<00:06, 16.02it/s] 46%|####6     | 93/200 [00:05<00:06, 16.02it/s] 48%|####7     | 95/200 [00:06<00:06, 16.02it/s] 48%|####8     | 97/200 [00:06<00:06, 15.97it/s] 50%|####9     | 99/200 [00:06<00:06, 15.97it/s] 50%|#####     | 101/200 [00:06<00:06, 15.97it/s] 52%|#####1    | 103/200 [00:06<00:06, 15.97it/s] 52%|#####2    | 105/200 [00:06<00:05, 16.02it/s] 54%|#####3    | 107/200 [00:06<00:05, 16.06it/s] 55%|#####4    | 109/200 [00:06<00:05, 16.03it/s] 56%|#####5    | 111/200 [00:07<00:05, 16.02it/s] 56%|#####6    | 113/200 [00:07<00:05, 15.80it/s] 57%|#####7    | 115/200 [00:07<00:05, 15.91it/s] 58%|#####8    | 117/200 [00:07<00:05, 15.93it/s] 60%|#####9    | 119/200 [00:07<00:05, 15.96it/s] 60%|######    | 121/200 [00:07<00:04, 16.00it/s] 62%|######1   | 123/200 [00:07<00:04, 15.95it/s] 62%|######2   | 125/200 [00:07<00:04, 15.99it/s] 64%|######3   | 127/200 [00:08<00:04, 16.01it/s] 64%|######4   | 129/200 [00:08<00:04, 16.02it/s] 66%|######5   | 131/200 [00:08<00:04, 16.05it/s] 66%|######6   | 133/200 [00:08<00:04, 16.05it/s] 68%|######7   | 135/200 [00:08<00:04, 16.04it/s] 68%|######8   | 137/200 [00:08<00:03, 16.03it/s] 70%|######9   | 139/200 [00:08<00:03, 16.06it/s] 70%|#######   | 141/200 [00:08<00:03, 16.07it/s] 72%|#######1  | 143/200 [00:09<00:03, 16.08it/s] 72%|#######2  | 145/200 [00:09<00:03, 16.06it/s] 74%|#######3  | 147/200 [00:09<00:03, 16.03it/s] 74%|#######4  | 149/200 [00:09<00:03, 16.03it/s] 76%|#######5  | 151/200 [00:09<00:03, 16.03it/s] 76%|#######6  | 153/200 [00:09<00:02, 16.00it/s] 78%|#######7  | 155/200 [00:09<00:02, 16.03it/s] 78%|#######8  | 157/200 [00:09<00:02, 16.02it/s] 80%|#######9  | 159/200 [00:10<00:02, 16.02it/s] 80%|########  | 161/200 [00:10<00:02, 16.01it/s] 82%|########1 | 163/200 [00:10<00:02, 16.01it/s] 82%|########2 | 165/200 [00:10<00:02, 16.01it/s] 84%|########3 | 167/200 [00:10<00:02, 16.02it/s] 84%|########4 | 169/200 [00:10<00:01, 16.05it/s] 86%|########5 | 171/200 [00:10<00:01, 16.00it/s] 86%|########6 | 173/200 [00:10<00:01, 16.00it/s] 88%|########7 | 175/200 [00:11<00:01, 15.98it/s] 88%|########8 | 177/200 [00:11<00:01, 15.89it/s] 90%|########9 | 179/200 [00:11<00:01, 16.01it/s] 90%|######### | 181/200 [00:11<00:01, 16.08it/s] 92%|#########1| 183/200 [00:11<00:01, 16.13it/s] 92%|#########2| 185/200 [00:11<00:00, 16.15it/s] 94%|#########3| 187/200 [00:12<00:01,  9.93it/s] 94%|#########4| 189/200 [00:12<00:00, 11.15it/s] 96%|#########5| 191/200 [00:12<00:00, 12.27it/s] 96%|#########6| 193/200 [00:12<00:00, 13.19it/s] 98%|#########7| 195/200 [00:12<00:00, 13.93it/s] 98%|#########8| 197/200 [00:12<00:00, 14.48it/s]100%|#########9| 199/200 [00:12<00:00, 14.91it/s]100%|##########| 200/200 [00:12<00:00, 15.56it/s]
+Train Epoch 9
+{
+    "Log_Likelihood": 10.914945840835571,
+    "Loss": -10.914945840835571,
+    "Optimizer/policy0_lr": 1.7005e-05,
+    "Policy_Grad_Norms": 9833.119434540198,
+    "Time_Data_Loading": 0.0019053578376770019,
+    "Time_Epoch": 0.2166109601656596,
+    "Time_Log_Info": 0.007169175148010254,
+    "Time_Process_Batch": 0.03243651390075684,
+    "Time_Train_Batch": 0.16909072796503702
+}
+
+Epoch 9 Memory Usage: 7865 MB
+
+  0%|          | 0/200 [00:00<?, ?it/s]  0%|          | 1/200 [00:00<00:25,  7.70it/s]  2%|1         | 3/200 [00:00<00:15, 12.50it/s]  2%|2         | 5/200 [00:00<00:13, 14.07it/s]  4%|3         | 7/200 [00:00<00:12, 14.86it/s]  4%|4         | 9/200 [00:00<00:12, 15.26it/s]  6%|5         | 11/200 [00:00<00:12, 15.52it/s]  6%|6         | 13/200 [00:00<00:11, 15.71it/s]  8%|7         | 15/200 [00:01<00:11, 15.77it/s]
