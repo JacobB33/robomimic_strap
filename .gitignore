@@ -1,6 +1,7 @@
 # pip distribution folder
 dist/
 trash/
+expdata/
 #data folder
 
 # datasets folder at top-level (leading slash)
