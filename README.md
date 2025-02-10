@@ -1,50 +1,56 @@
-# Strap Policy Learning Repo
-This was built on robomimic with some modifications to work on the LIBERO environments
-
-
-## Installation
-Create a conda environment:
-```
-conda create -n strap python=3.10
-conda activate strap
-```
-
-Insall LIBERO and STRAP. 
-To install LIBERO run:
-```
-git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git
-cd LIBERO
-pip install -e .  ## NOTE: Do not install the requirements for libero
-```
-
-To install strap run:
-```
-git clone https://github.com/WEIRDLabUW/STRAP.git
-cd STRAP
-pip install -e .
-```
-
-Then install this repository
-```
-cd robomimic_strap
-pip install -e .
-```
+# STRAP Policy Learning Repo
+This repository contains the policy learning code based on [robomimic](https://github.com/ARISE-Initiative/robomimic/tree/robocasa) to reproduce the experiments in [STRAP](https://weirdlabuw.github.io/strap/).
 
 -------
-## Training
-There are a number of algorithms to choose from. We offer official support for BC-Transformer. Users can also adapt the code to run Diffusion Policy, ACT, etc.
+## Setup
+Following the setup instructions in [STRAP retrieval code]([https://github.com/WEIRDLabUW/STRAP](https://github.com/WEIRDLabUW/STRAP?tab=readme-ov-file#setup)) to setup the base conda environment.
 
-Each algorithm has its own config generator script. For example for BC-Transformer policy run:
+1. Active the conda environment:
+    ```bash
+    conda activate strap
+    ```
+2. Install the [LIBERO benchmark](https://github.com/Lifelong-Robot-Learning/LIBERO/tree/master/libero/libero/envs):
+    ```bash
+    git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git
+    cd LIBERO
+    pip install -e .  ## NOTE: Do not install the requirements for libero
+    ```
+3. Install robomimic:
+    ```bash
+    git clone https://github.com/WEIRDLabUW/robomimic_strap.git
+    cd robomimic_strap
+    pip install -e .
+    ```
+
+You're all set!
+
+
+-------
+## Policy Learning
+We extensively tested STRAP with BC-Transformer. To generate a configuration script, run
 ```
 python robomimic/scripts/config_gen/bc_xfmr_gen.py --name <experiment-name> --train_ds_path <path to your train dataset>
 ```
-Modify this file accordingly, depending on which datasets you are training on and whether you are running evaluations.
 
-Note: You can add `--debug` to generate small runs for testing.
+The above generates a robomimic config file (json) and outputs a python command to start the training.
 
-After running this script, you just need to run the command(s) that are outputted.
+Here's an example:
+```
+python [PATH_TO_REPO]/robomimic_strap/robomimic/scripts/train.py --config [USER_DIR]/tmp/autogen_configs/ril/bc/libero/im/02-10-debug/02-10-25-08-12-19/json/seed_123_ds_human-50.json
+```
 
-### Acknowledgments:
+Modify the config file (json) accordingly to adjust logging, training, and evaluation parameters. Add `--debug` to the config generation to generate lightweight runs for debugging.
+
+-------
+## Citation
+```bibtex aiignore
+@article{memmel2024strap,
+  title={STRAP: Robot Sub-Trajectory Retrieval for Augmented Policy Learning},
+  author={Memmel, Marius and Berg, Jacob and Chen, Bingqing and Gupta, Abhishek and Francis, Jonathan},
+  journal={arXiv preprint arXiv:2412.15182},
+  year={2024}
+}
+```
+
+## Acknowledgments
 This repository was modified from the official policy learning repo accompanying the [RoboCasa](https://robocasa.ai/) paper. 
-
-
